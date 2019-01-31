@@ -9,6 +9,7 @@ import * as cors from 'cors';
 import * as helmet from 'helmet';
 import * as yes from 'yes-https';
 import * as next from 'next';
+import { resolve } from 'path';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
@@ -41,7 +42,7 @@ export default class Server {
 		this.app = express();
 		this.logger = createLogger(this);
 		this.setup();
-		this.nextApp = next({ dev: NODE_ENV !== 'production' });
+		this.nextApp = next({ dev: NODE_ENV !== 'production', dir: __dirname + '/../frontend' });
 	}
 
 	private setup(): void {

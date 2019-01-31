@@ -1,10 +1,10 @@
 {
 	"scripts": {
 		"dev": "nodemon backend/index.ts",
-		"build-client": "next build",
+		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
 		"build": "npm run build-client && npm run build-server",
-		"start": "NODE_ENV=production node dist/backend/index.js",
+		"start": "NODE_ENV=production node dist/index.js",
 		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts"
 	},
 	"dependencies": {

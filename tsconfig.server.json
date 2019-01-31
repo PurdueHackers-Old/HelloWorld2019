@@ -2,9 +2,9 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"module": "commonjs",
-		"outDir": "dist",
+
 		"target": "es2016",
 		"lib": ["es2017"]
 	},
-	"include": ["backend/**/*.ts"]
+	"include": ["backend"]
 }
