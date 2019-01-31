@@ -26,11 +26,6 @@ export default class Server {
 	public static async createInstance() {
 		const server = new Server();
 		await server.setupMongo();
-		await server.nextApp.prepare();
-		const handle = server.nextApp.getRequestHandler();
-		server.app.get('*', (req, res) => {
-			return handle(req, res);
-		});
 		return server;
 	}
 	public app: express.Application;
@@ -43,6 +38,19 @@ export default class Server {
 		this.logger = createLogger(this);
 		this.setup();
 		this.nextApp = next({ dev: NODE_ENV !== 'production', dir: __dirname + '/../frontend' });
+	}
+
+	public async initFrontend() {
+		try {
+			await this.nextApp.prepare();
+			const handle = this.nextApp.getRequestHandler();
+			this.app.get('*', (req, res) => {
+				return handle(req, res);
+			});
+		} catch (error) {
+			this.logger.error('Error setting up frontend:', error);
+			throw error;
+		}
 	}
 
 	private setup(): void {

@@ -7,6 +7,7 @@ const { PORT } = CONFIG;
 const start = async () => {
 	try {
 		const server = await Server.createInstance();
+		await server.initFrontend();
 
 		const httpServer = server.app.listen(PORT, () => {
 			if (CONFIG.NODE_ENV === 'production') server.logger.info('CONFIG:', CONFIG);

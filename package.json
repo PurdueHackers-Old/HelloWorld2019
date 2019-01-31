@@ -8,6 +8,7 @@
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
 		"build": "npm run build-client && npm run build-server",
+		"test": "NODE_ENV=test jest -i --detectOpenHandles",
 		"start": "NODE_ENV=production node dist/index.js",
 		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts"
 	},
@@ -71,8 +72,14 @@
 		"@types/node": "^10.12.20",
 		"@types/passport": "^1.0.0",
 		"@types/passport-jwt": "^3.0.1",
+		"@types/supertest": "^2.0.7",
+		"faker": "^4.1.0",
+		"jest": "23.6.0",
+		"mongodb-memory-server": "^3.0.0",
 		"nodemon": "^1.17.5",
 		"prettier": "^1.16.2",
+		"supertest": "^3.4.2",
+		"ts-jest": "23.10.1",
 		"tslint": "^5.12.1",
 		"tslint-config-prettier": "^1.17.0"
 	}

@@ -16,12 +16,14 @@ import {
 	BadRequestError,
 	UnauthorizedError,
 	Get,
-	CurrentUser
+	CurrentUser,
+	BodyParam
 } from 'routing-controllers';
 import { ValidationMiddleware } from '../middleware/validation';
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
+import { string } from 'prop-types';
 
 export const router = express.Router();
 
@@ -34,14 +36,19 @@ export class AuthController extends BaseController {
 
 	@Post('/signup')
 	@UseBefore(multer.any())
-	async signup(@Req() req: Request, @Body() member: UserDto) {
-		const { password, passwordConfirm } = req.body;
-
+	async signup(
+		@BodyParam('password') password: string,
+		@BodyParam('passwordConfirm') passwordConfirm: string,
+		@Body() member: UserDto
+	) {
 		if (!password || password.length < 5)
 			throw new BadRequestError('A password longer than 5 characters is required');
 		if (!passwordConfirm) throw new BadRequestError('Please confirm your password');
 		if (passwordConfirm !== password) throw new BadRequestError('Passwords did not match');
 		member.password = password;
+
+		if (!member.email.endsWith('purdue.edu'))
+			throw new BadRequestError('You must register with a @purdue.edu email');
 
 		const exists = await User.findOne({ email: member.email }).exec();
 		if (exists) throw new BadRequestError('An account already exists with that email');
@@ -51,27 +58,6 @@ export class AuthController extends BaseController {
 		const u = user.toJSON();
 		delete u.password;
 		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: '7 days' });
-
-
-
-
-
-
-
-		//   mongo.addUser(user, function(error, result) {
-		// 	if(error) {
-		// 	  res.status(401).json({message: error});
-		// 	} else {
-		// 	  var payload = {email: req.body.email};
-		// 	  var jwtToken = token.generateAccessToken(payload);
-		// 	  res.json({message: "Login Successful", token: jwtToken});
-		// 	}
-		//   });
-
-
-
-
-
 
 		return {
 			user: u,
