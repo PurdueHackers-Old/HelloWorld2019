@@ -1,10 +1,8 @@
 import 'jest';
-import * as supertest from 'supertest';
-import * as jwt from 'jsonwebtoken';
-import { ObjectId } from 'bson';
+// import * as supertest from 'supertest';
+import supertest = require('supertest');
 import { generateUser, sleep } from '../helper';
 import Server from '../../../backend/server';
-import { User } from '../../../backend/models/user';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
