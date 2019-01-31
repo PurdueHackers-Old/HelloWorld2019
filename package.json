@@ -1,4 +1,8 @@
 {
+	"name": "helloworld",
+	"version": "1.0.0",
+	"description": "Web page for Hello World 2019",
+	"main": "dist/index.js",
 	"scripts": {
 		"dev": "nodemon backend/index.ts",
 		"build-client": "cd frontend && next build",
@@ -7,6 +11,16 @@
 		"start": "NODE_ENV=production node dist/index.js",
 		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ashwinGokhale/HelloWorld2019.git"
+	},
+	"author": "Purdue Hackers",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ashwinGokhale/HelloWorld2019/issues"
+	},
+	"homepage": "https://github.com/ashwinGokhale/HelloWorld2019#readme",
 	"dependencies": {
 		"@google-cloud/storage": "^2.4.1",
 		"@sendgrid/mail": "^6.3.1",

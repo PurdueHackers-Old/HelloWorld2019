@@ -1,6 +1,6 @@
 import Server from '../server';
 import CONFIG from '../config';
-import { Member } from '../models/member';
+import { User } from '../models/user';
 
 let server: Server;
 

@@ -1,14 +1,14 @@
 import * as jwt from 'jsonwebtoken';
 import * as sendGrid from '@sendgrid/mail';
 import CONFIG from '../config';
-import { IMemberModel, MemberDto } from '../models/member';
+import { IUserModel, UserDto } from '../models/user';
 import { Service } from 'typedi';
 
 sendGrid.setApiKey(CONFIG.SENDGRID_KEY);
 
 @Service('emailService')
 export class EmailService {
-	async sendResetEmail(member: IMemberModel) {
+	async sendResetEmail(member: IUserModel) {
 		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, {
 			expiresIn: '2 days'
 		});
@@ -32,7 +32,7 @@ export class EmailService {
 		} as any);
 	}
 
-	async sendAccountCreatedEmail(member: IMemberModel) {
+	async sendAccountCreatedEmail(member: IUserModel) {
 		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, {
 			expiresIn: '2 days'
 		});
@@ -56,7 +56,7 @@ export class EmailService {
 		} as any);
 	}
 
-	async sendErrorEmail(error: Error, user?: MemberDto) {
+	async sendErrorEmail(error: Error, user?: UserDto) {
 		// if (CONFIG.NODE_ENV !== 'production') return null;
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',

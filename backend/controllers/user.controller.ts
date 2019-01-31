@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
-import { Member, MemberDto, IMemberModel } from '../models/member';
+import { User, UserDto, IUserModel } from '../models/user';
 import { memberMatches, multer } from '../utils';
 import {
 	JsonController,
@@ -19,7 +19,7 @@ import {
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
 
-@JsonController('/api/members')
+@JsonController('/api/users')
 @UseAfter(ValidationMiddleware)
 export class MemberController extends BaseController {
 	@Get('/')
@@ -28,12 +28,12 @@ export class MemberController extends BaseController {
 		sortBy = sortBy || 'createdAt';
 
 		let contains = false;
-		Member.schema.eachPath(path => {
+		User.schema.eachPath(path => {
 			if (path.toLowerCase() === sortBy.toLowerCase()) contains = true;
 		});
 		if (!contains) sortBy = 'createdAt';
 
-		const results = await Member.find({}, '_id name email createdAt')
+		const results = await User.find({}, '_id name email createdAt')
 
 			.sort({ [sortBy]: order })
 			// .limit(100)
@@ -46,7 +46,7 @@ export class MemberController extends BaseController {
 	@Get('/:id')
 	async getById(@Param('id') id: string) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid member ID');
-		const member = await Member.findById(id)
+		const member = await User.findById(id)
 			.lean()
 			.exec();
 		if (!member) throw new BadRequestError('Member does not exist');
@@ -58,16 +58,16 @@ export class MemberController extends BaseController {
 	async updateById(
 		@Req() req: Request,
 		@Param('id') id: string,
-		@Body() memberDto: MemberDto,
-		@CurrentUser({ required: true }) user: IMemberModel
+		@Body() memberDto: UserDto,
+		@CurrentUser({ required: true }) user: IUserModel
 	) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid member ID');
 		if (!memberMatches(user, id))
 			throw new UnauthorizedError('You are unauthorized to edit this profile');
-		let member = await Member.findById(id, '+password').exec();
+		let member = await User.findById(id, '+password').exec();
 		if (!member) throw new BadRequestError('Member not found');
 
-		member = await Member.findByIdAndUpdate(id, memberDto, { new: true })
+		member = await User.findByIdAndUpdate(id, memberDto, { new: true })
 			.lean()
 			.exec();
 		return member;

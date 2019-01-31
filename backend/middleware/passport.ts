@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import { Strategy } from 'passport-jwt';
 import { Request, Response, NextFunction } from 'express';
 import CONFIG from '../config';
-import { Member } from '../models/member';
+import { User } from '../models/user';
 import { errorRes, hasPermission, extractToken } from '../utils';
 import { ObjectId } from 'bson';
 
@@ -18,7 +18,7 @@ export default (pass: any) =>
 				try {
 					if (!payload || !payload._id || !ObjectId.isValid(payload._id))
 						return done(null, false);
-					const user = await Member.findById(payload._id)
+					const user = await User.findById(payload._id)
 						.lean()
 						.exec();
 					return user ? done(null, user) : done(null, false);

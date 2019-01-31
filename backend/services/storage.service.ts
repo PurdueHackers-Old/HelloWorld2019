@@ -1,7 +1,7 @@
 import CONFIG from '../config';
 import { Storage } from '@google-cloud/storage';
 import { Service } from 'typedi';
-import { MemberDto } from '../models/member';
+import { UserDto } from '../models/user';
 
 const storage = new Storage({
 	projectId: CONFIG.GC_PROJECT_ID,
@@ -15,7 +15,7 @@ const bucket = storage.bucket(CONFIG.GC_BUCKET);
 
 @Service('storageService')
 export class StorageService {
-	async uploadToStorage(file: Express.Multer.File, folder: string, user: MemberDto) {
+	async uploadToStorage(file: Express.Multer.File, folder: string, user: UserDto) {
 		if (!file) return 'No image file';
 		else if (folder === 'pictures' && !file.originalname.match(/\.(jpg|jpeg|png|gif)$/i))
 			return `File: ${file.originalname} is an invalid image type`;

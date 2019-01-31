@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
 import CONFIG from '../config';
-import { Member, MemberDto } from '../models/member';
+import { User, UserDto } from '../models/user';
 import { multer, extractToken } from '../utils';
 import {
 	JsonController,
@@ -34,7 +34,7 @@ export class AuthController extends BaseController {
 
 	@Post('/signup')
 	@UseBefore(multer.any())
-	async signup(@Req() req: Request, @Body() member: MemberDto) {
+	async signup(@Req() req: Request, @Body() member: UserDto) {
 		const { password, passwordConfirm } = req.body;
 
 		if (!password || password.length < 5)
@@ -43,14 +43,36 @@ export class AuthController extends BaseController {
 		if (passwordConfirm !== password) throw new BadRequestError('Passwords did not match');
 		member.password = password;
 
-		const exists = await Member.findOne({ email: member.email }).exec();
+		const exists = await User.findOne({ email: member.email }).exec();
 		if (exists) throw new BadRequestError('An account already exists with that email');
 
-		const user = new Member(member);
+		const user = new User(member);
 		await user.save();
 		const u = user.toJSON();
 		delete u.password;
 		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: '7 days' });
+
+
+
+
+
+
+
+		//   mongo.addUser(user, function(error, result) {
+		// 	if(error) {
+		// 	  res.status(401).json({message: error});
+		// 	} else {
+		// 	  var payload = {email: req.body.email};
+		// 	  var jwtToken = token.generateAccessToken(payload);
+		// 	  res.json({message: "Login Successful", token: jwtToken});
+		// 	}
+		//   });
+
+
+
+
+
+
 		return {
 			user: u,
 			token
@@ -60,7 +82,7 @@ export class AuthController extends BaseController {
 	@Post('/login')
 	async login(@Body() body: { email: string; password: string }) {
 		const { email, password } = body;
-		const user = await Member.findOne({ email }, '+password').exec();
+		const user = await User.findOne({ email }, '+password').exec();
 		if (!user) throw new UnauthorizedError('Member not found');
 
 		// Check if password matches
@@ -86,7 +108,7 @@ export class AuthController extends BaseController {
 		const payload: any = jwt.decode(token);
 		if (!payload || !payload._id || !ObjectId.isValid(payload._id))
 			throw new UnauthorizedError('Invalid token');
-		const user = await Member.findById(payload._id)
+		const user = await User.findById(payload._id)
 			.lean()
 			.exec();
 		if (!user) throw new UnauthorizedError('Member not found');
@@ -98,7 +120,7 @@ export class AuthController extends BaseController {
 	async forgot(@Body() body: { email: string }) {
 		const { email } = body;
 		if (!email || !isEmail(email)) throw new BadRequestError('Please provide a valid email');
-		const member = await Member.findOne({ email }).exec();
+		const member = await User.findOne({ email }).exec();
 		if (!member) throw new BadRequestError(`There is no member with the email: ${email}`);
 		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, { expiresIn: '2 days' });
 		member.resetPasswordToken = token;
@@ -127,7 +149,7 @@ export class AuthController extends BaseController {
 		const { id } = payload;
 		if (!id || !ObjectId.isValid(id))
 			throw new BadRequestError('Reset password token corresponds to an invalid member');
-		const member = await Member.findById(id).exec();
+		const member = await User.findById(id).exec();
 		if (!member)
 			throw new BadRequestError('Reset password token corresponds to a non existing member');
 		if (member.resetPasswordToken !== token)

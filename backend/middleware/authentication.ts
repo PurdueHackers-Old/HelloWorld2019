@@ -1,6 +1,6 @@
 import { Action, UnauthorizedError } from 'routing-controllers';
 import { decode, verify } from 'jsonwebtoken';
-import { Member } from '../models/member';
+import { User } from '../models/user';
 import { ObjectId } from 'bson';
 import CONFIG from '../config';
 import { hasPermission, extractToken } from '../utils';
@@ -18,7 +18,7 @@ export const currentUserChecker = async (action: Action) => {
 	const payload: any = decode(token);
 	if (!payload || !payload._id || !ObjectId.isValid(payload._id)) return null;
 
-	const user = await Member.findById(payload._id)
+	const user = await User.findById(payload._id)
 		// .lean()
 		.exec();
 	return user;
