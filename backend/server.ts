@@ -73,7 +73,7 @@ export default class Server {
 
 	private setupMiddleware() {
 		this.app.use(helmet());
-		if (NODE_ENV === 'production') this.app.use(yes());
+		// if (NODE_ENV === 'production') this.app.use(yes());
 		if (NODE_ENV !== 'test')
 			NODE_ENV !== 'production' ? this.app.use(logger('dev')) : this.app.use(logger('tiny'));
 		this.app.use(express.json());

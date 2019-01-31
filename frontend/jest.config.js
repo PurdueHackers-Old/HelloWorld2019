@@ -6,7 +6,7 @@ module.exports = {
 	displayName: 'frontend',
 	globals: {
 		'ts-jest': {
-			tsConfig: '<rootDir>/tsconfig.test.json'
+			tsConfig: '<rootDir>/__tests__/tsconfig.test.json'
 		}
 	},
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
