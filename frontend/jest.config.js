@@ -1,4 +1,3 @@
-// const TEST_REGEX = '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|js?|tsx?|ts?)$';
 const TEST_REGEX = '**/?(*.)+(spec|test).+(ts|tsx|js)?(x)';
 
 module.exports = {

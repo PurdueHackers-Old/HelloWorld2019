@@ -1,8 +1,8 @@
 import { createLogger } from '../utils/logger';
-import * as winston from 'winston';
+import { Logger } from 'winston';
 
 export class BaseController {
-	readonly logger: winston.Logger;
+	readonly logger: Logger;
 	constructor() {
 		this.logger = createLogger(this);
 	}

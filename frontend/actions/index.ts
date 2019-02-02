@@ -1,6 +1,6 @@
 import axios from 'axios';
 import getConfig from 'next/config';
-import { ICreateUser } from '../types';
+import { ICreateUser } from '../@types';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
 const api = axios.create({

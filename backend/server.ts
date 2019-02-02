@@ -73,9 +73,9 @@ export default class Server {
 
 	private setupMiddleware() {
 		const devLogger = logger('dev', { skip: r => r.url.startsWith('/_next') });
-		const prodLogger = logger('tiny');
+		const prodLogger = logger('tiny', { skip: r => r.url.startsWith('/_next') });
 		this.app.use(helmet());
-		if (NODE_ENV === 'production') this.app.use(yes());
+		// if (NODE_ENV === 'production') this.app.use(yes());
 		if (NODE_ENV !== 'test')
 			NODE_ENV !== 'production' ? this.app.use(devLogger) : this.app.use(prodLogger);
 		this.app.use(express.json());

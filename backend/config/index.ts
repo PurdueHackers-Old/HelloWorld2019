@@ -1,3 +1,3 @@
-import { serverRuntimeConfig as config } from '../../env-config';
+import { serverRuntimeConfig as config } from './env-config';
 
 export default config;

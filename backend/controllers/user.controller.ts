@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { User, UserDto, IUserModel } from '../models/user';
-import { memberMatches, multer } from '../utils';
+import { userMatches, multer } from '../utils';
 import {
 	JsonController,
 	Get,
@@ -19,7 +19,7 @@ import { ValidationMiddleware } from '../middleware/validation';
 
 @JsonController('/api/users')
 @UseAfter(ValidationMiddleware)
-export class MemberController extends BaseController {
+export class UserController extends BaseController {
 	@Get('/')
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
 		order = order === 1 ? 1 : -1;
@@ -36,35 +36,35 @@ export class MemberController extends BaseController {
 			.lean()
 			.exec();
 
-		return { members: results };
+		return { users: results };
 	}
 
 	@Get('/:id')
 	async getById(@Param('id') id: string) {
-		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid member ID');
-		const member = await User.findById(id)
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		const user = await User.findById(id)
 			.lean()
 			.exec();
-		if (!member) throw new BadRequestError('Member does not exist');
-		return member;
+		if (!user) throw new BadRequestError('User does not exist');
+		return user;
 	}
 
 	@Put('/:id')
 	@UseBefore(multer.any())
 	async updateById(
 		@Param('id') id: string,
-		@Body() memberDto: UserDto,
-		@CurrentUser({ required: true }) user: IUserModel
+		@Body() userDto: UserDto,
+		@CurrentUser({ required: true }) currentUser: IUserModel
 	) {
-		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid member ID');
-		if (!memberMatches(user, id))
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this profile');
-		let member = await User.findById(id, '+password').exec();
-		if (!member) throw new BadRequestError('Member not found');
+		let user = await User.findById(id, '+password').exec();
+		if (!user) throw new BadRequestError('User not found');
 
-		member = await User.findByIdAndUpdate(id, memberDto, { new: true })
+		user = await User.findByIdAndUpdate(id, userDto, { new: true })
 			.lean()
 			.exec();
-		return member;
+		return user;
 	}
 }

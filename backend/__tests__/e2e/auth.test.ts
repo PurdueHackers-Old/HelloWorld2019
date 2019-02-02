@@ -1,6 +1,5 @@
 import 'jest';
-// import * as supertest from 'supertest';
-import supertest = require('supertest');
+import * as supertest from 'supertest';
 import { generateUser, sleep } from '../helper';
 import Server from '../../../backend/server';
 
