@@ -1,8 +1,4 @@
-// const withTypescript = require('next-with-typescript')
-// module.exports = withTypescript()
-
-const withTypescript = require('next-with-typescript');
-// const { publicRuntimeConfig, serverRuntimeConfig } = require('../env-config');
+const withTypescript = require('@zeit/next-typescript');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
 
 module.exports = {
