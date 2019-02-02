@@ -16,14 +16,12 @@ import {
 	BadRequestError,
 	UnauthorizedError,
 	Get,
-	CurrentUser,
 	BodyParam
 } from 'routing-controllers';
 import { ValidationMiddleware } from '../middleware/validation';
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
-import { string } from 'prop-types';
 
 export const router = express.Router();
 
@@ -85,8 +83,8 @@ export class AuthController extends BaseController {
 		};
 	}
 
-	@Get('/me')
-	async me(@Req() req: Request) {
+	@Get('/refresh')
+	async refresh(@Req() req: Request) {
 		// Renew user's auth token
 		let token = extractToken(req);
 		if (!token || token === 'null' || token === 'undefined')

@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { User, UserDto, IUserModel } from '../models/user';
 import { memberMatches, multer } from '../utils';
@@ -10,7 +9,6 @@ import {
 	BadRequestError,
 	Put,
 	Body,
-	Req,
 	UseBefore,
 	CurrentUser,
 	UnauthorizedError,
@@ -33,10 +31,8 @@ export class MemberController extends BaseController {
 		});
 		if (!contains) sortBy = 'createdAt';
 
-		const results = await User.find({}, '_id name email createdAt')
-
+		const results = await User.find()
 			.sort({ [sortBy]: order })
-			// .limit(100)
 			.lean()
 			.exec();
 
@@ -56,7 +52,6 @@ export class MemberController extends BaseController {
 	@Put('/:id')
 	@UseBefore(multer.any())
 	async updateById(
-		@Req() req: Request,
 		@Param('id') id: string,
 		@Body() memberDto: UserDto,
 		@CurrentUser({ required: true }) user: IUserModel
