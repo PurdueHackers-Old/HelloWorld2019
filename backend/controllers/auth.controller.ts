@@ -23,7 +23,6 @@ import { ValidationMiddleware } from '../middleware/validation';
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
-import { string } from 'prop-types';
 
 export const router = express.Router();
 

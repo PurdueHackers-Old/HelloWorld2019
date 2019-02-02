@@ -57,7 +57,6 @@ export class EmailService {
 	}
 
 	async sendErrorEmail(error: Error, user?: UserDto) {
-		// if (CONFIG.NODE_ENV !== 'production') return null;
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',
 			from: `"${CONFIG.ORG_NAME}" <${CONFIG.EMAIL}>`,

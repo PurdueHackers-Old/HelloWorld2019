@@ -14,7 +14,7 @@
 		"sourceMap": true,
 		"skipLibCheck": true,
 		"outDir": "dist",
-		"typeRoots": ["./node_modules/@types"],
+		"typeRoots": ["./node_modules/@types", "./frontend/@types"],
 		"lib": ["es2017", "dom", "es2015", "es2016"]
 	},
 	"exclude": ["./node_modules"],
