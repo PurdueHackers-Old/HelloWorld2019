@@ -14,7 +14,6 @@ describe('Auth route tests', () => {
 		Server.createInstance().then(s => {
 			server = s;
 			request = supertest(s.app);
-			console.log('Test Database:', CONFIG.DB);
 		})
 	);
 
