@@ -1,7 +1,3 @@
-const path = require('path');
-
-console.log('Backend config path:', __dirname);
-
 module.exports = {
 	collectCoverage: true,
 	displayName: 'backend',
