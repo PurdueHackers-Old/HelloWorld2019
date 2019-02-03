@@ -1,44 +1,39 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
 import Router from 'next/router';
-// import { signup } from '../actions';
+// import { signin } from '../actions';
 
-class SignupPage extends Component {
+class LoginPage extends Component {
 	state = {
-		name: '',
 		email: '',
 		password: '',
-		passwordConfirm: ''
+		rememberMe: false
 	};
 
 	onChange = (e: ChangeEvent<HTMLInputElement>) =>
 		this.setState({ [e.target.name]: e.target.value });
 
+	onCheck = () => this.setState({ rememberMe: !this.state.rememberMe });
+
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { name, email, password, passwordConfirm } = this.state;
-		// if (!name || !email || !password || !passwordConfirm) return;
+		const { email, password } = this.state;
+		if (!email || !password) return;
 		try {
-			// const user = await signup(this.state);
+			// const user = await signin(this.state);
 			Router.push('/');
-			// this.props.router.push('/');
-			// console.log('New User:', user);
+			// console.log('Logged in as:', user);
 		} catch (error) {
 			console.error('Error creating user', error);
 		}
 	};
 
 	render() {
-		const { name, email, password, passwordConfirm } = this.state;
+		const { email, password } = this.state;
 		return (
 			<div>
-				Signup Page
+				Login Page
 				<br />
 				<form onSubmit={this.onSubmit}>
-					<label>
-						Name:
-						<input name="name" value={name} onChange={this.onChange} />
-					</label>
-					<br />
 					<label>
 						Email:
 						<input name="email" value={email} onChange={this.onChange} />
@@ -54,15 +49,7 @@ class SignupPage extends Component {
 						/>
 					</label>
 					<br />
-					<label>
-						Password Comfirm:
-						<input
-							type="password"
-							name="passwordConfirm"
-							value={passwordConfirm}
-							onChange={this.onChange}
-						/>
-					</label>
+					Remember Me <input type="checkbox" name="rememberMe" onClick={this.onCheck} />
 					<br />
 					<input type="submit" value="Submit" />
 				</form>
@@ -71,4 +58,4 @@ class SignupPage extends Component {
 	}
 }
 
-export default SignupPage;
+export default LoginPage;

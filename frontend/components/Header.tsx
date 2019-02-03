@@ -8,6 +8,10 @@ export default () => {
 				<a>Home</a>
 			</Link>{' '}
 			|{' '}
+			<Link href="/login">
+				<a>Login</a>
+			</Link>{' '}
+			|{' '}
 			<Link href="/signup">
 				<a>Signup</a>
 			</Link>

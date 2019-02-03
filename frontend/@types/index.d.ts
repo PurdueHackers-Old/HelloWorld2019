@@ -4,3 +4,9 @@ export interface ICreateUser {
 	password: string;
 	passwordConfirm: string;
 }
+
+export interface ILoginUser {
+	email: string;
+	password: string;
+	rememberMe: boolean;
+}
