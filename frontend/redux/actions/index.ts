@@ -1,12 +1,15 @@
 import { ICreateUser, ILoginUser } from '../../@types';
 import { api } from '../../utils';
+import { ActionCreator, AnyAction, Dispatch } from 'redux';
 
 // Helper functions
 export const getToken = () => {
 	return '';
 };
 // getStorage().getItem('token');
-const makeDispatcher = (type: string, ...argNames: string[]) => (...args: any[]) => {
+const makeDispatcher = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
+	...args: any[]
+) => {
 	const action = { type };
 	argNames.forEach((arg, index) => {
 		action[argNames[index]] = args[index];
@@ -17,7 +20,6 @@ const makeDispatcher = (type: string, ...argNames: string[]) => (...args: any[])
 // Actions
 export const AUTH_USER_SET = 'AUTH_USER_SET';
 export const AUTH_TOKEN_SET = 'AUTH_TOKEN_SET';
-export const AUTH_REMEMBER_ME_SET = 'AUTH_REMEMBER_ME_SET';
 
 export const FLASH_GREEN_SET = 'FLASH_GREEN_SET';
 export const FLASH_RED_SET = 'FLASH_RED_SET';
@@ -25,13 +27,12 @@ export const FLASH_RED_SET = 'FLASH_RED_SET';
 // Dispatchers
 const setUser = makeDispatcher(AUTH_USER_SET, 'user');
 const setToken = makeDispatcher(AUTH_TOKEN_SET, 'token');
-const setRememberMe = makeDispatcher(AUTH_REMEMBER_ME_SET, 'rememberMe');
 
 const setGreenFlash = makeDispatcher(FLASH_GREEN_SET, 'msgGreen');
 const setRedFlash = makeDispatcher(FLASH_RED_SET, 'msgRed');
 
 // Creators
-export const signup = (body: ICreateUser) => async dispatch => {
+export const signup = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -44,25 +45,24 @@ export const signup = (body: ICreateUser) => async dispatch => {
 	}
 };
 
-export const signin = async (body: ILoginUser) => async dispatch => {
+export const signin = (body: ILoginUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
-		} = await api.post('/api/auth/login', body);
+		} = await api.post('/auth/login', body);
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
-		dispatch(setRememberMe(body.rememberMe));
 		return response;
 	} catch (error) {
-		throw error.response.data;
+		if (error.response) throw error.response.data;
+		else throw error;
 	}
 };
 
-export const signOut = () => async dispatch => {
+export const signOut = () => async (dispatch: Dispatch) => {
 	try {
 		dispatch(setToken(null));
 		dispatch(setUser(null));
-		dispatch(setRememberMe(false));
 	} catch (error) {
 		throw error;
 	}
@@ -94,11 +94,11 @@ export const resetPassword = async (password, passwordConfirm, token) => {
 	}
 };
 
-export const sendFlashMessage = (msg, type = 'red') => dispatch => {
+export const sendFlashMessage = (msg, type = 'red') => (dispatch: Dispatch) => {
 	type === 'red' ? dispatch(setRedFlash(msg)) : dispatch(setGreenFlash(msg));
 };
 
-export const clearFlashMessages = () => dispatch => {
+export const clearFlashMessages = () => (dispatch: Dispatch) => {
 	dispatch(setGreenFlash(''));
 	dispatch(setRedFlash(''));
 };
@@ -133,7 +133,7 @@ export const fetchUser = async (id, params) => {
 	}
 };
 
-export const refreshUser = params => async dispatch => {
+export const refreshToken = params => async (dispatch: Dispatch) => {
 	try {
 		const token = getToken();
 		if (!token) {

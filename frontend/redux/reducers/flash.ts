@@ -1,4 +1,10 @@
 import { FLASH_GREEN_SET, FLASH_RED_SET } from '../actions';
+import { Action } from 'redux';
+
+interface IState {
+	msgGreen: string;
+	msgRed: string;
+}
 
 export default (
 	state = {

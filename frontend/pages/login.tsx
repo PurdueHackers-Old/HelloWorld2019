@@ -1,6 +1,7 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
+import { connect } from 'react-redux';
 import Router from 'next/router';
-// import { signin } from '../actions';
+import { signin, sendFlashMessage } from '../redux/actions';
 
 class LoginPage extends Component {
 	state = {
@@ -19,9 +20,10 @@ class LoginPage extends Component {
 		const { email, password } = this.state;
 		if (!email || !password) return;
 		try {
-			// const user = await signin(this.state);
-			Router.push('/');
-			// console.log('Logged in as:', user);
+			console.log('Login props:', this.props);
+			const user = await this.props.signin(this.state);
+			console.log('Logged in as:', user);
+			// Router.push('/');
 		} catch (error) {
 			console.error('Error creating user', error);
 		}
@@ -36,7 +38,7 @@ class LoginPage extends Component {
 				<form onSubmit={this.onSubmit}>
 					<label>
 						Email:
-						<input name="email" value={email} onChange={this.onChange} />
+						<input type="email" name="email" value={email} onChange={this.onChange} />
 					</label>
 					<br />
 					<label>
@@ -58,4 +60,11 @@ class LoginPage extends Component {
 	}
 }
 
-export default LoginPage;
+const mapStateToProps = state => ({
+	...state.sessionState
+});
+
+export default connect(
+	mapStateToProps,
+	{ signin, flash: sendFlashMessage }
+)(LoginPage);

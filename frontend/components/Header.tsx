@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default () => {
+const Header = () => {
 	return (
 		<div>
 			<Link href="/">
@@ -18,3 +18,5 @@ export default () => {
 		</div>
 	);
 };
+
+export default Header;
