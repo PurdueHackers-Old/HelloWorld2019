@@ -1,19 +1,16 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
-import { signin, sendFlashMessage } from '../redux/actions';
+import { signIn, sendFlashMessage } from '../redux/actions';
 
 class LoginPage extends Component {
 	state = {
 		email: '',
-		password: '',
-		rememberMe: false
+		password: ''
 	};
 
 	onChange = (e: ChangeEvent<HTMLInputElement>) =>
 		this.setState({ [e.target.name]: e.target.value });
-
-	onCheck = () => this.setState({ rememberMe: !this.state.rememberMe });
 
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -21,9 +18,9 @@ class LoginPage extends Component {
 		if (!email || !password) return;
 		try {
 			console.log('Login props:', this.props);
-			const user = await this.props.signin(this.state);
+			const user = await this.props.signIn(this.state);
 			console.log('Logged in as:', user);
-			// Router.push('/');
+			Router.push('/');
 		} catch (error) {
 			console.error('Error creating user', error);
 		}
@@ -51,8 +48,6 @@ class LoginPage extends Component {
 						/>
 					</label>
 					<br />
-					Remember Me <input type="checkbox" name="rememberMe" onClick={this.onCheck} />
-					<br />
 					<input type="submit" value="Submit" />
 				</form>
 			</div>
@@ -66,5 +61,5 @@ const mapStateToProps = state => ({
 
 export default connect(
 	mapStateToProps,
-	{ signin, flash: sendFlashMessage }
+	{ signIn, flash: sendFlashMessage }
 )(LoginPage);

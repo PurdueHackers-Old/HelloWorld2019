@@ -1,6 +1,6 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
 import Router from 'next/router';
-// import { signup } from '../actions';
+import { signUp } from '../redux/actions';
 
 class SignupPage extends Component {
 	state = {
@@ -16,12 +16,11 @@ class SignupPage extends Component {
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { name, email, password, passwordConfirm } = this.state;
-		// if (!name || !email || !password || !passwordConfirm) return;
+		if (!name || !email || !password || !passwordConfirm) return;
 		try {
-			// const user = await signup(this.state);
+			const user = await this.props.signup(this.state);
 			Router.push('/');
-			// this.props.router.push('/');
-			// console.log('New User:', user);
+			console.log('New User:', user);
 		} catch (error) {
 			console.error('Error creating user', error);
 		}

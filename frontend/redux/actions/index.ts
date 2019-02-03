@@ -1,12 +1,13 @@
+import { ActionCreator, AnyAction, Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { ICreateUser, ILoginUser } from '../../@types';
 import { api } from '../../utils';
-import { ActionCreator, AnyAction, Dispatch } from 'redux';
 
 // Helper functions
-export const getToken = () => {
-	return '';
+export const getToken = state => {
+	return state.sessionState.token;
 };
-// getStorage().getItem('token');
+
 const makeDispatcher = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
 	...args: any[]
 ) => {
@@ -32,7 +33,7 @@ const setGreenFlash = makeDispatcher(FLASH_GREEN_SET, 'msgGreen');
 const setRedFlash = makeDispatcher(FLASH_RED_SET, 'msgRed');
 
 // Creators
-export const signup = (body: ICreateUser) => async (dispatch: Dispatch) => {
+export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -45,7 +46,7 @@ export const signup = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	}
 };
 
-export const signin = (body: ILoginUser) => async (dispatch: Dispatch) => {
+export const signIn = (body: ILoginUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -61,7 +62,7 @@ export const signin = (body: ILoginUser) => async (dispatch: Dispatch) => {
 
 export const signOut = () => async (dispatch: Dispatch) => {
 	try {
-		dispatch(setToken(null));
+		dispatch(setToken(''));
 		dispatch(setUser(null));
 	} catch (error) {
 		throw error;
@@ -103,39 +104,9 @@ export const clearFlashMessages = () => (dispatch: Dispatch) => {
 	dispatch(setRedFlash(''));
 };
 
-export const fetchUsers = async params => {
+export const refreshToken = params => async (dispatch: Dispatch, getState) => {
 	try {
-		const token = getToken();
-		const {
-			data: { response }
-		} = await api.get('/api/users', {
-			params,
-			headers: { Authorization: `Bearer ${token}` }
-		});
-		return response;
-	} catch (error) {
-		throw error.response.data;
-	}
-};
-
-export const fetchUser = async (id, params) => {
-	try {
-		const token = getToken();
-		const {
-			data: { response }
-		} = await api.get(`/api/users/${id}`, {
-			params,
-			headers: { Authorization: `Bearer ${token}` }
-		});
-		return response;
-	} catch (error) {
-		throw error.response.data;
-	}
-};
-
-export const refreshToken = params => async (dispatch: Dispatch) => {
-	try {
-		const token = getToken();
+		const token = getToken(getState());
 		if (!token) {
 			dispatch(setUser(null));
 			dispatch(setToken(null));
@@ -155,8 +126,8 @@ export const refreshToken = params => async (dispatch: Dispatch) => {
 	}
 };
 
-export const storageChanged = e => dispatch => {
-	const token = getToken();
+export const storageChanged = e => (dispatch, getState) => {
+	const token = getToken(getState());
 	if (!token) signOut()(dispatch);
 	else dispatch(setToken(token));
 };
