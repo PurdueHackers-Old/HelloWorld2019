@@ -1,3 +1,7 @@
+const path = require('path');
+
+console.log('Backend config path:', __dirname);
+
 module.exports = {
 	collectCoverage: true,
 	displayName: 'backend',
@@ -11,7 +15,7 @@ module.exports = {
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
 	name: 'backend',
 	preset: 'ts-jest',
-	rootDir: './',
+	rootDir: __dirname,
 	testEnvironment: 'node',
 	testMatch: ['**/?(*.)+(spec|test).+(ts|tsx|js)?(x)']
 };

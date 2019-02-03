@@ -1,14 +1,14 @@
 import { ActionCreator, AnyAction, Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { ICreateUser, ILoginUser } from '../../@types';
+import { ICreateUser, ILoginUser, ILoginResponse } from '../../@types';
 import { api } from '../../utils';
+import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
 
 // Helper functions
 export const getToken = state => {
 	return state.sessionState.token;
 };
 
-const makeDispatcher = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
+const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
 	...args: any[]
 ) => {
 	const action = { type };
@@ -18,22 +18,18 @@ const makeDispatcher = (type: string, ...argNames: string[]): ActionCreator<AnyA
 	return action;
 };
 
+
+// Action Creators
+const setUser = makeCreator(AUTH_USER_SET, 'user');
+const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
+
+const setGreenFlash = makeCreator(FLASH_GREEN_SET, 'msgGreen');
+const setRedFlash = makeCreator(FLASH_RED_SET, 'msgRed');
+
 // Actions
-export const AUTH_USER_SET = 'AUTH_USER_SET';
-export const AUTH_TOKEN_SET = 'AUTH_TOKEN_SET';
-
-export const FLASH_GREEN_SET = 'FLASH_GREEN_SET';
-export const FLASH_RED_SET = 'FLASH_RED_SET';
-
-// Dispatchers
-const setUser = makeDispatcher(AUTH_USER_SET, 'user');
-const setToken = makeDispatcher(AUTH_TOKEN_SET, 'token');
-
-const setGreenFlash = makeDispatcher(FLASH_GREEN_SET, 'msgGreen');
-const setRedFlash = makeDispatcher(FLASH_RED_SET, 'msgRed');
-
-// Creators
-export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
+export const signUp = (body: ICreateUser) => async (
+	dispatch: Dispatch
+): Promise<ILoginResponse> => {
 	try {
 		const {
 			data: { response }
@@ -46,7 +42,7 @@ export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	}
 };
 
-export const signIn = (body: ILoginUser) => async (dispatch: Dispatch) => {
+export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<ILoginResponse> => {
 	try {
 		const {
 			data: { response }

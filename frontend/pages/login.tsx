@@ -2,8 +2,13 @@ import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
+import { ILoginUser, ILoginResponse } from '../@types';
 
-class LoginPage extends Component {
+type Props = {
+	signin: (body: ILoginUser) => Promise<ILoginResponse>;
+};
+
+class LoginPage extends Component<Props> {
 	state = {
 		email: '',
 		password: ''
@@ -18,7 +23,7 @@ class LoginPage extends Component {
 		if (!email || !password) return;
 		try {
 			console.log('Login props:', this.props);
-			const user = await this.props.signIn(this.state);
+			const user = await this.props.signin(this.state);
 			console.log('Logged in as:', user);
 			Router.push('/');
 		} catch (error) {
@@ -61,5 +66,5 @@ const mapStateToProps = state => ({
 
 export default connect(
 	mapStateToProps,
-	{ signIn, flash: sendFlashMessage }
+	{ signin: signIn, flash: sendFlashMessage }
 )(LoginPage);

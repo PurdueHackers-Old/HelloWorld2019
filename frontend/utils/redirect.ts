@@ -1,6 +1,6 @@
 import Router from 'next/router';
 
-export default (target, ctx: { [x: string]: any } = {}) => {
+export default (target: string, ctx: { [x: string]: any } = {}) => {
 	if (ctx.res) {
 		// server
 		// 303: "See other"

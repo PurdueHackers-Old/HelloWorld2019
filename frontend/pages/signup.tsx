@@ -1,8 +1,14 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
+import { connect } from 'react-redux';
 import Router from 'next/router';
-import { signUp } from '../redux/actions';
+import { signUp, sendFlashMessage } from '../redux/actions';
+import { ILoginResponse, ICreateUser } from '../@types';
 
-class SignupPage extends Component {
+type Props = {
+	signup: (body: ICreateUser) => Promise<ILoginResponse>;
+};
+
+class SignupPage extends Component<Props> {
 	state = {
 		name: '',
 		email: '',
@@ -70,4 +76,11 @@ class SignupPage extends Component {
 	}
 }
 
-export default SignupPage;
+const mapStateToProps = state => ({
+	...state.sessionState
+});
+
+export default connect(
+	mapStateToProps,
+	{ signup: signUp, flash: sendFlashMessage }
+)(SignupPage);

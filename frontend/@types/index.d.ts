@@ -1,5 +1,17 @@
 import { AnyAction } from 'redux';
 
+export interface IUser {
+	_id: string;
+	roles: string[];
+	verified: boolean;
+	checkedin: boolean;
+	name: string;
+	email: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+// Request types
 export interface ICreateUser {
 	name: string;
 	email: string;
@@ -10,9 +22,10 @@ export interface ICreateUser {
 export interface ILoginUser {
 	email: string;
 	password: string;
-	rememberMe: boolean;
 }
 
-export interface Action {
-	
+// Response types
+export interface ILoginResponse {
+	token: string;
+	user: IUser;
 }

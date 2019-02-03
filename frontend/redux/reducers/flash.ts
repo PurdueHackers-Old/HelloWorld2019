@@ -1,18 +1,12 @@
-import { FLASH_GREEN_SET, FLASH_RED_SET } from '../actions';
-import { Action } from 'redux';
+import { FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
+import { AnyAction } from 'redux';
 
-interface IState {
-	msgGreen: string;
-	msgRed: string;
-}
+export const initialState = {
+	msgGreen: '',
+	msgRed: ''
+};
 
-export default (
-	state = {
-		msgGreen: '',
-		msgRed: ''
-	},
-	action
-) => {
+export default (state = initialState, action: AnyAction) => {
 	switch (action.type) {
 		case FLASH_GREEN_SET: {
 			return {

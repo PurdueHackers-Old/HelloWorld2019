@@ -55,7 +55,7 @@ export class AuthController extends BaseController {
 		await user.save();
 		const u = user.toJSON();
 		delete u.password;
-		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: '7 days' });
+		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
 
 		return {
 			user: u,
@@ -76,7 +76,7 @@ export class AuthController extends BaseController {
 		delete u.password;
 
 		// If user is found and password is right create a token
-		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: '7 days' });
+		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
 		return {
 			user: u,
 			token
@@ -96,7 +96,7 @@ export class AuthController extends BaseController {
 			.lean()
 			.exec();
 		if (!user) throw new UnauthorizedError('Member not found');
-		token = jwt.sign({ _id: user._id }, CONFIG.SECRET, { expiresIn: '7 days' });
+		token = jwt.sign({ _id: user._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
 		return { user, token };
 	}
 
@@ -123,9 +123,9 @@ export class AuthController extends BaseController {
 		if (passwordConfirm !== password) throw new BadRequestError('Passwords did not match');
 
 		if (!token) throw new UnauthorizedError('Invalid reset password token');
-		let payload;
+		let payload: { id: string };
 		try {
-			payload = jwt.verify(token, CONFIG.SECRET) as object;
+			payload = jwt.verify(token, CONFIG.SECRET) as any;
 		} catch (error) {
 			throw new UnauthorizedError('Invalid reset password token');
 		}

@@ -8774,10 +8774,10 @@ typedi@^0.8.0:
   resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.8.0.tgz#d8e203bd1d41a96e2b0a5c6295147d74b2b2d03e"
   integrity sha512-/c7Bxnm6eh5kXx2I+mTuO+2OvoWni5+rXA3PhXwVWCtJRYmz3hMok5s1AKLzoDvNAZqj/Q/acGstN0ri5aQoOA==
 
-typescript@^3.4.0-dev.20190202:
-  version "3.4.0-dev.20190202"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.0-dev.20190202.tgz#a1f41f722ee2d77c01411d67de042be32ea7af93"
-  integrity sha512-/9NIR5B2Dddc+mg8Re+A7w7nuuijafrDt6b2CHNjUdKRWaET1kPBjydmS/xTtCqcnHNotINws2BuV6ouac5zMw==
+typescript@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
+  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
 
 uglify-es@^3.3.4:
   version "3.3.9"

@@ -1,12 +1,12 @@
-import { AUTH_USER_SET, AUTH_TOKEN_SET } from '../actions';
+import { AUTH_USER_SET, AUTH_TOKEN_SET } from '../constants';
+import { AnyAction } from 'redux';
 
-export default (
-	state = {
-		token: '',
-		user: null
-	},
-	action
-) => {
+export const initialState = {
+	token: '',
+	user: null
+};
+
+export default (state = initialState, action: AnyAction) => {
 	switch (action.type) {
 		case AUTH_USER_SET: {
 			return action.user

@@ -4,35 +4,32 @@ import Router from 'next/router';
 import { connect } from 'react-redux';
 import { sendFlashMessage, signOut } from '../redux/actions';
 
-class Header extends Component {
-	render() {
-		const { token } = this.props;
-		return (
-			<div>
-				<Link href="/">
-					<a>Home</a>
-				</Link>{' '}
-				|{' '}
-				{token && (
-					<Link href="/logout">
-						<a>Logout</a>
+const Header = ({ token }) => {
+	return (
+		<div>
+			<Link href="/">
+				<a>Home</a>
+			</Link>{' '}
+			|{' '}
+			{token && (
+				<Link href="/logout">
+					<a>Logout</a>
+				</Link>
+			)}
+			{!token && (
+				<>
+					<Link href="/login">
+						<a>Login</a>
+					</Link>{' '}
+					|{' '}
+					<Link href="/signup">
+						<a>Signup</a>
 					</Link>
-				)}
-				{!token && (
-					<>
-						<Link href="/login">
-							<a>Login</a>
-						</Link>{' '}
-						|{' '}
-						<Link href="/signup">
-							<a>Signup</a>
-						</Link>
-					</>
-				)}
-			</div>
-		);
-	}
-}
+				</>
+			)}
+		</div>
+	);
+};
 
 const mapStateToProps = state => ({
 	token: !!state.sessionState.token
