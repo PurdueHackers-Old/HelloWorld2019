@@ -2,6 +2,9 @@
 	"defaultSeverity": "error",
 	"extends": ["tslint:recommended", "tslint-config-prettier"],
 	"jsRules": {},
+	"linterOptions": {
+		"exclude": ["node_modules/**", "**/.next/**", "dist/**"]
+	},
 	"rules": {
 		"indent": false,
 		"no-tabs": false,
