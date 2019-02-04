@@ -20,9 +20,7 @@ export const errorRes = (res: Response, status: number, error: any) =>
 	});
 
 export const hasPermission = (user: IUserModel, name: string): boolean =>
-	user &&
-	user.roles &&
-	user.roles.some(role => role === name || role === 'admin');
+	user && user.roles && user.roles.some(role => role === name || role === 'admin');
 
 export const isAdmin = user => hasPermission(user, 'admin');
 
@@ -58,5 +56,10 @@ export const extractToken = (req: Request) =>
 		ExtractJwt.fromAuthHeaderAsBearerToken(),
 		ExtractJwt.fromBodyField('token'),
 		ExtractJwt.fromHeader('token'),
-		ExtractJwt.fromUrlQueryParameter('token')
+		ExtractJwt.fromUrlQueryParameter('token'),
+		(r: Request) => {
+			let token: string;
+			if (r && r.cookies) token = r.cookies.token;
+			return token;
+		}
 	])(req);

@@ -4,6 +4,7 @@ import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
 import { ILoginUser, ILoginResponse } from '../@types';
+import { redirectIfAuthenticated } from '../utils/session';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
@@ -11,18 +12,14 @@ type Props = {
 } & ISessionState;
 
 class LoginPage extends Component<Props> {
-	static getInitialProps = async ctx => {
+	static getInitialProps = ctx => {
+		redirectIfAuthenticated('/', ctx);
 		return {};
 	};
 
 	state = {
 		email: '',
 		password: ''
-	};
-
-	// TODO: Handle redirecting of already logged-in users on server side
-	componentWillMount = () => {
-		// if (this.props.token) Router.replace('/');
 	};
 
 	onChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -43,7 +40,6 @@ class LoginPage extends Component<Props> {
 	};
 
 	render() {
-		console.log('Rendering login page:', this.props);
 		const { email, password } = this.state;
 		return (
 			<div>

@@ -4,6 +4,7 @@ import Router from 'next/router';
 import { signUp, sendFlashMessage } from '../redux/actions';
 import { ILoginResponse, ICreateUser } from '../@types';
 import { ISessionState } from '../redux/reducers/session';
+import { redirectIfAuthenticated } from '../utils/session';
 
 type Props = {
 	signup: (body: ICreateUser) => Promise<ILoginResponse>;
@@ -11,15 +12,17 @@ type Props = {
 } & ISessionState;
 
 class SignupPage extends Component<Props> {
+
+	static getInitialProps = (ctx) => {
+		redirectIfAuthenticated('/', ctx);
+		return {};
+	};
+	
 	state = {
 		name: '',
 		email: '',
 		password: '',
 		passwordConfirm: ''
-	};
-
-	componentWillMount = () => {
-		if (this.props.token) Router.replace('/');
 	};
 
 	onChange = (e: ChangeEvent<HTMLInputElement>) =>

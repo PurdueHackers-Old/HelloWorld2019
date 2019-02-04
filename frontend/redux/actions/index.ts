@@ -2,22 +2,23 @@ import { ActionCreator, AnyAction, Dispatch } from 'redux';
 import { ICreateUser, ILoginUser, ILoginResponse } from '../../@types';
 import { api } from '../../utils';
 import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
+import { setCookie, removeCookie, getToken } from '../../utils/session';
 
 // Helper functions
-export const getToken = state => {
-	return state.sessionState.token;
-};
+// export const getToken = state => {
+// 	// return state.sessionState.token;
+// 	return getCookie('token');
+// };
 
 const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
 	...args: any[]
 ) => {
 	const action = { type };
-	argNames.forEach((arg, index) => {
+	argNames.forEach((_, index) => {
 		action[argNames[index]] = args[index];
 	});
 	return action;
 };
-
 
 // Action Creators
 const setUser = makeCreator(AUTH_USER_SET, 'user');
@@ -36,6 +37,7 @@ export const signUp = (body: ICreateUser) => async (
 		} = await api.post('/auth/signup', body);
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
+		setCookie('token', response.token);
 		return response;
 	} catch (error) {
 		throw error.response.data;
@@ -49,6 +51,7 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<
 		} = await api.post('/auth/login', body);
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
+		setCookie('token', response.token);
 		return response;
 	} catch (error) {
 		if (error.response) throw error.response.data;
@@ -60,6 +63,7 @@ export const signOut = () => async (dispatch: Dispatch) => {
 	try {
 		dispatch(setToken(''));
 		dispatch(setUser(null));
+		removeCookie('token');
 	} catch (error) {
 		throw error;
 	}
@@ -100,12 +104,13 @@ export const clearFlashMessages = () => (dispatch: Dispatch) => {
 	dispatch(setRedFlash(''));
 };
 
-export const refreshToken = params => async (dispatch: Dispatch, getState) => {
+export const refreshToken = params => async (dispatch: Dispatch) => {
 	try {
-		const token = getToken(getState());
+		const token = getToken();
 		if (!token) {
 			dispatch(setUser(null));
-			dispatch(setToken(null));
+			dispatch(setToken(''));
+			removeCookie('token');
 			return null;
 		}
 		const {
@@ -116,6 +121,7 @@ export const refreshToken = params => async (dispatch: Dispatch, getState) => {
 		});
 		dispatch(setUser(response.user));
 		dispatch(setToken(response.token));
+		setCookie('token', response.token);
 		return response;
 	} catch (error) {
 		throw error.response.data;
