@@ -9,7 +9,7 @@ import CONFIG from '../../config';
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
 
-describe('Suite: /api/auth -- E2E', () => {
+describe('Suite: /api/auth -- Integration', () => {
 	beforeAll(() =>
 		Server.createInstance().then(s => {
 			server = s;
