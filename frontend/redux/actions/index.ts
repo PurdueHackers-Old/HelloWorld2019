@@ -21,8 +21,8 @@ const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyActi
 };
 
 // Action Creators
-const setUser = makeCreator(AUTH_USER_SET, 'user');
-const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
+export const setUser = makeCreator(AUTH_USER_SET, 'user');
+export const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
 
 const setGreenFlash = makeCreator(FLASH_GREEN_SET, 'msgGreen');
 const setRedFlash = makeCreator(FLASH_RED_SET, 'msgRed');
@@ -104,9 +104,9 @@ export const clearFlashMessages = () => (dispatch: Dispatch) => {
 	dispatch(setRedFlash(''));
 };
 
-export const refreshToken = params => async (dispatch: Dispatch) => {
+export const refreshToken = (ctx?, params?: any) => async (dispatch: Dispatch) => {
 	try {
-		const token = getToken();
+		const token = getToken(ctx);
 		if (!token) {
 			dispatch(setUser(null));
 			dispatch(setToken(''));
@@ -115,7 +115,7 @@ export const refreshToken = params => async (dispatch: Dispatch) => {
 		}
 		const {
 			data: { response }
-		} = await api.get('/api/auth/refresh', {
+		} = await api.get('/auth/refresh', {
 			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});

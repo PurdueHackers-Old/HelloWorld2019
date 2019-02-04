@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import { connect } from 'react-redux';
-import { sendFlashMessage, signOut } from '../redux/actions';
 
 const Header = ({ token }) => {
+	console.log('Rendering Header:', token);
 	return (
 		<div>
 			<Link href="/">
@@ -30,11 +29,4 @@ const Header = ({ token }) => {
 	);
 };
 
-const mapStateToProps = state => ({
-	token: !!state.sessionState.token
-});
-
-export default connect(
-	mapStateToProps,
-	{ logout: signOut, flash: sendFlashMessage }
-)(Header);
+export default Header;

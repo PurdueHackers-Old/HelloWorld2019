@@ -19,7 +19,7 @@ const getCookieFromBrowser = (key: string) => {
 };
 
 const getCookieFromServer = (key: string, req: Request) => {
-	if (!req || !req.cookies) return undefined;
+	if (!req || !req.cookies) return '';
 	return req.cookies[key];
 };
 
