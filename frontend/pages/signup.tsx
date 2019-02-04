@@ -12,12 +12,11 @@ type Props = {
 } & ISessionState;
 
 class SignupPage extends Component<Props> {
-
-	static getInitialProps = (ctx) => {
+	static getInitialProps = ctx => {
 		redirectIfAuthenticated('/', ctx);
 		return {};
 	};
-	
+
 	state = {
 		name: '',
 		email: '',
@@ -33,9 +32,9 @@ class SignupPage extends Component<Props> {
 		const { name, email, password, passwordConfirm } = this.state;
 		if (!name || !email || !password || !passwordConfirm) return;
 		try {
-			const user = await this.props.signup(this.state);
+			const { user } = await this.props.signup(this.state);
 			Router.push('/');
-			console.log('New User:', user);
+			this.props.flash(`Welcome ${user.name}!`);
 		} catch (error) {
 			console.error('Error creating user', error);
 		}

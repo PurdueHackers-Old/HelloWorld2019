@@ -14,11 +14,13 @@ type Props = { store: Store };
 
 class MyApp extends App<Props> {
 	static async getInitialProps({ Component, ctx }) {
+		// TODO: Find better way to refresh token w/o network request
 		if (ctx.isServer) {
-			const { user } = ctx.req;
-			const token = getToken(ctx);
-			ctx.store.dispatch(setUser(user));
-			ctx.store.dispatch(setToken(token));
+			// const { user } = ctx.req;
+			// const token = getToken(ctx);
+			// ctx.store.dispatch(setUser(user));
+			// ctx.store.dispatch(setToken(token));
+			await refreshToken(ctx)(ctx.store.dispatch);
 		}
 		return {
 			pageProps: Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
@@ -26,7 +28,8 @@ class MyApp extends App<Props> {
 	}
 
 	async componentWillMount() {
-		Router.onRouteChangeComplete = url => {
+		Router.onRouteChangeStart = url => {
+			console.log('History change:', url);
 			const state = this.props.store.getState().flashState;
 			if (state.msgGreen || state.msgRed) clearFlashMessages()(this.props.store.dispatch);
 		};

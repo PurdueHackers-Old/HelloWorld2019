@@ -30,10 +30,9 @@ class LoginPage extends Component<Props> {
 		const { email, password } = this.state;
 		if (!email || !password) return;
 		try {
-			console.log('Login props:', this.props);
-			const user = await this.props.signin(this.state);
-			console.log('Logged in as:', user);
+			const { user } = await this.props.signin(this.state);
 			Router.push('/');
+			this.props.flash(`Welcome ${user.name}!`);
 		} catch (error) {
 			console.error('Error creating user', error);
 		}
