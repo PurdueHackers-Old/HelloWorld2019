@@ -9,7 +9,7 @@ import CONFIG from '../../config';
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
 
-describe('Auth route tests', () => {
+describe('Suite: /api/auth -- E2E', () => {
 	beforeAll(() =>
 		Server.createInstance().then(s => {
 			server = s;
@@ -84,7 +84,7 @@ describe('Auth route tests', () => {
 			expect(error).toEqual('Passwords did not match');
 		});
 
-		it('Fails because passwords do not match', async () => {
+		it('Fails because not purdue email', async () => {
 			const newUser = generateUser();
 			newUser.email = 'test123@gmail.com';
 			const {

@@ -9,7 +9,7 @@ let request: supertest.SuperTest<supertest.Test>;
 let users: { user: IUserModel; token: string }[];
 let user: { user: IUserModel; token: string };
 
-describe('Suite: /api/users', () => {
+describe('Suite: /api/users -- E2E', () => {
 	beforeAll(() =>
 		Server.createInstance().then(s => {
 			server = s;
