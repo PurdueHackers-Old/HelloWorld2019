@@ -2,16 +2,27 @@ import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
+import { ISessionState } from '../redux/reducers/session';
 import { ILoginUser, ILoginResponse } from '../@types';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
-};
+	flash: (msg: any, type?: string) => void;
+} & ISessionState;
 
 class LoginPage extends Component<Props> {
+	static getInitialProps = async ctx => {
+		return {};
+	};
+
 	state = {
 		email: '',
 		password: ''
+	};
+
+	// TODO: Handle redirecting of already logged-in users on server side
+	componentWillMount = () => {
+		// if (this.props.token) Router.replace('/');
 	};
 
 	onChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -32,6 +43,7 @@ class LoginPage extends Component<Props> {
 	};
 
 	render() {
+		console.log('Rendering login page:', this.props);
 		const { email, password } = this.state;
 		return (
 			<div>

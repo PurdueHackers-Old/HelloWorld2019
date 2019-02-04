@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
 import { connect } from 'react-redux';
 import { sendFlashMessage, signOut } from '../redux/actions';
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getConfig from 'next/config';
+import Router from 'next/router';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
 export const api = axios.create({
@@ -15,9 +16,14 @@ export const err = e =>
 		? e.error
 		: 'Whoops, something went wrong!';
 
-// let storage = localStorage.getItem('token') ? localStorage : sessionStorage;
-
-// export const getStorage = () => storage;
-// export const setStorage = (store: Storage) => {
-// 	storage = store;
-// };
+export const redirect = (target: string, ctx: { [x: string]: any } = {}) => {
+	if (ctx.res) {
+		// server
+		// 303: "See other"
+		ctx.res.writeHead(303, { Location: target });
+		ctx.res.end();
+	} else {
+		// In the browser, we just pretend like this never even happened
+		Router.replace(target);
+	}
+};

@@ -1,7 +1,13 @@
 import { AUTH_USER_SET, AUTH_TOKEN_SET } from '../constants';
 import { AnyAction } from 'redux';
+import { IUser } from '../../@types';
 
-export const initialState = {
+export interface ISessionState {
+	token: string;
+	user: IUser;
+}
+
+export const initialState: ISessionState = {
 	token: '',
 	user: null
 };
