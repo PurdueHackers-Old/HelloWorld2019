@@ -167,7 +167,8 @@ describe('Suite: /api/auth -- Integration', () => {
 				status: statusCode
 			} = await request.post('/api/auth/login').send({
 				email: generatedUser.email,
-				password: generatedUser.password + generatedUser.password
+				password: 'Wrongpassword'
+				// generatedUser.password + generatedUser.password
 			}));
 
 			expect(statusCode).toStrictEqual(401);

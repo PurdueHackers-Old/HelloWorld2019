@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { Document, Schema, model } from 'mongoose';
 import { IsEmail, Matches, IsNotEmpty } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
+import { IApplicationModel } from './application';
 
 export enum Roles {
 	USER = 'USER',
@@ -22,14 +23,16 @@ export class UserDto {
 	email: string;
 	@Exclude()
 	password: string;
+	@Exclude()
 	resetPasswordToken?: string;
-	comparePassword(password: string) {
-		return password && bcrypt.compareSync(password, this.password);
+	async comparePassword(password: string) {
+		return password && (await bcrypt.compare(password, this.password));
 	}
 }
 
 export interface IUserModel extends UserDto, Document {
 	role: Roles;
+	application: IApplicationModel;
 	verified: boolean;
 	checkedin: boolean;
 	createdAt: Date;
@@ -50,12 +53,17 @@ const schema = new Schema(
 		password: {
 			type: String,
 			select: false,
-			default: ''
+			required: true
 		},
 		role: { type: String, enum: Object.keys(Roles), default: Roles.USER },
 		verified: { type: Boolean, default: false },
 		checkedin: { type: Boolean, default: false },
-		resetPasswordToken: { type: String, default: '' }
+		resetPasswordToken: { type: String, select: false },
+
+		application: {
+			type: Schema.Types.ObjectId,
+			ref: 'Application'
+		}
 	},
 	{ timestamps: true }
 );
@@ -75,9 +83,9 @@ schema.pre('save', async function(next) {
 	next();
 });
 
-schema.methods.comparePassword = function(password: string) {
+schema.methods.comparePassword = async function(password: string) {
 	const user = this as IUserModel;
-	return password && bcrypt.compareSync(password, user.password);
+	return password && (await bcrypt.compare(password, user.password));
 };
 
 export const User = model<IUserModel>('User', schema, 'users');

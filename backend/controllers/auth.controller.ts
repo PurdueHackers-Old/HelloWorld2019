@@ -70,7 +70,7 @@ export class AuthController extends BaseController {
 		if (!user) throw new UnauthorizedError('Member not found');
 
 		// Check if password matches
-		if (!user.comparePassword(password)) throw new UnauthorizedError('Wrong password');
+		if (!(await user.comparePassword(password))) throw new UnauthorizedError('Wrong password');
 
 		const u = user.toJSON();
 		delete u.password;
