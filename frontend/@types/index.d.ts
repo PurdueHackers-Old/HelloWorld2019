@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 
 export interface IUser {
 	_id: string;
-	roles: string[];
+	role: string;
 	verified: boolean;
 	checkedin: boolean;
 	name: string;

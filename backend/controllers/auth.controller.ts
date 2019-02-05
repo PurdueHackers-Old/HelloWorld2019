@@ -5,7 +5,7 @@ import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
 import CONFIG from '../config';
 import { User, UserDto } from '../models/user';
-import { multer, extractToken } from '../utils';
+import { multer, extractToken, hasPermission } from '../utils';
 import {
 	JsonController,
 	Post,

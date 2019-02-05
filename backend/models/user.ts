@@ -3,6 +3,13 @@ import { Document, Schema, model } from 'mongoose';
 import { IsEmail, Matches, IsNotEmpty } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 
+export enum Roles {
+	USER = 'USER',
+	MENTOR = 'MENTOR',
+	EXEC = 'EXEC',
+	ADMIN = 'ADMIN'
+}
+
 @Exclude()
 export class UserDto {
 	@IsNotEmpty({ message: 'Please provide your first and last name' })
@@ -15,7 +22,6 @@ export class UserDto {
 	email: string;
 	@Exclude()
 	password: string;
-	rememberToken?: string;
 	resetPasswordToken?: string;
 	comparePassword(password: string) {
 		return password && bcrypt.compareSync(password, this.password);
@@ -23,7 +29,7 @@ export class UserDto {
 }
 
 export interface IUserModel extends UserDto, Document {
-	roles: string[];
+	role: Roles;
 	verified: boolean;
 	checkedin: boolean;
 	createdAt: Date;
@@ -46,11 +52,10 @@ const schema = new Schema(
 			select: false,
 			default: ''
 		},
-		roles: [String],
+		role: { type: String, enum: Object.keys(Roles), default: Roles.USER },
 		verified: { type: Boolean, default: false },
 		checkedin: { type: Boolean, default: false },
-		rememberToken: { type: String },
-		resetPasswordToken: { type: String }
+		resetPasswordToken: { type: String, default: '' }
 	},
 	{ timestamps: true }
 );

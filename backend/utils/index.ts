@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { ObjectId } from 'mongodb';
 import * as Multer from 'multer';
 import { ExtractJwt } from 'passport-jwt';
-import { IUserModel, User } from '../models/user';
+import { IUserModel, User, Roles } from '../models/user';
 
 export const multer = Multer({
 	storage: Multer.memoryStorage(),
@@ -19,8 +19,11 @@ export const errorRes = (res: Response, status: number, error: any) =>
 		error
 	});
 
+// export const hasPermission = (user: IUserModel, name: string): boolean =>
+// 	user && user.roles && user.roles.some(role => role === name || role === 'admin');
+
 export const hasPermission = (user: IUserModel, name: string): boolean =>
-	user && user.roles && user.roles.some(role => role === name || role === 'admin');
+	(user && user.role && user.role === name) || user.role === Roles.ADMIN;
 
 export const isAdmin = user => hasPermission(user, 'admin');
 
