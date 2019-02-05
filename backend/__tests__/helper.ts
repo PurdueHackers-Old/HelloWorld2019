@@ -40,8 +40,8 @@ export const generateApplication = () => {
 	const shirtSize = getRandomEnumVal(ShirtSize);
 	const dietaryRestrictions = faker.lorem.word();
 	const website = faker.internet.url();
-	const answer1 = faker.lorem.paragraph(1);
-	const answer2 = faker.lorem.paragraph(1);
+	const answer1 = faker.lorem.paragraph(1).substring(0, 240);
+	const answer2 = faker.lorem.paragraph(1).substring(0, 240);
 
 	return {
 		gender,
