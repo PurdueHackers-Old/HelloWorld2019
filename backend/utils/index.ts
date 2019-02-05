@@ -22,10 +22,12 @@ export const errorRes = (res: Response, status: number, error: any) =>
 // export const hasPermission = (user: IUserModel, name: string): boolean =>
 // 	user && user.roles && user.roles.some(role => role === name || role === 'admin');
 
-export const hasPermission = (user: IUserModel, name: string): boolean =>
-	(user && user.role && user.role === name) || user.role === Role.ADMIN;
+export const hasPermission = (user: IUserModel, name: string): boolean => {
+	if (!user || !user.role) return false;
+	return user.role === Role.ADMIN || user.role === name;
+};
 
-export const isAdmin = user => hasPermission(user, 'admin');
+export const isAdmin = (user: IUserModel) => hasPermission(user, Role.ADMIN);
 
 export const userMatches = (user: IUserModel, id: ObjectId | string, exec?: boolean) => {
 	if (!user) return false;

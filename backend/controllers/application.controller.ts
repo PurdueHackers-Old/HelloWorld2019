@@ -11,17 +11,19 @@ import {
 	CurrentUser,
 	UnauthorizedError,
 	UseAfter,
-	Post
+	Post,
+	Authorized
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
 import { Application, ApplicationDto } from '../models/application';
-import { IUserModel } from '../models/user';
+import { IUserModel, Role } from '../models/user';
 
 @JsonController('/api/applications')
 @UseAfter(ValidationMiddleware)
 export class ApplicationController extends BaseController {
 	@Get('/')
+	@Authorized([Role.EXEC])
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
 		order = order === 1 ? 1 : -1;
 		sortBy = sortBy || 'createdAt';

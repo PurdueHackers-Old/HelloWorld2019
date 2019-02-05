@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { User, UserDto, IUserModel } from '../models/user';
+import { User, UserDto, IUserModel, Role } from '../models/user';
 import { userMatches, multer } from '../utils';
 import {
 	JsonController,
@@ -13,7 +13,8 @@ import {
 	CurrentUser,
 	UnauthorizedError,
 	UseAfter,
-	Post
+	Post,
+	Authorized
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
@@ -22,7 +23,9 @@ import { ApplicationDto, Application } from '../models/application';
 @JsonController('/api/users')
 @UseAfter(ValidationMiddleware)
 export class UserController extends BaseController {
+	// TODO: Add tests
 	@Get('/')
+	@Authorized([Role.EXEC])
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
 		order = order === 1 ? 1 : -1;
 		sortBy = sortBy || 'createdAt';
@@ -42,6 +45,7 @@ export class UserController extends BaseController {
 	}
 
 	@Get('/:id/application')
+	@Authorized()
 	async getApplicationById(
 		@Param('id') id: string,
 		@CurrentUser({ required: true }) currentUser: IUserModel
@@ -59,7 +63,9 @@ export class UserController extends BaseController {
 		return application;
 	}
 
+	// TODO: Add tests
 	@Get('/:id')
+	@Authorized([Role.EXEC])
 	async getById(@Param('id') id: string) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
 		const user = await User.findById(id)
@@ -69,7 +75,9 @@ export class UserController extends BaseController {
 		return user;
 	}
 
+	// TODO: Add tests
 	@Put('/:id')
+	@Authorized()
 	@UseBefore(multer.any())
 	async updateById(
 		@Param('id') id: string,
@@ -89,6 +97,7 @@ export class UserController extends BaseController {
 	}
 
 	@Post('/:id/apply')
+	@Authorized()
 	@UseBefore(multer.any())
 	async apply(
 		@Param('id') id: string,

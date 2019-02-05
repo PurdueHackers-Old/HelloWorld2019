@@ -26,11 +26,9 @@ export const currentUserChecker = async (action: Action) => {
 
 export const authorizationChecker = async (action: Action, roles: string[]) => {
 	const user = await currentUserChecker(action);
-	// if (!user) return false;
-	if (!user) throw new UnauthorizedError('Permission Denied');
+	if (!user) throw new UnauthorizedError('You must be logged in!');
 	if (!roles.length) return true;
-	// return roles.some(role => hasPermission(user, role));
 	if (!roles.some(role => hasPermission(user, role)))
-		throw new UnauthorizedError('Permission Denied');
+		throw new UnauthorizedError('Unsufficient permissions');
 	return true;
 };
