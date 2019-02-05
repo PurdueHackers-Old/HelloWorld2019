@@ -49,36 +49,4 @@ export class ApplicationController extends BaseController {
 		if (!application) throw new BadRequestError('User does not exist');
 		return application;
 	}
-
-	@Post('/:id')
-	@UseBefore(multer.any())
-	async createOrUpdate(
-		@Param('id') id: string,
-		@Body() applicationDto: ApplicationDto,
-		@CurrentUser({ required: true }) currentUser: IUserModel
-	) {
-		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
-		const application = await Application.findById(id)
-			.populate('user')
-			.exec();
-		if (application && !userMatches(currentUser, application.user.id))
-			throw new UnauthorizedError('You are unauthorized to edit this application');
-
-		const app = await Application.update(
-			{ _id: id },
-			{ ...applicationDto, user: currentUser },
-			{
-				upsert: true,
-				setDefaultsOnInsert: true,
-				new: true
-			}
-		).exec();
-		// let application = await Application.findById(id, '+password').exec();
-		// if (!application) throw new BadRequestError('User not found');
-
-		// application = await User.findByIdAndUpdate(id, applicationDto, { new: true })
-		// 	.lean()
-		// 	.exec();
-		return app;
-	}
 }

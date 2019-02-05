@@ -1,5 +1,15 @@
 import { Document, Schema, model } from 'mongoose';
-import { IsNotEmpty, IsEnum, IsIn, IsNumber, ValidateIf, IsUrl, Length } from 'class-validator';
+import {
+	IsNotEmpty,
+	IsEnum,
+	IsIn,
+	IsNumber,
+	ValidateIf,
+	IsUrl,
+	Length,
+	MinLength,
+	MaxLength
+} from 'class-validator';
 import { IUserModel } from './user';
 import { Type } from 'class-transformer';
 import {
@@ -15,38 +25,37 @@ import {
 import { isNotEmpty } from '../utils';
 
 export class ApplicationDto {
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid gender' })
 	@IsEnum(Gender, { message: 'Please provide a valid gender' })
 	gender: Gender;
 
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid ethnicity' })
 	@IsEnum(ethnicities, { message: 'Please provide a valid ethnicity' })
 	ethnicity: string;
 
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid class year' })
 	@IsEnum(ClassYear, { message: 'Please provide a valid class year' })
 	classYear: ClassYear;
 
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid graduation year' })
 	@Type(() => Number)
-	@IsNumber({}, { message: 'Please provide a valid graduation year' })
+	@IsNumber({}, { message: 'Graduation year must be a number' })
 	@IsIn(gradYears, { message: 'Please provide a valid graduation year' })
 	graduationYear: number;
 
-	// TODO: Add major enum
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid class major' })
 	@IsEnum(Major, { message: 'Please provide a valid class major' })
 	major: string;
 
-	@IsNotEmpty()
-	@IsEnum(Referral, { message: 'Please provide a valid class major' })
+	@IsNotEmpty({ message: 'Please provide a valid referral' })
+	@IsEnum(Referral, { message: 'Please provide a valid referral' })
 	referral: string;
 
 	@Type(() => Number)
 	@IsNumber({}, { message: 'Please provide a valid hackathon number' })
 	hackathons: number;
 
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Please provide a valid class year' })
 	@IsEnum(ShirtSize, { message: 'Please provide a valid class year' })
 	shirtSize: string;
 
@@ -56,12 +65,14 @@ export class ApplicationDto {
 	@IsUrl({}, { message: 'Please provide a valid website URL' })
 	website: string;
 
-	@IsNotEmpty()
-	@Length(1, 250)
+	@IsNotEmpty({ message: 'Please provide an answer' })
+	@MinLength(1, { message: 'Please provide an answer' })
+	@MaxLength(250, { message: 'Your answer must be less than 250 characters' })
 	answer1: string;
 
 	@IsNotEmpty()
-	@Length(1, 250)
+	@MinLength(1, { message: 'Please provide an answer' })
+	@MaxLength(250, { message: 'Your answer must be less than 250 characters' })
 	answer2: string;
 
 	resume: string;

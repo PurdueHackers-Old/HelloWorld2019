@@ -12,10 +12,12 @@ import {
 	UseBefore,
 	CurrentUser,
 	UnauthorizedError,
-	UseAfter
+	UseAfter,
+	Post
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
+import { ApplicationDto, Application } from '../models/application';
 
 @JsonController('/api/users')
 @UseAfter(ValidationMiddleware)
@@ -66,5 +68,32 @@ export class UserController extends BaseController {
 			.lean()
 			.exec();
 		return user;
+	}
+
+	@Post('/:id/apply')
+	@UseBefore(multer.any())
+	async apply(
+		@Param('id') id: string,
+		@Body() applicationDto: ApplicationDto,
+		@CurrentUser({ required: true }) currentUser: IUserModel
+	) {
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		const user = await User.findById(id).exec();
+		if (!user) throw new BadRequestError('User not found');
+		if (!userMatches(currentUser, id))
+			throw new UnauthorizedError('You are unauthorized to edit this application');
+
+		const app = await Application.findOneAndUpdate(
+			{ user },
+			{ ...applicationDto, user: currentUser },
+			{
+				upsert: true,
+				setDefaultsOnInsert: true,
+				new: true
+			}
+		)
+			.populate('user')
+			.exec();
+		return app;
 	}
 }

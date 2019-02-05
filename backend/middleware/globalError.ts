@@ -1,4 +1,5 @@
 import { getFromContainer } from 'routing-controllers';
+import { AuthorizationRequiredError } from 'routing-controllers/error/AuthorizationRequiredError';
 import { errorRes } from '../utils';
 import { createLogger } from '../utils/logger';
 import { EmailService } from '../services/email.service';
@@ -19,8 +20,10 @@ export const globalError = (err, req, res, next) => {
 			.catch(error => logger.error('Error sending email:', error));
 		errorRes(res, httpCode, 'Whoops! Something went wrong!');
 	} else {
+		if (err instanceof AuthorizationRequiredError) message = 'You must be logged in!';
 		logger.error('Caught error:', message);
 		errorRes(res, httpCode, message);
+
 		// next(err);
 	}
 };

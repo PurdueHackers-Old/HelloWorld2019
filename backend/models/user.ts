@@ -4,7 +4,7 @@ import { IsEmail, Matches, IsNotEmpty } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 import { IApplicationModel } from './application';
 
-export enum Roles {
+export enum Role {
 	USER = 'USER',
 	MENTOR = 'MENTOR',
 	EXEC = 'EXEC',
@@ -31,7 +31,7 @@ export class UserDto {
 }
 
 export interface IUserModel extends UserDto, Document {
-	role: Roles;
+	role: Role;
 	application: IApplicationModel;
 	verified: boolean;
 	checkedin: boolean;
@@ -55,7 +55,7 @@ const schema = new Schema(
 			select: false,
 			required: true
 		},
-		role: { type: String, enum: Object.keys(Roles), default: Roles.USER },
+		role: { type: String, enum: Object.keys(Role), default: Role.USER },
 		verified: { type: Boolean, default: false },
 		checkedin: { type: Boolean, default: false },
 		resetPasswordToken: { type: String, select: false },
