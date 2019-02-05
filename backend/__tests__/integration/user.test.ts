@@ -32,17 +32,40 @@ describe('Suite: /api/users -- Integration', () => {
 	});
 
 	describe('Get all Users', () => {
+		it('Fails to get all users because not logged in', async () => {
+			const {
+				body: { error },
+				status
+			} = await request.get('/api/users');
+			expect(status).toEqual(401);
+			expect(error).toEqual('You must be logged in!');
+		});
+
+		it('Fails to get all users because insufficient permissions', async () => {
+			const {
+				body: { error },
+				status
+			} = await request.get('/api/users').auth(user.token, { type: 'bearer' });
+			expect(status).toEqual(401);
+			expect(error).toEqual('Unsufficient permissions');
+		});
+
 		it('Successfully gets all users', async () => {
+			user.user = await User.findByIdAndUpdate(
+				user.user._id,
+				{ $set: { role: Role.EXEC } },
+				{ new: true }
+			);
 			const {
 				body: { response },
 				status
-			} = await request.get('/api/users');
+			} = await request.get('/api/users').auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(200);
 			expect(response.users).toHaveLength(users.length);
 			response.users.forEach(u => {
 				expect(u).not.toHaveProperty('password');
 				expect(u).toHaveProperty('_id');
-				const foundUser = users.find(val => val.user._id === u._id);
+				const foundUser = users.find(val => new ObjectId(val.user._id).equals(u._id));
 				expect(foundUser).toBeTruthy();
 				expect(u.name).toEqual(foundUser.user.name);
 				expect(u.email).toEqual(foundUser.user.email);
@@ -51,31 +74,75 @@ describe('Suite: /api/users -- Integration', () => {
 	});
 
 	describe('Get a single user', () => {
-		it('Fails to get a single user because invalid id', async () => {
+		it('Fails to get a single user because not logged in', async () => {
 			const {
 				body: { error },
 				status
-			} = await request.get('/api/users/invalidID');
+			} = await request.get(`/api/users/${user.user._id}`);
+			expect(status).toEqual(401);
+			expect(error).toEqual('You must be logged in!');
+		});
+
+		it('Fails to get a single user because insufficient permissions', async () => {
+			const {
+				body: { error },
+				status
+			} = await request
+				.get(`/api/users/${user.user._id}`)
+				.auth(user.token, { type: 'bearer' });
+			expect(status).toEqual(401);
+			expect(error).toEqual('Unsufficient permissions');
+		});
+
+		it('Fails to get a single user because invalid id', async () => {
+			user.user = await User.findByIdAndUpdate(
+				user.user._id,
+				{ $set: { role: Role.EXEC } },
+				{ new: true }
+			);
+			const {
+				body: { error },
+				status
+			} = await request.get('/api/users/invalidID').auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(400);
 			expect(error).toEqual('Invalid user ID');
 		});
 
 		it('Fails to get a single user because user does not exist', async () => {
+			user.user = await User.findByIdAndUpdate(
+				user.user._id,
+				{ $set: { role: Role.EXEC } },
+				{ new: true }
+			);
 			const {
 				body: { error },
 				status
-			} = await request.get(`/api/users/${server.mongoose.Types.ObjectId()}`);
+			} = await request
+				.get(`/api/users/${server.mongoose.Types.ObjectId()}`)
+				.auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(400);
 			expect(error).toEqual('User does not exist');
 		});
 
 		it('Successfully gets a single user', async () => {
+			user.user = await User.findByIdAndUpdate(
+				user.user._id,
+				{ $set: { role: Role.EXEC } },
+				{ new: true }
+			);
 			const {
 				body: { response },
 				status
-			} = await request.get(`/api/users/${user.user._id}`);
+			} = await request
+				.get(`/api/users/${user.user._id}`)
+				.auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(200);
-			expect(response).toEqual(user.user);
+			expect(response).toMatchObject({
+				_id: user.user.id,
+				name: user.user.name,
+				email: user.user.email,
+				role: user.user.role
+			});
 		});
 	});
 
