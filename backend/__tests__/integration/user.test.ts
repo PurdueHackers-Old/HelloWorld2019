@@ -355,7 +355,180 @@ describe('Suite: /api/users -- Integration', () => {
 					dietaryRestrictions: app.dietaryRestrictions,
 					website: app.website,
 					answer1: app.answer1,
-					answer2: app.answer2
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
+				})
+			);
+		});
+	});
+
+	describe('Get application tests', () => {
+		it('Fails to get another users application', async () => {
+			const app = generateApplication();
+			await request
+				.post(`/api/users/${users[0].user._id}/apply`)
+				.send(app)
+				.auth(users[0].token, { type: 'bearer' });
+
+			const {
+				body: { error },
+				status
+			} = await request
+				.get(`/api/users/${users[0].user._id}/application`)
+				.auth(users[1].token, { type: 'bearer' });
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('You are unauthorized to view this application');
+		});
+
+		it('Successsfully gets users own application', async () => {
+			const app = generateApplication();
+			await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' });
+
+			const {
+				body: { response },
+				status
+			} = await request
+				.get(`/api/users/${user.user._id}/application`)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusInternal).toEqual(Status.PENDING);
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
+				})
+			);
+		});
+
+		it('Successsfully gets another user application as admin', async () => {
+			const admin = await request
+				.post('/api/auth/signup')
+				.send(generateUser())
+				.then(resp => resp.body.response);
+
+			admin.user = await User.findByIdAndUpdate(
+				admin.user._id,
+				{ role: Role.ADMIN },
+				{ new: true }
+			).exec();
+
+			const app = generateApplication();
+			await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' });
+
+			const {
+				body: { response },
+				status
+			} = await request
+				.get(`/api/users/${user.user._id}/application`)
+				.auth(admin.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusInternal).toEqual(Status.PENDING);
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
+				})
+			);
+		});
+
+		it('Successsfully gets another user application as exec', async () => {
+			const exec = await request
+				.post('/api/auth/signup')
+				.send(generateUser())
+				.then(resp => resp.body.response);
+
+			exec.user = await User.findByIdAndUpdate(
+				exec.user._id,
+				{ role: Role.EXEC },
+				{ new: true }
+			).exec();
+
+			const app = generateApplication();
+			await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' });
+
+			const {
+				body: { response },
+				status
+			} = await request
+				.get(`/api/users/${user.user._id}/application`)
+				.auth(exec.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusInternal).toEqual(Status.PENDING);
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
 				})
 			);
 		});

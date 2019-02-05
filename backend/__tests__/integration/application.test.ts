@@ -48,6 +48,8 @@ describe('Suite: /api/applications -- Integration', () => {
 				body: { response },
 				status
 			} = await request.get('/api/applications');
+
+			expect(status).toEqual(200);
 			expect(response.applications).toHaveLength(applications.length);
 			expect(response.applications).toEqual(
 				expect.arrayContaining(

@@ -27,11 +27,14 @@ export const hasPermission = (user: IUserModel, name: string): boolean =>
 
 export const isAdmin = user => hasPermission(user, 'admin');
 
-export const userMatches = (user: IUserModel, id: ObjectId | string) =>
-	user &&
-	(hasPermission(user, 'admin') ||
-		user._id === id ||
-		(typeof user._id.equals === 'function' && user._id.equals(id)));
+export const userMatches = (user: IUserModel, id: ObjectId | string, exec?: boolean) => {
+	if (!user) return false;
+	if (isAdmin(user)) return true;
+	if (exec && hasPermission(user, Role.EXEC)) return true;
+	return new ObjectId(user._id).equals(id);
+	// return user._id === id ||
+	// 	(typeof user._id.equals === 'function' && user._id.equals(id));
+};
 
 export const escapeRegEx = (str: string) =>
 	str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');

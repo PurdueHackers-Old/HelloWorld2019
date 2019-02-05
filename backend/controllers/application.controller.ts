@@ -46,7 +46,7 @@ export class ApplicationController extends BaseController {
 		const application = await Application.findById(id)
 			.lean()
 			.exec();
-		if (!application) throw new BadRequestError('User does not exist');
+		if (!application) throw new BadRequestError('Application does not exist');
 		return application;
 	}
 }

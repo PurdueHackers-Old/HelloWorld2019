@@ -41,6 +41,24 @@ export class UserController extends BaseController {
 		return { users: results };
 	}
 
+	@Get('/:id/application')
+	async getApplicationById(
+		@Param('id') id: string,
+		@CurrentUser({ required: true }) currentUser: IUserModel
+	) {
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		if (!userMatches(currentUser, id, true))
+			throw new UnauthorizedError('You are unauthorized to view this application');
+		const user = await User.findById(id)
+			.lean()
+			.exec();
+		if (!user) throw new BadRequestError('User does not exist');
+		const application = Application.findOne({ user })
+			.populate('user')
+			.exec();
+		return application;
+	}
+
 	@Get('/:id')
 	async getById(@Param('id') id: string) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
@@ -85,7 +103,7 @@ export class UserController extends BaseController {
 
 		const app = await Application.findOneAndUpdate(
 			{ user },
-			{ ...applicationDto, user: currentUser },
+			{ ...applicationDto, user },
 			{
 				upsert: true,
 				setDefaultsOnInsert: true,
