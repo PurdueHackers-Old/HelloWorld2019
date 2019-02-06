@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
-import { sendFlashMessage, signOut } from '../redux/actions';
+import { sendFlashMessage } from '../redux/actions';
+import { redirect } from '../utils/session';
 
 type DispatchToProps = {
 	flash: (msg: any, type?: string) => void;
@@ -16,7 +16,7 @@ type Props = {
 class Redirect extends Component<Props> {
 	componentDidMount() {
 		const { to, flash, msgGreen, msgRed } = this.props;
-		Router.push(to);
+		redirect(to);
 		if (msgRed) flash(msgRed);
 		else if (msgGreen) flash(msgGreen, 'green');
 	}
@@ -26,9 +26,7 @@ class Redirect extends Component<Props> {
 	}
 }
 
-const mapStateToProps = state => ({});
-
 export default connect<{}, DispatchToProps>(
-	mapStateToProps,
+	() => ({}),
 	{ flash: sendFlashMessage }
 )(Redirect);
