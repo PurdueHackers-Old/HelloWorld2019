@@ -65,7 +65,6 @@ export default class Server {
 			defaultErrorHandler: false,
 			validation: true,
 			controllers: [__dirname + '/controllers/*'],
-			// controllers: [AuthController, MemberController, EventsController],
 			interceptors: [SuccessInterceptor],
 			currentUserChecker,
 			authorizationChecker

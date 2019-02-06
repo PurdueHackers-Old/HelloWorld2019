@@ -6,9 +6,17 @@ import withRedux from 'next-redux-wrapper';
 // import { persistStore } from 'redux-persist';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
-import { clearFlashMessages, refreshToken, setUser, setToken } from '../redux/actions';
+import {
+	clearFlashMessages,
+	refreshToken,
+	setUser,
+	setToken,
+	sendFlashMessage
+} from '../redux/actions';
 import { getToken } from '../utils/session';
 import Layout from '../components/Layout';
+import Header from '../components/Header';
+import FlashMessage from '../components/FlashMessage';
 
 type Props = { store: Store };
 
@@ -29,7 +37,6 @@ class MyApp extends App<Props> {
 
 	async componentWillMount() {
 		Router.onRouteChangeStart = url => {
-			console.log('History change:', url);
 			const state = this.props.store.getState().flashState;
 			if (state.msgGreen || state.msgRed) clearFlashMessages()(this.props.store.dispatch);
 		};

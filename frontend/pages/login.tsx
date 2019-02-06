@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
-import { ILoginUser, ILoginResponse } from '../@types';
+import { ILoginUser, ILoginResponse, IContext } from '../@types';
 import { redirectIfAuthenticated } from '../utils/session';
 
 type Props = {
@@ -12,8 +12,10 @@ type Props = {
 } & ISessionState;
 
 class LoginPage extends Component<Props> {
-	static getInitialProps = ctx => {
-		redirectIfAuthenticated('/', ctx);
+	static getInitialProps = (ctx: IContext) => {
+		if (redirectIfAuthenticated('/', ctx))
+			sendFlashMessage('You are already logged in!')(ctx.store.dispatch);
+
 		return {};
 	};
 

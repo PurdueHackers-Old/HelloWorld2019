@@ -13,7 +13,8 @@ type Props = {
 
 class SignupPage extends Component<Props> {
 	static getInitialProps = ctx => {
-		redirectIfAuthenticated('/', ctx);
+		if (redirectIfAuthenticated('/', ctx))
+			sendFlashMessage('You are already logged in!')(ctx.store.dispatch);
 		return {};
 	};
 

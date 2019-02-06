@@ -1,4 +1,17 @@
-import { AnyAction } from 'redux';
+import { NextContext } from 'next';
+import { Store } from 'redux';
+import { IFlashState } from '../redux/reducers/flash';
+import { ISessionState } from '../redux/reducers/session';
+
+
+export interface IStoreState {
+	flashState: IFlashState;
+	sessionState: ISessionState;
+}
+
+export interface IContext extends NextContext {
+	store: Store<IStoreState>
+}
 
 export interface IUser {
 	_id: string;
