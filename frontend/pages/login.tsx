@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
 import { ILoginUser, ILoginResponse, IContext } from '../@types';
-import { redirectIfAuthenticated } from '../utils/session';
+import NoAuthRoute from '../components/NoAuthRoute';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
@@ -13,9 +13,6 @@ type Props = {
 
 class LoginPage extends Component<Props> {
 	static getInitialProps = (ctx: IContext) => {
-		if (redirectIfAuthenticated('/', ctx))
-			sendFlashMessage('You are already logged in!')(ctx.store.dispatch);
-
 		return {};
 	};
 
@@ -73,7 +70,9 @@ const mapStateToProps = state => ({
 	...state.sessionState
 });
 
-export default connect(
+const ConnectedLogin = connect(
 	mapStateToProps,
 	{ signin: signIn, flash: sendFlashMessage }
 )(LoginPage);
+
+export default NoAuthRoute(ConnectedLogin, 'You are already logged in!');

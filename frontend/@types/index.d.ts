@@ -2,7 +2,7 @@ import { NextContext } from 'next';
 import { Store } from 'redux';
 import { IFlashState } from '../redux/reducers/flash';
 import { ISessionState } from '../redux/reducers/session';
-
+import { Request, Response } from 'express';
 
 export interface IStoreState {
 	flashState: IFlashState;
@@ -10,7 +10,9 @@ export interface IStoreState {
 }
 
 export interface IContext extends NextContext {
-	store: Store<IStoreState>
+	store: Store<IStoreState>;
+	req: Request;
+	res: Response
 }
 
 export interface IUser {
@@ -41,4 +43,10 @@ export interface ILoginUser {
 export interface ILoginResponse {
 	token: string;
 	user: IUser;
+}
+
+declare namespace NodeJS {
+	export interface Process {
+		browser: boolean;
+	}
 }

@@ -11,10 +11,9 @@ type Props = {
 } & ISessionState;
 
 class ApplyPage extends Component<Props> {
-	// static getInitialProps = ctx => {
-	// 	redirectIfNotAuthenticated('/', ctx);
-	// 	return {};
-	// };
+	static getInitialProps = ctx => {
+		// redirectIfNotAuthenticated('/', ctx);
+	};
 
 	render() {
 		return (
