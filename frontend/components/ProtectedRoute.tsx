@@ -19,7 +19,6 @@ const ProtectedRoute = (Comp, msg: string, roles?: Role[]) => {
 			};
 		};
 		render() {
-			console.log('Protected Route');
 			const { ctx } = this.props;
 			// console.log('Protected context:', ctx);
 			if (isAuthenticated(ctx, roles)) return <Comp {...this.props} />;

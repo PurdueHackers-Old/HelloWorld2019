@@ -13,13 +13,9 @@ type Props = {
 class ApplyPage extends Component<Props> {
 	static getInitialProps = ctx => {
 		// redirectIfNotAuthenticated('/', ctx);
-		return {
-			hi: 'bye'
-		};
 	};
 
 	render() {
-		console.log('Apply props:', this.props);
 		return (
 			<div>
 				Apply Page
@@ -33,11 +29,9 @@ const mapStateToProps = state => ({
 	...state.sessionState
 });
 
-// const ConnectedApply = connect(
-// 	mapStateToProps,
-// 	{ signin: signIn, flash: sendFlashMessage }
-// )(ProtectedRoute(ApplyPage, 'To apply, please login or create an account'));
+const ConnectedApply = connect(
+	mapStateToProps,
+	{ signin: signIn, flash: sendFlashMessage }
+)(ApplyPage);
 
-// export default ConnectedApply;
-
-export default ProtectedRoute(ApplyPage, 'To apply, please login or create an account');
+export default ProtectedRoute(ConnectedApply, 'To apply, please login or create an account');
