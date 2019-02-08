@@ -3,7 +3,7 @@ import { Role, isAuthenticated } from '../utils/session';
 import { IContext } from '../@types';
 import Redirect from './Redirect';
 
-const ProtectedRoute = (Comp, msg: string, roles?: Role[]) => {
+const NoAuthRoute = (Comp, msg: string) => {
 	class Route extends Component<{ ctx: IContext }> {
 		static getInitialProps = ctx => {
 			const pageProps = Comp.getInitialProps && Comp.getInitialProps(ctx);
@@ -20,11 +20,11 @@ const ProtectedRoute = (Comp, msg: string, roles?: Role[]) => {
 		};
 		render() {
 			const { ctx } = this.props;
-			if (isAuthenticated(ctx, roles)) return <Comp {...this.props} />;
+			if (!isAuthenticated(ctx)) return <Comp {...this.props} />;
 			return <Redirect to="/" msgRed={msg} />;
 		}
 	}
 	return Route;
 };
 
-export default ProtectedRoute;
+export default NoAuthRoute;
