@@ -44,6 +44,7 @@ class MyApp extends App<Props> {
 
 	render() {
 		const { Component, pageProps, store } = this.props as any;
+		console.log('App props:', this.props);
 		// const persistor = persistStore(store);
 
 		return (
