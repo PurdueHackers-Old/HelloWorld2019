@@ -12,7 +12,7 @@ export interface IStoreState {
 export interface IContext extends NextContext {
 	store: Store<IStoreState>;
 	req: Request;
-	res: Response
+	res: Response;
 }
 
 export interface IUser {

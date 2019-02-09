@@ -6,21 +6,18 @@ import Redirect from './Redirect';
 const ProtectedRoute = (Comp, msg: string, roles?: Role[]) => {
 	class Route extends Component<{ ctx: IContext }> {
 		static getInitialProps = ctx => {
-			const pageProps = Comp.getInitialProps && Comp.getInitialProps(ctx);
-			const newCtx = {
-				store: ctx.store,
-				req: {
-					cookies: ctx.req ? ctx.req.cookies : {}
+			return {
+				ctx: {
+					req: {
+						cookies: ctx.req ? ctx.req.cookies : {}
+					}
 				}
 			};
-			return {
-				ctx: newCtx,
-				...pageProps
-			};
 		};
+
 		render() {
 			const { ctx } = this.props;
-			if (isAuthenticated(ctx, roles)) return <Comp {...this.props} />;
+			if (isAuthenticated(ctx, roles)) return <Comp />;
 			return <Redirect to="/" msgRed={msg} />;
 		}
 	}

@@ -2,10 +2,9 @@ import createStoreFromServer from './server';
 import createStoreFromClient from './client';
 
 export default (initialState, options) => {
-	// if (options.isServer) {
-	// 	return createStoreFromServer(initialState, options);
-	// } else {
-	// 	return createStoreFromClient(initialState, options);
-	// }
-	return createStoreFromServer(initialState, options);
+	if (options.req) {
+		return createStoreFromServer(initialState, options);
+	} else {
+		return createStoreFromClient(initialState, options);
+	}
 };

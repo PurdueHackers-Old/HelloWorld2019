@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 import { signIn, sendFlashMessage } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
-import { ILoginUser, ILoginResponse, IContext } from '../@types';
-import NoAuthRoute from '../components/NoAuthRoute';
+import { ILoginUser, ILoginResponse } from '../@types';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
@@ -12,10 +11,6 @@ type Props = {
 } & ISessionState;
 
 class LoginPage extends Component<Props> {
-	static getInitialProps = (ctx: IContext) => {
-		return {};
-	};
-
 	state = {
 		email: '',
 		password: ''
@@ -75,4 +70,5 @@ const ConnectedLogin = connect(
 	{ signin: signIn, flash: sendFlashMessage }
 )(LoginPage);
 
-export default NoAuthRoute(ConnectedLogin, 'You are already logged in!');
+// export default NoAuthRoute(ConnectedLogin, 'You are already logged in!');
+export default ConnectedLogin;
