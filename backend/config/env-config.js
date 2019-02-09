@@ -2,6 +2,11 @@ require('dotenv').config();
 
 const env = process.env;
 
+const sharedConfig = {
+	PORT: env.PORT || 5000,
+	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2'
+};
+
 const serverRuntimeConfig = {
 	DB: env.DB || 'mongodb://localhost:27017/HelloWorld',
 	EMAIL: env.EMAIL || 'my@email.com',
@@ -12,15 +17,16 @@ const serverRuntimeConfig = {
 	GC_PROJECT_ID: env.GC_PROJECT_ID || 'myprojectid',
 	NODE_ENV: env.NODE_ENV || 'development',
 	ORG_NAME: env.ORG_NAME || 'Purdue Hackers',
-	PORT: env.PORT || 5000,
 	REDIS_URL: env.REDIS_URL || 'redis://localhost:6379',
 	SECRET: env.SECRET || 'my-secret',
-	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey'
+	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
+	...sharedConfig
 };
 
 const publicRuntimeConfig = {
-	API_URL: env.API_URL ? env.API_URL : `http://localhost:${serverRuntimeConfig.PORT}/api`,
-	NODE_ENV: env.NODE_ENV || 'development'
+	API_URL: env.API_URL ? env.API_URL : `http://localhost:${sharedConfig.PORT}/api`,
+	NODE_ENV: env.NODE_ENV || 'development',
+	...sharedConfig
 };
 
 module.exports = {
