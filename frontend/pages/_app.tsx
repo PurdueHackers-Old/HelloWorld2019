@@ -6,17 +6,9 @@ import withRedux from 'next-redux-wrapper';
 // import { persistStore } from 'redux-persist';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
-import {
-	clearFlashMessages,
-	refreshToken,
-	setUser,
-	setToken,
-	sendFlashMessage
-} from '../redux/actions';
-import { getToken } from '../utils/session';
+import { clearFlashMessages, refreshToken } from '../redux/actions';
 import Layout from '../components/Layout';
-import Header from '../components/Header';
-import FlashMessage from '../components/FlashMessage';
+import { initGA, logPageView } from '../utils/analytics';
 
 type Props = { store: Store };
 
@@ -35,11 +27,19 @@ class MyApp extends App<Props> {
 		};
 	}
 
-	async componentWillMount() {
+	componentWillMount() {
 		Router.onRouteChangeStart = url => {
 			const state = this.props.store.getState().flashState;
 			if (state.msgGreen || state.msgRed) clearFlashMessages()(this.props.store.dispatch);
 		};
+	}
+
+	componentDidMount() {
+		const state = this.props.store.getState().sessionState;
+		const uid = state.user && state.user._id;
+		initGA(uid);
+		logPageView();
+		Router.router.events.on('routeChangeComplete', logPageView);
 	}
 
 	render() {
