@@ -3,7 +3,6 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
 export const initGA = (uid: string) => {
-	console.log('GA init');
 	ReactGA.initialize(CONFIG.TRACKING_ID, {
 		debug: CONFIG.NODE_ENV === 'development',
 		testMode: CONFIG.NODE_ENV === 'development'

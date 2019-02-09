@@ -53,7 +53,7 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
 		setCookie('token', response.token);
-		ReactGA.set({ uid: response.user._id });
+		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
 		if (error.response) throw error.response.data;
@@ -66,7 +66,7 @@ export const signOut = () => async (dispatch: Dispatch) => {
 		dispatch(setToken(''));
 		dispatch(setUser(null));
 		removeCookie('token');
-		ReactGA.set({ uid: null });
+		ReactGA.set({ userId: null });
 	} catch (error) {
 		throw error;
 	}
@@ -114,7 +114,7 @@ export const refreshToken = (ctx?, params?: any) => async (dispatch: Dispatch) =
 			dispatch(setUser(null));
 			dispatch(setToken(''));
 			removeCookie('token');
-			ReactGA.set({ uid: null });
+			ReactGA.set({ userId: null });
 			return null;
 		}
 		const {
@@ -126,7 +126,7 @@ export const refreshToken = (ctx?, params?: any) => async (dispatch: Dispatch) =
 		dispatch(setUser(response.user));
 		dispatch(setToken(response.token));
 		setCookie('token', response.token);
-		ReactGA.set({ uid: response.user._id });
+		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
 		throw error.response.data;
