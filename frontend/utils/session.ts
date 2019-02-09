@@ -48,8 +48,11 @@ export const redirect = (target: string, ctx: { [x: string]: any } = {}, replace
 };
 
 const extractUser = (ctx: IContext) => {
-	if (!ctx || !ctx.store) return null;
-	return ctx.store.getState().sessionState.user;
+	// Try to get from redux, and if not, req.user
+	let user = ctx && ctx.store && ctx.store.getState().sessionState.user;
+	if (user) return user;
+	user = ctx && ctx.req && ctx.req.user;
+	return user;
 };
 
 export const hasPermission = (user: IUser, name: string): boolean => {

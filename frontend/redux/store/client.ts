@@ -28,6 +28,6 @@ const enhancer =
 		? composeWithDevTools(applyMiddleware(...middleware))
 		: compose(applyMiddleware(...middleware));
 
-export default (initialState = {}, options) => {
+export default (initialState, options) => {
 	return createStore(rootReducer, initialState, enhancer);
 };

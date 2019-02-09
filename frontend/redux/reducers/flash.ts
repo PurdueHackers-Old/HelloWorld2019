@@ -6,7 +6,7 @@ export interface IFlashState {
 	msgRed: string;
 }
 
-export const initialState = {
+export const initialState: IFlashState = {
 	msgGreen: '',
 	msgRed: ''
 };
