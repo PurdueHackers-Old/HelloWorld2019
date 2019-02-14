@@ -1,29 +1,29 @@
 import React from 'react';
 
-type Props = { msgGreen: string; msgRed: string };
+type Props = { green: string; red: string };
 
 const defaultProps: Props = {
-	msgGreen: '',
-	msgRed: ''
+	green: '',
+	red: ''
 };
 
-const FlashMessage = ({ msgGreen, msgRed } = defaultProps) => {
+const FlashMessage = ({ green, red } = defaultProps) => {
 	return (
 		<React.Fragment>
-			{msgGreen && (
+			{green && (
 				<div className="section alert-section" style={{ paddingTop: 0 }}>
 					<div className="section-container">
 						<div className="alert alert-success" role="alert">
-							{msgGreen}
+							{green}
 						</div>
 					</div>
 				</div>
 			)}
-			{msgRed && (
+			{red && (
 				<div className="section alert-section" style={{ paddingTop: 0 }}>
 					<div className="section-container">
 						<div className="alert alert-danger" role="alert">
-							{msgRed}
+							{red}
 						</div>
 					</div>
 				</div>

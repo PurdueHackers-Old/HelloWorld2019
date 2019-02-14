@@ -2,8 +2,8 @@ import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { signIn, sendFlashMessage } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
-import { ILoginUser, ILoginResponse } from '../@types';
-import ProtectedRoute from '../components/ProtectedRoute';
+import { ILoginUser, ILoginResponse, IContext } from '../@types';
+import { redirectIfNotAuthenticated } from '../utils/session';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
@@ -11,8 +11,9 @@ type Props = {
 } & ISessionState;
 
 class ApplyPage extends Component<Props> {
-	static getInitialProps = ctx => {
-		// redirectIfNotAuthenticated('/', ctx);
+	static getInitialProps = (ctx: IContext) => {
+		redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' });
+		return {};
 	};
 
 	render() {
@@ -34,4 +35,4 @@ const ConnectedApply = connect(
 	{ signin: signIn, flash: sendFlashMessage }
 )(ApplyPage);
 
-export default ProtectedRoute(ConnectedApply, 'To apply, please login or create an account');
+export default ConnectedApply;

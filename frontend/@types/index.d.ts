@@ -26,6 +26,9 @@ export interface IUser {
 	updatedAt: string;
 }
 
+export type flashColor = 'red' | 'green';
+export type flashType = { [key in flashColor]?: string };
+
 // Request types
 export interface ICreateUser {
 	name: string;
@@ -46,7 +49,7 @@ export interface ILoginResponse {
 }
 
 declare namespace NodeJS {
-	export interface Process {
+	interface Process {
 		browser: boolean;
 	}
 }

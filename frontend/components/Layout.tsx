@@ -5,15 +5,15 @@ import FlashMessage from './FlashMessage';
 
 type StateToProps = {
 	token: string;
-	msgGreen: string;
-	msgRed: string;
+	green: string;
+	red: string;
 };
 
-const Layout = ({ token, msgGreen, msgRed, children }) => {
+const Layout = ({ token, green, red, children }) => {
 	return (
 		<div>
 			<Header token={token} />
-			<FlashMessage msgGreen={msgGreen} msgRed={msgRed} />
+			<FlashMessage green={green} red={red} />
 			{children}
 		</div>
 	);

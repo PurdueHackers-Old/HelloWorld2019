@@ -70,5 +70,4 @@ const ConnectedLogin = connect(
 	{ signin: signIn, flash: sendFlashMessage }
 )(LoginPage);
 
-// export default NoAuthRoute(ConnectedLogin, 'You are already logged in!');
 export default ConnectedLogin;

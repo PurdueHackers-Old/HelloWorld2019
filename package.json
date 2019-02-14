@@ -82,6 +82,7 @@
 		"@types/react-redux": "^7.0.1",
 		"@types/redux": "^3.6.0",
 		"@types/redux-logger": "^3.0.6",
+		"@types/redux-thunk": "^2.1.0",
 		"@types/supertest": "^2.0.7",
 		"@zeit/next-typescript": "^1.1.1",
 		"enzyme": "^3.8.0",

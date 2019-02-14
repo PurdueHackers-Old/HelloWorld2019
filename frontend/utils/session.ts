@@ -1,7 +1,7 @@
 import cookie from 'js-cookie';
 import Router from 'next/router';
-import { Request } from 'express';
 import { IUser, IContext } from '../@types';
+import { sendFlashMessage } from '../redux/actions';
 
 export enum Role {
 	USER = 'USER',
@@ -10,36 +10,38 @@ export enum Role {
 	ADMIN = 'ADMIN'
 }
 
-export const setCookie = (key: string, value: string | object) => {
-	if (process.browser) cookie.set(key, value);
+export const setCookie = (key: string, value: string | object, ctx?: IContext, options?) => {
+	// Server
+	if (ctx && ctx.req) ctx.res.cookie(key, value, options);
+	// Client
+	else cookie.set(key, value, options);
 };
 
-export const removeCookie = (key: string) => {
-	if (process.browser) cookie.remove(key);
+export const removeCookie = (key: string, ctx?: IContext) => {
+	// Server
+	if (ctx && ctx.req) ctx.res.clearCookie(key);
+	// Client
+	else cookie.remove(key);
 };
 
-export const getCookie = (key: string, req?: Request) => {
-	return process.browser ? getCookieFromBrowser(key) : getCookieFromServer(key, req);
+export const getCookie = (key: string, ctx?: IContext) => {
+	// Server
+	if (ctx && ctx.req) return ctx.req.cookies[key];
+	// Client
+	else return cookie.getJSON(key);
 };
 
-const getCookieFromBrowser = (key: string) => {
-	return cookie.get(key);
+export const getToken = (ctx?: IContext) => {
+	return getCookie('token', ctx);
 };
 
-const getCookieFromServer = (key: string, req: Request) => {
-	if (!req || !req.cookies) return '';
-	return req.cookies[key];
-};
-
-export const getToken = (ctx: { [x: string]: any } = {}) => {
-	return getCookie('token', ctx.req);
-};
-
-export const redirect = (target: string, ctx: { [x: string]: any } = {}, replace?: boolean) => {
+export const redirect = (target: string, ctx?: IContext, replace?: boolean) => {
 	if (ctx && ctx.res) {
 		// Server redirect
-		ctx.res.writeHead(replace ? 303 : 301, { Location: target });
-		ctx.res.end();
+		// ctx.res.redirect(replace ? 303 : 301, target);
+		// ctx.res.writeHead(replace ? 303 : 301, { Location: target });
+		ctx.res.status(replace ? 303 : 301).header('Location', target);
+		// ctx.res.end();
 	} else {
 		// Browser redirect
 		replace ? Router.replace(target) : Router.push(target);
@@ -69,16 +71,16 @@ export const isAuthenticated = (ctx: IContext, roles?: Role[]) => {
 	return true;
 };
 
-export const redirectIfAuthenticated = (path: string, ctx: IContext) => {
-	if (isAuthenticated(ctx)) return redirect(path, ctx, true);
-	return false;
-};
-
 export const redirectIfNotAuthenticated = (
 	path: string,
 	ctx: IContext,
-	roles?: Role[]
+	{ roles, msg }: { roles?: Role[]; msg?: string } = {}
 ): boolean => {
-	if (!isAuthenticated(ctx, roles)) return redirect(path, ctx, true);
+	if (!isAuthenticated(ctx, roles)) {
+		redirect(path, ctx, true);
+		if (msg) sendFlashMessage(msg, ctx)(ctx.store.dispatch);
+		return true;
+	}
+
 	return false;
 };

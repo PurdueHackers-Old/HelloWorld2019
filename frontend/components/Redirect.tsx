@@ -2,23 +2,24 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { sendFlashMessage } from '../redux/actions';
 import { redirect } from '../utils/session';
+import { IContext, flashColor } from '../@types';
 
 type DispatchToProps = {
-	flash: (msg: any, type?: string) => void;
+	flash: (msg: string, ctx?: IContext, type?: flashColor) => void;
 };
 
 type Props = {
 	to: string;
-	msgGreen?: string;
-	msgRed?: string;
+	green?: string;
+	red?: string;
 } & DispatchToProps;
 
 class Redirect extends Component<Props> {
 	componentDidMount() {
-		const { to, flash, msgGreen, msgRed } = this.props;
+		const { to, flash, green, red } = this.props;
 		redirect(to);
-		if (msgRed) flash(msgRed);
-		else if (msgGreen) flash(msgGreen, 'green');
+		if (red) flash(red);
+		else if (green) flash(green, null, 'green');
 	}
 
 	render() {

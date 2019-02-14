@@ -2,12 +2,12 @@ import ReactGA from 'react-ga';
 import getConfig from 'next/config';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
-export const initGA = (uid: string) => {
+export const initGA = (userId: string) => {
 	ReactGA.initialize(CONFIG.TRACKING_ID, {
-		debug: CONFIG.NODE_ENV === 'development',
+		// debug: CONFIG.NODE_ENV === 'development',
 		testMode: CONFIG.NODE_ENV === 'development'
 	});
-	ReactGA.set({ uid });
+	ReactGA.set({ userId });
 };
 
 export const logPageView = () => {

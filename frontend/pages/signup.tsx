@@ -4,8 +4,6 @@ import Router from 'next/router';
 import { signUp, sendFlashMessage } from '../redux/actions';
 import { ILoginResponse, ICreateUser } from '../@types';
 import { ISessionState } from '../redux/reducers/session';
-import { redirectIfAuthenticated } from '../utils/session';
-import NoAuthRoute from '../components/NoAuthRoute';
 
 type Props = {
 	signup: (body: ICreateUser) => Promise<ILoginResponse>;
@@ -89,9 +87,9 @@ const mapStateToProps = state => ({
 	...state.sessionState
 });
 
-const ConnectedSignupPage =  connect(
+const ConnectedSignupPage = connect(
 	mapStateToProps,
 	{ signup: signUp, flash: sendFlashMessage }
 )(SignupPage);
 
-export default NoAuthRoute(ConnectedSignupPage, 'You are already logged in!');
+export default ConnectedSignupPage;
