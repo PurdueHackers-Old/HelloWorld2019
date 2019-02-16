@@ -12,13 +12,6 @@ let user: { user: IUserModel; token: string };
 let applications: IApplicationModel[];
 
 describe('Suite: /api/applications -- Integration', () => {
-	// beforeAll(() =>
-	// 	Server.createInstance().then(s => {
-	// 		server = s;
-	// 		request = supertest(s.app);
-	// 	})
-	// );
-
 	beforeEach(async () => {
 		await Server.createInstance().then(s => {
 			server = s;
@@ -153,8 +146,4 @@ describe('Suite: /api/applications -- Integration', () => {
 			);
 		});
 	});
-
-	// afterEach(() => server.mongoose.connection.dropDatabase());
-
-	// afterAll(() => server.mongoose.disconnect());
 });

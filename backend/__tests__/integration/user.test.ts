@@ -3,7 +3,7 @@ import * as supertest from 'supertest';
 import { generateUsers, generateApplication, generateUser } from '../helper';
 import { IUserModel, User, Role } from '../../models/user';
 import Server from '../../server';
-import { Status } from '../../models/app.enums';
+import { Status, ethnicities, Referral } from '../../models/app.enums';
 import { ObjectId } from 'bson';
 
 let server: Server;
@@ -363,7 +363,6 @@ describe('Suite: /api/users -- Integration', () => {
 
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
-			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
 			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
@@ -385,6 +384,121 @@ describe('Suite: /api/users -- Integration', () => {
 		});
 
 		it('Successfully creates an application for another user by an admin', async () => {
+			const admin = await request
+				.post('/api/auth/signup')
+				.send(generateUser())
+				.then(resp => resp.body.response);
+
+			admin.user = await User.findByIdAndUpdate(
+				admin.user._id,
+				{ role: Role.ADMIN },
+				{ new: true }
+			).exec();
+
+			const app = generateApplication();
+			const {
+				body: { response },
+				status
+			} = await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(admin.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusInternal).toEqual(Status.PENDING);
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
+				})
+			);
+		});
+	});
+
+	describe('Update application tests', () => {
+		it('Successfully updates an application for a user', async () => {
+			const app = generateApplication();
+			let {
+				body: { response },
+				status
+			} = await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2
+				})
+			);
+
+			app.ethnicity = ethnicities[0];
+			app.referral = Referral.CLASS;
+
+			({
+				body: { response },
+				status
+			} = await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' }));
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2
+				})
+			);
+		});
+
+		it('Successfully updates an application for another user by an admin', async () => {
 			const admin = await request
 				.post('/api/auth/signup')
 				.send(generateUser())
@@ -469,7 +583,6 @@ describe('Suite: /api/users -- Integration', () => {
 
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
-			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
 			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(

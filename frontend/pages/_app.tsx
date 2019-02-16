@@ -29,8 +29,7 @@ class MyApp extends App<Props> {
 			// ctx.store.dispatch(setUser(user));
 			// ctx.store.dispatch(setToken(token));
 			// try {
-			// await refreshToken(ctx)(ctx.store.dispatch);
-			await ctx.store.dispatch(refreshToken(ctx));
+			await refreshToken(ctx)(ctx.store.dispatch);
 			if (ctx.req.headers.cookie) {
 				const messages = flash.get(ctx);
 				if (messages.red) sendFlashMessage(messages.red, ctx)(ctx.store.dispatch);

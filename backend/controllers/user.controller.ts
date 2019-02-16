@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { User, UserDto, IUserModel, Role } from '../models/user';
-import { userMatches, multer } from '../utils';
+import { userMatches, multer, hasPermission } from '../utils';
 import {
 	JsonController,
 	Get,
@@ -14,7 +14,8 @@ import {
 	UnauthorizedError,
 	UseAfter,
 	Post,
-	Authorized
+	Authorized,
+	Params
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
@@ -46,10 +47,7 @@ export class UserController extends BaseController {
 
 	@Get('/:id/application')
 	@Authorized()
-	async getApplicationById(
-		@Param('id') id: string,
-		@CurrentUser({ required: true }) currentUser: IUserModel
-	) {
+	async getUserApplication(@Param('id') id: string, @CurrentUser() currentUser: IUserModel) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
 		if (!userMatches(currentUser, id, true))
 			throw new UnauthorizedError('You are unauthorized to view this application');
@@ -57,16 +55,32 @@ export class UserController extends BaseController {
 			.lean()
 			.exec();
 		if (!user) throw new BadRequestError('User does not exist');
-		const application = Application.findOne({ user })
+		// const application = Application.findOne({ user })
+		// 	.populate('user')
+		// 	.exec();
+
+		const appQuery = Application.findOne({ user }).populate('user');
+		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
+
+		const application = await appQuery.exec();
+		return application;
+	}
+
+	// TODO: Add tests
+	@Get('/application')
+	@Authorized()
+	async getOwnApplication(@CurrentUser() currentUser: IUserModel) {
+		const application = Application.findOne({ user: currentUser })
 			.populate('user')
 			.exec();
 		return application;
 	}
 
-	// TODO: Add tests
-	@Get('/:id')
+	// Regex because route clashes with get application route above ^
+	@Get(/\/((?!application)[a-zA-Z0-9]+)$/)
 	@Authorized([Role.EXEC])
-	async getById(@Param('id') id: string) {
+	async getById(@Params() params: string[]) {
+		const id = params[0];
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
 		const user = await User.findById(id)
 			.lean()
@@ -110,7 +124,7 @@ export class UserController extends BaseController {
 		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this application');
 
-		const app = await Application.findOneAndUpdate(
+		const appQuery = Application.findOneAndUpdate(
 			{ user },
 			{ ...applicationDto, user },
 			{
@@ -118,9 +132,10 @@ export class UserController extends BaseController {
 				setDefaultsOnInsert: true,
 				new: true
 			}
-		)
-			.populate('user')
-			.exec();
+		).populate('user');
+		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
+
+		const app = await appQuery.exec();
 		return app;
 	}
 }
