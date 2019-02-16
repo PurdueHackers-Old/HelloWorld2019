@@ -10,7 +10,6 @@ export default (pass: any) =>
 	pass.use(
 		new Strategy(
 			{
-				// jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 				jwtFromRequest: extractToken,
 				secretOrKey: CONFIG.SECRET
 			},

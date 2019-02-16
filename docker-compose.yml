@@ -1,0 +1,30 @@
+version: '3'
+services:
+    mongo:
+        image: mongo
+        ports:
+            - '27017:27017'
+    mongo-express:
+        image: mongo-express
+        depends_on:
+            - mongo
+        ports:
+            - '8080:8081'
+
+    app:
+        container_name: app
+        build:
+            context: ./
+        command: yarn dev
+        volumes:
+            - ./:/usr/app
+            - /usr/app/node_modules
+        depends_on:
+            - mongo-express
+        ports:
+            - '5000:5000'
+            - '9222:9222'
+        network_mode: host
+        # env_file: ./.env # TODO - uncomment this to auto-load your .env file!
+        environment:
+            - DB=mongodb://localhost:27017/HelloWorld
