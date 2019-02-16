@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import { Strategy } from 'passport-jwt';
 import { Request, Response, NextFunction } from 'express';
 import CONFIG from '../config';
-import { User } from '../models/user';
+import { User, Role } from '../models/user';
 import { errorRes, hasPermission, extractToken } from '../utils';
 import { ObjectId } from 'bson';
 
@@ -39,7 +39,7 @@ export const extractUser = () => (req: Request, res: Response, next: NextFunctio
 		next();
 	})(req, res, next);
 
-export const hasPermissions = (roles: string[]) => (
+export const hasPermissions = (roles: Role[]) => (
 	req: Request,
 	res: Response,
 	next: NextFunction
