@@ -121,10 +121,10 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 	} catch (error) {
 		if (!error.response) throw error;
 
-		dispatch(setUser(null));
-		dispatch(setToken(''));
-		removeCookie('token', ctx);
-		ReactGA.set({ userId: null });
+		// dispatch(setUser(null));
+		// dispatch(setToken(''));
+		// removeCookie('token', ctx);
+		// ReactGA.set({ userId: null });
 		return null;
 		// throw error.response ? error.response.data : error;
 	}
@@ -133,6 +133,7 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 // User Actions
 export const getApplication = async (ctx?: IContext, params?: any) => {
 	try {
+		console.log('Application headers sent:', ctx && ctx.res && ctx.res.headersSent);
 		const token = getToken(ctx);
 		const {
 			data: { response }

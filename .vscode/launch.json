@@ -12,6 +12,16 @@
 	"configurations": [
 		{
 			"type": "node",
+			"request": "launch",
+			"name": "Debug Server",
+			"preLaunchTask": "build",
+			"program": "${workspaceFolder}/backend/index.ts",
+			"cwd": "${workspaceFolder}",
+			"protocol": "inspector",
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
+		},
+		{
+			"type": "node",
 			"request": "attach",
 			"name": "Server",
 			"port": 9229,

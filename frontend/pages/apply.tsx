@@ -13,7 +13,6 @@ type Props = {
 class ApplyPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
-
 		const application = await getApplication(ctx);
 		return { application };
 	};
@@ -21,7 +20,6 @@ class ApplyPage extends Component<Props> {
 	constructor(props) {
 		super(props);
 		this.state = {
-			
 			...props.application
 		};
 	}

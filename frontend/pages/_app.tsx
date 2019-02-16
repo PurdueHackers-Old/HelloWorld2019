@@ -24,19 +24,15 @@ class MyApp extends App<Props> {
 	static async getInitialProps({ Component, ctx }) {
 		// TODO: Find better way to refresh token w/o network request
 		if (ctx.req) {
-			// const { user } = ctx.req;
-			// const token = getToken(ctx);
-			// ctx.store.dispatch(setUser(user));
-			// ctx.store.dispatch(setToken(token));
-			// try {
 			await refreshToken(ctx)(ctx.store.dispatch);
-			if (ctx.req.headers.cookie) {
+			if (!ctx.res.headersSent) {
 				const messages = flash.get(ctx);
 				if (messages.red) sendFlashMessage(messages.red, ctx)(ctx.store.dispatch);
 				if (messages.green)
 					sendFlashMessage(messages.green, ctx, 'green')(ctx.store.dispatch);
 			}
 		}
+
 		return {
 			pageProps: Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
 		};

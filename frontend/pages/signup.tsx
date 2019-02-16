@@ -39,7 +39,6 @@ class SignupPage extends Component<Props> {
 	};
 
 	render() {
-		console.log('Rendering signup page');
 		const { name, email, password, passwordConfirm } = this.state;
 		return (
 			<div>
