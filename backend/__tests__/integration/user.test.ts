@@ -12,14 +12,13 @@ let users: { user: IUserModel; token: string }[];
 let user: { user: IUserModel; token: string };
 
 describe('Suite: /api/users -- Integration', () => {
-	beforeAll(() =>
-		Server.createInstance().then(s => {
+	beforeEach(async () => {
+		await Server.createInstance().then(s => {
 			server = s;
 			request = supertest(s.app);
-		})
-	);
+		});
+		await server.mongoose.connection.dropDatabase();
 
-	beforeEach(async () => {
 		users = await Promise.all<{ user: IUserModel; token: string }>(
 			generateUsers(6).map(u =>
 				request
@@ -30,6 +29,8 @@ describe('Suite: /api/users -- Integration', () => {
 		);
 		user = users[0];
 	});
+
+	afterEach(() => server.mongoose.disconnect());
 
 	describe('Get all Users', () => {
 		it('Fails to get all users because not logged in', async () => {
@@ -600,8 +601,4 @@ describe('Suite: /api/users -- Integration', () => {
 			);
 		});
 	});
-
-	afterEach(() => server.mongoose.connection.dropDatabase());
-
-	afterAll(() => server.mongoose.disconnect());
 });

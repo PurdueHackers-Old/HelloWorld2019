@@ -3,19 +3,22 @@ import * as supertest from 'supertest';
 import * as jwt from 'jsonwebtoken';
 import { ObjectId } from 'bson';
 import { generateUser, sleep } from '../helper';
-import Server from '../../../backend/server';
+import Server from '../../server';
 import CONFIG from '../../config';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
 
 describe('Suite: /api/auth -- Integration', () => {
-	beforeAll(() =>
-		Server.createInstance().then(s => {
+	beforeEach(async () => {
+		await Server.createInstance().then(s => {
 			server = s;
 			request = supertest(s.app);
-		})
-	);
+		});
+		await server.mongoose.connection.dropDatabase();
+	});
+
+	afterEach(() => server.mongoose.disconnect());
 
 	describe('Signup Tests', () => {
 		it('Fails because no name', async () => {
@@ -310,8 +313,4 @@ describe('Suite: /api/auth -- Integration', () => {
 			expect(isExpired).toEqual(false);
 		});
 	});
-
-	afterEach(() => server.mongoose.connection.dropDatabase());
-
-	afterAll(() => server.mongoose.disconnect());
 });

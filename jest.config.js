@@ -26,7 +26,6 @@ module.exports = {
 					tsConfig: './tsconfig.server.json'
 				}
 			},
-
 			moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
 			name: 'backend',
 			preset: 'ts-jest',

@@ -12,14 +12,20 @@ let user: { user: IUserModel; token: string };
 let applications: IApplicationModel[];
 
 describe('Suite: /api/applications -- Integration', () => {
-	beforeAll(() =>
-		Server.createInstance().then(s => {
-			server = s;
-			request = supertest(s.app);
-		})
-	);
+	// beforeAll(() =>
+	// 	Server.createInstance().then(s => {
+	// 		server = s;
+	// 		request = supertest(s.app);
+	// 	})
+	// );
 
 	beforeEach(async () => {
+		await Server.createInstance().then(s => {
+			server = s;
+			request = supertest(s.app);
+		});
+		await server.mongoose.connection.dropDatabase();
+		
 		users = await Promise.all<{ user: IUserModel; token: string }>(
 			generateUsers(6).map(u =>
 				request
@@ -41,6 +47,8 @@ describe('Suite: /api/applications -- Integration', () => {
 
 		user = users[0];
 	});
+	
+	afterEach(() => server.mongoose.disconnect());
 
 	describe('Get all Applications', () => {
 		it('Fail to get all applications without logging in', async () => {
@@ -146,7 +154,7 @@ describe('Suite: /api/applications -- Integration', () => {
 		});
 	});
 
-	afterEach(() => server.mongoose.connection.dropDatabase());
+	// afterEach(() => server.mongoose.connection.dropDatabase());
 
-	afterAll(() => server.mongoose.disconnect());
+	// afterAll(() => server.mongoose.disconnect());
 });
