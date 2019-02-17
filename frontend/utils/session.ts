@@ -1,7 +1,7 @@
 import cookie from 'js-cookie';
 import Router from 'next/router';
 import { IUser, IContext } from '../@types';
-import { sendFlashMessage } from '../redux/actions';
+import { sendErrorMessage } from '../redux/actions';
 
 export enum Role {
 	USER = 'USER',
@@ -81,7 +81,7 @@ export const redirectIfNotAuthenticated = (
 ): boolean => {
 	if (!isAuthenticated(ctx, roles)) {
 		redirect(path, ctx, true);
-		if (msg) sendFlashMessage(msg, ctx)(ctx.store.dispatch);
+		if (msg) sendErrorMessage(msg, ctx)(ctx.store.dispatch);
 		return true;
 	}
 

@@ -6,7 +6,12 @@ import withRedux from 'next-redux-wrapper';
 // import { persistStore } from 'redux-persist';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
-import { clearFlashMessages, sendFlashMessage, refreshToken } from '../redux/actions';
+import {
+	clearFlashMessages,
+	sendErrorMessage,
+	sendSuccessMessage,
+	refreshToken
+} from '../redux/actions';
 import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
@@ -15,14 +20,12 @@ type Props = { store: Store };
 
 class MyApp extends App<Props> {
 	static async getInitialProps({ Component, ctx }) {
-		// TODO: Find better way to refresh token w/o network request
 		if (ctx.req) {
 			await refreshToken(ctx)(ctx.store.dispatch);
 			if (!ctx.res.headersSent) {
 				const messages = flash.get(ctx);
-				if (messages.red) sendFlashMessage(messages.red, ctx)(ctx.store.dispatch);
-				if (messages.green)
-					sendFlashMessage(messages.green, ctx, 'green')(ctx.store.dispatch);
+				if (messages.red) sendErrorMessage(messages.red, ctx)(ctx.store.dispatch);
+				if (messages.green) sendSuccessMessage(messages.green, ctx)(ctx.store.dispatch);
 			}
 		}
 
