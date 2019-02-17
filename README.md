@@ -8,9 +8,19 @@
 -   [MongoDB](https://docs.mongodb.com/manual/installation/)
 -   [Yarn](https://yarnpkg.com/en/docs/install)
 -   [Homebrew](https://brew.sh/) \*Only on Mac
+-  [Docker](https://www.docker.com/)
+-  [Docker Compose](https://docs.docker.com/compose/install/)
 
-### Setup
+### Usage with Docker
+* To start: `docker-compose up`
+	* Open http://localhost:5000
+* To stop:
+	1. Ctrl+C when inside `docker-compose up`
+	* OR
+	2. `docker-compose down`
+* To build: `docker-compose build`
 
+### Usage without Docker
 1. `yarn`
 2. Edit .env
 3. Make sure MongoDB is running:
