@@ -6,17 +6,10 @@ import withRedux from 'next-redux-wrapper';
 // import { persistStore } from 'redux-persist';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
-import {
-	clearFlashMessages,
-	sendFlashMessage,
-	refreshToken,
-	setUser,
-	setToken
-} from '../redux/actions';
-import Layout from '../components/Layout';
+import { clearFlashMessages, sendFlashMessage, refreshToken } from '../redux/actions';
+import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
-import { getToken } from '../utils/session';
 
 type Props = { store: Store };
 
