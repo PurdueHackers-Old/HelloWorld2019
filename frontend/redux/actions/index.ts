@@ -167,16 +167,26 @@ export const sendApplication = async (body: ApplicationDto, ctx?: IContext, para
 };
 
 // Flash Actions
-export const sendFlashMessage = (msg: string, ctx?: IContext, type: flashColor = 'red') => (
-	dispatch: Dispatch
-) => {
-	if (type === 'red') {
-		dispatch(setRedFlash(msg));
-		flash.set({ red: msg }, ctx);
-	} else {
-		dispatch(setGreenFlash(msg));
-		flash.set({ green: msg }, ctx);
-	}
+// export const sendFlashMessage = (msg: string, ctx?: IContext, type: flashColor = 'red') => (
+// 	dispatch: Dispatch
+// ) => {
+// 	if (type === 'red') {
+// 		dispatch(setRedFlash(msg));
+// 		flash.set({ red: msg }, ctx);
+// 	} else {
+// 		dispatch(setGreenFlash(msg));
+// 		flash.set({ green: msg }, ctx);
+// 	}
+// };
+
+export const sendErrorMessage = (msg: string, ctx?: IContext) => (dispatch: Dispatch) => {
+	dispatch(setRedFlash(msg));
+	flash.set({ red: msg }, ctx);
+};
+
+export const sendSuccessMessage = (msg: string, ctx?: IContext) => (dispatch: Dispatch) => {
+	dispatch(setGreenFlash(msg));
+	flash.set({ green: msg }, ctx);
 };
 
 export const clearFlashMessages = (ctx?: IContext) => (dispatch: Dispatch) => {

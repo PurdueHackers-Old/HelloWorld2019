@@ -1,16 +1,3 @@
-import React from 'react';
-import Link from 'next/link';
+import { HomePage } from '../modules/home';
 
-const Index = () => {
-	return (
-		<div>
-			Home Page
-			<br />
-			<Link href="/apply">
-				<button>Apply</button>
-			</Link>
-		</div>
-	);
-};
-
-export default Index;
+export default HomePage;
