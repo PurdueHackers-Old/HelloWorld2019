@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { sendFlashMessage } from '../redux/actions';
-import { redirect } from '../utils/session';
-import { IContext, flashColor } from '../@types';
+import { sendFlashMessage } from '../../redux/actions';
+import { redirect } from '../../utils/session';
+import { IContext, flashColor } from '../../@types';
 
 type DispatchToProps = {
 	flash: (msg: string, ctx?: IContext, type?: flashColor) => void;

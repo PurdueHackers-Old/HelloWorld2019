@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { signOut } from '../redux/actions';
-import Redirect from '../components/Redirect';
+import Redirect from '../modules/common/Redirect';
 
 type Props = { logout: () => Promise<void> };
 
