@@ -71,7 +71,7 @@ export class UserController extends BaseController {
 	@Authorized()
 	async getOwnApplication(@CurrentUser() currentUser: IUserModel) {
 		this.logger.info('Getting application');
-		const application = Application.findOne({ user: currentUser })
+		const application = await Application.findOne({ user: currentUser })
 			.populate('user')
 			.exec();
 		return application;

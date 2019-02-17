@@ -23,6 +23,22 @@
 		{
 			"type": "node",
 			"request": "attach",
+			"name": "Attach to Docker",
+			// "preLaunchTask": "tsc-watch",
+			"port": 9229,
+			"protocol": "inspector",
+			// "restart": true,
+			"localRoot": "${workspaceFolder}",
+			"remoteRoot": "/usr/app",
+			"skipFiles": [
+				"<node_internals>/**/*.js",
+				"${workspaceFolder}/node_modules/**/*.js",
+				"${workspaceFolder}/dist/**/*.js"
+			]
+		},
+		{
+			"type": "node",
+			"request": "attach",
 			"name": "Server",
 			"port": 9229,
 			"skipFiles": [

@@ -4,7 +4,7 @@
 	"description": "Web page for Hello World 2019",
 	"main": "dist/index.js",
 	"scripts": {
-		"dev": "nodemon backend/index.ts",
+		"dev": "nodemon",
 		"clean": "rimraf dist",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
