@@ -2,7 +2,9 @@ import { Response, Request } from 'express';
 import { ObjectId } from 'mongodb';
 import * as Multer from 'multer';
 import { ExtractJwt } from 'passport-jwt';
-import { IUserModel, User, Role } from '../models/user';
+import * as jwt from 'jsonwebtoken';
+import { IUserModel, Role } from '../models/user';
+import CONFIG from '../config';
 
 export const multer = Multer({
 	storage: Multer.memoryStorage(),
@@ -71,3 +73,8 @@ export const extractToken = (req: Request) =>
 			return token;
 		}
 	])(req);
+
+export const signToken = (user: IUserModel, expiresIn = CONFIG.EXPIRES_IN) =>
+	jwt.sign({ _id: user._id, role: user.role }, CONFIG.SECRET, {
+		expiresIn
+	});
