@@ -30,6 +30,7 @@ class ApplyPage extends Component<Props> {
 			<div>
 				Apply Page
 				<br />
+				
 			</div>
 		);
 	}

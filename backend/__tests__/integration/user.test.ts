@@ -3,7 +3,7 @@ import * as supertest from 'supertest';
 import { generateUsers, generateApplication, generateUser } from '../helper';
 import { IUserModel, User, Role } from '../../models/user';
 import Server from '../../server';
-import { Status, ethnicities, Referral } from '../../models/app.enums';
+import { Status, ethnicities, Referral } from '../../../shared/app.enums';
 import { ObjectId } from 'bson';
 
 let server: Server;
