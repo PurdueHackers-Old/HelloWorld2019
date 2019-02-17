@@ -3,12 +3,6 @@ const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
 
-// module.exports = {
-// 	publicRuntimeConfig,
-// 	serverRuntimeConfig,
-// 	...withTypescript()
-// };
-
 module.exports = withPlugins(
 	[
 		withTM({

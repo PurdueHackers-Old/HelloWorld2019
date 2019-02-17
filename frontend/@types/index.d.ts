@@ -17,11 +17,11 @@ export interface IContext extends NextContext {
 
 export interface IUser {
 	_id: string;
+	name: string;
+	email: string;
 	role: string;
 	verified: boolean;
 	checkedin: boolean;
-	name: string;
-	email: string;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -46,10 +46,4 @@ export interface ILoginUser {
 export interface ILoginResponse {
 	token: string;
 	user: IUser;
-}
-
-declare namespace NodeJS {
-	interface Process {
-		browser: boolean;
-	}
 }
