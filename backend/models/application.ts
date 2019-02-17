@@ -6,7 +6,6 @@ import {
 	IsNumber,
 	ValidateIf,
 	IsUrl,
-	Length,
 	MinLength,
 	MaxLength
 } from 'class-validator';
@@ -21,7 +20,7 @@ import {
 	Referral,
 	ShirtSize,
 	Status
-} from './app.enums';
+} from '../../shared/app.enums';
 import { isNotEmpty } from '../utils';
 
 export class ApplicationDto {
@@ -45,11 +44,11 @@ export class ApplicationDto {
 
 	@IsNotEmpty({ message: 'Please provide a valid class major' })
 	@IsEnum(Major, { message: 'Please provide a valid class major' })
-	major: string;
+	major: Major;
 
 	@IsNotEmpty({ message: 'Please provide a valid referral' })
 	@IsEnum(Referral, { message: 'Please provide a valid referral' })
-	referral: string;
+	referral: Referral;
 
 	@Type(() => Number)
 	@IsNumber({}, { message: 'Please provide a valid hackathon number' })
@@ -57,7 +56,7 @@ export class ApplicationDto {
 
 	@IsNotEmpty({ message: 'Please provide a valid class year' })
 	@IsEnum(ShirtSize, { message: 'Please provide a valid class year' })
-	shirtSize: string;
+	shirtSize: ShirtSize;
 
 	dietaryRestrictions: string;
 
@@ -80,7 +79,6 @@ export class ApplicationDto {
 
 export interface IApplicationModel extends ApplicationDto, Document {
 	user: IUserModel;
-	// TODO: Add status enum
 	statusInternal: Status;
 	statusPublic: Status;
 	createdAt: Date;
@@ -107,7 +105,12 @@ const schema = new Schema(
 		answer1: { type: String, required: true },
 		answer2: { type: String, required: true },
 		emailSent: { type: Boolean, default: false },
-		statusInternal: { type: String, default: Status.PENDING, enum: Object.values(Status) },
+		statusInternal: {
+			type: String,
+			default: Status.PENDING,
+			enum: Object.values(Status),
+			select: false
+		},
 		statusPublic: { type: String, default: Status.PENDING, enum: Object.values(Status) }
 	},
 	{ timestamps: true }

@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import { Strategy } from 'passport-jwt';
 import { Request, Response, NextFunction } from 'express';
 import CONFIG from '../config';
-import { User } from '../models/user';
+import { User, Role } from '../models/user';
 import { errorRes, hasPermission, extractToken } from '../utils';
 import { ObjectId } from 'bson';
 
@@ -10,7 +10,6 @@ export default (pass: any) =>
 	pass.use(
 		new Strategy(
 			{
-				// jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 				jwtFromRequest: extractToken,
 				secretOrKey: CONFIG.SECRET
 			},
@@ -34,12 +33,12 @@ export const auth = () => (req: Request, res: Response, next: NextFunction) =>
 	req.user ? next() : errorRes(res, 401, 'Unauthorized');
 
 export const extractUser = () => (req: Request, res: Response, next: NextFunction) =>
-	passport.authenticate('jwt', { session: true }, (err, data, info) => {
+	passport.authenticate('jwt', { session: false }, (err, data, info) => {
 		req.user = data || null;
 		next();
 	})(req, res, next);
 
-export const hasPermissions = (roles: string[]) => (
+export const hasPermissions = (roles: Role[]) => (
 	req: Request,
 	res: Response,
 	next: NextFunction

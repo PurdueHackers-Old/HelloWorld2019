@@ -1,6 +1,6 @@
 import { Action, UnauthorizedError } from 'routing-controllers';
 import { decode, verify } from 'jsonwebtoken';
-import { User } from '../models/user';
+import { User, Role } from '../models/user';
 import { ObjectId } from 'bson';
 import CONFIG from '../config';
 import { hasPermission, extractToken } from '../utils';
@@ -24,7 +24,7 @@ export const currentUserChecker = async (action: Action) => {
 	return user;
 };
 
-export const authorizationChecker = async (action: Action, roles: string[]) => {
+export const authorizationChecker = async (action: Action, roles: Role[]) => {
 	const user = await currentUserChecker(action);
 	if (!user) throw new UnauthorizedError('You must be logged in!');
 	if (!roles.length) return true;

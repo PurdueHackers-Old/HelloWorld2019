@@ -1,6 +1,7 @@
 import ReactGA from 'react-ga';
 import { ActionCreator, AnyAction, Dispatch } from 'redux';
 import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor } from '../../@types';
+import { ApplicationDto } from '../../../backend/models/application';
 import { api, err } from '../../utils';
 import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
@@ -23,7 +24,8 @@ export const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
 const setGreenFlash = makeCreator(FLASH_GREEN_SET, 'green');
 const setRedFlash = makeCreator(FLASH_RED_SET, 'red');
 
-// Actions
+// Auth Actions
+// TODO: Signing up should not log user in
 export const signUp = (body: ICreateUser) => async (
 	dispatch: Dispatch
 ): Promise<ILoginResponse> => {
@@ -36,7 +38,7 @@ export const signUp = (body: ICreateUser) => async (
 		setCookie('token', response.token);
 		return response;
 	} catch (error) {
-		throw error.response.data;
+		throw error.response ? error.response.data : error;
 	}
 };
 
@@ -51,8 +53,7 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<
 		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
-		if (error.response) throw error.response.data;
-		else throw error;
+		throw error.response ? error.response.data : error;
 	}
 };
 
@@ -71,25 +72,25 @@ export const forgotPassword = async (email: string) => {
 	try {
 		const {
 			data: { response }
-		} = await api.post('/api/auth/forgot', { email });
+		} = await api.post('/auth/forgot', { email });
 		return response;
 	} catch (error) {
-		throw error.response.data;
+		throw error.response ? error.response.data : error;
 	}
 };
 
-export const resetPassword = async (password, passwordConfirm, token) => {
+export const resetPassword = async (password: string, passwordConfirm: string, token: string) => {
 	try {
 		const {
 			data: { response }
-		} = await api.post('/api/auth/reset', {
+		} = await api.post('/auth/reset', {
 			password,
 			passwordConfirm,
 			token
 		});
 		return response;
 	} catch (error) {
-		throw error.response.data;
+		throw error.response ? error.response.data : error;
 	}
 };
 
@@ -118,11 +119,34 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
-		if (error.response) throw error.response.data;
-		throw error;
+		if (!error.response) throw error;
+		dispatch(setUser(null));
+		dispatch(setToken(''));
+		removeCookie('token', ctx);
+		ReactGA.set({ userId: null });
+		return null;
+		// throw error.response ? error.response.data : error;
 	}
 };
 
+// User Actions
+export const getApplication = async (ctx?: IContext, params?: any) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get('/users/application', {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const app: ApplicationDto = response;
+		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Flash Actions
 export const sendFlashMessage = (msg: string, ctx?: IContext, type: flashColor = 'red') => (
 	dispatch: Dispatch
 ) => {

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { userMatches, multer } from '../utils';
+import { userMatches, multer, hasPermission } from '../utils';
 import {
 	JsonController,
 	Get,
@@ -36,6 +36,8 @@ export class ApplicationController extends BaseController {
 
 		const results = await Application.find()
 			.sort({ [sortBy]: order })
+			// .populate('user')
+			.select('+statusInternal')
 			.lean()
 			.exec();
 

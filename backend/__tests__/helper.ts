@@ -8,7 +8,7 @@ import {
 	Major,
 	Referral,
 	ShirtSize
-} from '../models/app.enums';
+} from '../../shared/app.enums';
 
 export const generateUser = () => {
 	const first = faker.name.firstName();
