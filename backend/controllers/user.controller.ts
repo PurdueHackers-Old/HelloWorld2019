@@ -55,9 +55,6 @@ export class UserController extends BaseController {
 			.lean()
 			.exec();
 		if (!user) throw new BadRequestError('User does not exist');
-		// const application = Application.findOne({ user })
-		// 	.populate('user')
-		// 	.exec();
 
 		const appQuery = Application.findOne({ user }).populate('user');
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
@@ -70,7 +67,6 @@ export class UserController extends BaseController {
 	@Get('/application')
 	@Authorized()
 	async getOwnApplication(@CurrentUser() currentUser: IUserModel) {
-		this.logger.info('Getting application');
 		const application = await Application.findOne({ user: currentUser })
 			.populate('user')
 			.exec();
@@ -86,6 +82,7 @@ export class UserController extends BaseController {
 		const user = await User.findById(id)
 			.lean()
 			.exec();
+
 		if (!user) throw new BadRequestError('User does not exist');
 		return user;
 	}

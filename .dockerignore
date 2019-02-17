@@ -13,3 +13,5 @@ LICENSE
 travis.yml
 dist
 coverage
+data
+.next

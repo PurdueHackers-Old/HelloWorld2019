@@ -4,6 +4,7 @@ import { signIn, sendFlashMessage, getApplication } from '../redux/actions';
 import { ISessionState } from '../redux/reducers/session';
 import { ILoginUser, ILoginResponse, IContext } from '../@types';
 import { redirectIfNotAuthenticated } from '../utils/session';
+import { Gender } from '../../shared/app.enums';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;

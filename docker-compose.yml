@@ -4,17 +4,25 @@ services:
         image: mongo
         ports:
             - '27017:27017'
+        volumes:
+            - ./data:/data/db:Z
         logging:
             driver: none
 
     mongo-express:
-        image: mongo-express
+        image: mrvautin/adminmongo
         depends_on:
             - mongo
         ports:
-            - '8080:8081'
+            - '1234:1234'
+        network_mode: host
         logging:
             driver: none
+        environment:
+            - CONN_NAME=HelloWorld
+            - DB_HOST=localhost
+            - DB_PORT=27017
+            - DB_NAME=HelloWorld
 
     app:
         container_name: app
@@ -26,9 +34,11 @@ services:
             - /usr/app/node_modules
         depends_on:
             - mongo-express
+            # - mongo
         ports:
             - '5000:5000'
-            - '9222:9222'
+            - '9229:9229'
+            - '5858:5858'
         network_mode: host
         # env_file: ./.env # TODO - uncomment this to auto-load your .env file!
         environment:

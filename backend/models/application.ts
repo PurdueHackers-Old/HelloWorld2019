@@ -6,7 +6,6 @@ import {
 	IsNumber,
 	ValidateIf,
 	IsUrl,
-	Length,
 	MinLength,
 	MaxLength
 } from 'class-validator';
@@ -21,7 +20,7 @@ import {
 	Referral,
 	ShirtSize,
 	Status
-} from './app.enums';
+} from '../../shared/app.enums';
 import { isNotEmpty } from '../utils';
 
 export class ApplicationDto {
@@ -106,7 +105,12 @@ const schema = new Schema(
 		answer1: { type: String, required: true },
 		answer2: { type: String, required: true },
 		emailSent: { type: Boolean, default: false },
-		statusInternal: { type: String, default: Status.PENDING, enum: Object.values(Status), select: false },
+		statusInternal: {
+			type: String,
+			default: Status.PENDING,
+			enum: Object.values(Status),
+			select: false
+		},
 		statusPublic: { type: String, default: Status.PENDING, enum: Object.values(Status) }
 	},
 	{ timestamps: true }

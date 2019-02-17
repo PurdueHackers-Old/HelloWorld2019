@@ -33,7 +33,7 @@ export const auth = () => (req: Request, res: Response, next: NextFunction) =>
 	req.user ? next() : errorRes(res, 401, 'Unauthorized');
 
 export const extractUser = () => (req: Request, res: Response, next: NextFunction) =>
-	passport.authenticate('jwt', { session: true }, (err, data, info) => {
+	passport.authenticate('jwt', { session: false }, (err, data, info) => {
 		req.user = data || null;
 		next();
 	})(req, res, next);
