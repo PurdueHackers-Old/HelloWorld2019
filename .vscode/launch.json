@@ -34,7 +34,9 @@
 				"<node_internals>/**/*.js",
 				"${workspaceFolder}/node_modules/**/*.js",
 				"${workspaceFolder}/dist/**/*.js"
-			]
+			],
+			"sourceMaps": true,
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
 		},
 		{
 			"type": "node",

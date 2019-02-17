@@ -32,7 +32,7 @@ export const getCookie = (key: string, ctx?: IContext) => {
 };
 
 export const getToken = (ctx?: IContext) => {
-	let { token } = ctx && ctx.store && ctx.store.getState().sessionState;
+	let token = ctx && ctx.store && ctx.store.getState().sessionState.token;
 	if (token) return token;
 	token = getCookie('token', ctx);
 	return token;
@@ -54,7 +54,7 @@ export const redirect = (target: string, ctx?: IContext, replace?: boolean) => {
 
 const extractUser = (ctx: IContext) => {
 	// Try to get from redux, and if not, req.user
-	let { user } = ctx && ctx.store && ctx.store.getState().sessionState;
+	let user = ctx && ctx.store && ctx.store.getState().sessionState.user;
 	if (user) return user;
 	user = ctx && ctx.req && ctx.req.user;
 	return user;

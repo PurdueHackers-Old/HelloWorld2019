@@ -5,7 +5,7 @@ import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
 import CONFIG from '../config';
 import { User, UserDto } from '../models/user';
-import { multer, extractToken, hasPermission } from '../utils';
+import { multer, extractToken, signToken } from '../utils';
 import {
 	JsonController,
 	Post,
@@ -55,7 +55,7 @@ export class AuthController extends BaseController {
 		await user.save();
 		const u = user.toJSON();
 		delete u.password;
-		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
+		const token = signToken(u);
 
 		return {
 			user: u,
@@ -75,8 +75,8 @@ export class AuthController extends BaseController {
 		const u = user.toJSON();
 		delete u.password;
 
-		// If user is found and password is right create a token
-		const token = jwt.sign({ _id: u._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
+		// If user is found and password is correct, create a token
+		const token = signToken(u);
 		return {
 			user: u,
 			token
@@ -96,7 +96,7 @@ export class AuthController extends BaseController {
 			.lean()
 			.exec();
 		if (!user) throw new UnauthorizedError('Member not found');
-		token = jwt.sign({ _id: user._id }, CONFIG.SECRET, { expiresIn: CONFIG.EXPIRES_IN });
+		token = signToken(user);
 		return { user, token };
 	}
 
