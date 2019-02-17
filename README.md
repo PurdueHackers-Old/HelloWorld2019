@@ -15,7 +15,7 @@
 
 -   To start: `docker-compose up`
     -   Open http://localhost:5000 to view the app
-    -   Open http://localhost:8080 to view mongo-express
+    -   Open http://localhost:1234 to view [adminMongo](https://adminmongo.markmoffat.com/)
 -   To stop: 1. Ctrl+C when inside `docker-compose up` \* OR 2. `docker-compose down`
 -   To build: `docker-compose build`
 

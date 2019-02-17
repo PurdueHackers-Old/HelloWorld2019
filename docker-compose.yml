@@ -18,6 +18,7 @@ services:
         network_mode: host
         logging:
             driver: none
+        command: /bin/sh -c "node app.js && rm ./config/app.json"
         environment:
             - CONN_NAME=HelloWorld
             - DB_HOST=localhost

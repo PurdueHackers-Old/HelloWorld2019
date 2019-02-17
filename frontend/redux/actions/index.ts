@@ -1,5 +1,6 @@
 import ReactGA from 'react-ga';
 import { ActionCreator, AnyAction, Dispatch } from 'redux';
+import * as jwt from 'jsonwebtoken';
 import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor } from '../../@types';
 import { ApplicationDto } from '../../../backend/models/application';
 import { api, err } from '../../utils';
@@ -133,9 +134,28 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 export const getApplication = async (ctx?: IContext, params?: any) => {
 	try {
 		const token = getToken(ctx);
+		const id = (jwt.decode(token) as any)._id;
 		const {
 			data: { response }
-		} = await api.get('/users/application', {
+		} = await api.get(`/users/${id}/application`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const app: ApplicationDto = response;
+		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// User Actions
+export const sendApplication = async (body: ApplicationDto, ctx?: IContext, params?: any) => {
+	try {
+		const token = getToken(ctx);
+		const id = (jwt.decode(token) as any)._id;
+		const {
+			data: { response }
+		} = await api.post(`/users/${id}/apply`, body, {
 			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});

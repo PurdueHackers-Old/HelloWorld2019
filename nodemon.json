@@ -1,7 +1,7 @@
 {
 	"watch": ["backend/**/*.ts"],
-
+	"inspect": true,
 	"ext": "ts",
 	"ignore": ["src/**/*.test.ts"],
-	"exec": "TS_NODE_PROJECT=tsconfig.server.json node -r ts-node/register/transpile-only backend/index.ts"
+	"exec": "TS_NODE_PROJECT=tsconfig.server.json node --inspect -r ts-node/register/transpile-only backend/index.ts"
 }
