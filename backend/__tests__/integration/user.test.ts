@@ -1,8 +1,9 @@
 import 'jest';
 import * as supertest from 'supertest';
 import { generateUsers, generateApplication, generateUser } from '../helper';
-import { IUserModel, User, Role } from '../../models/user';
 import Server from '../../server';
+import { IUserModel, User } from '../../models/user';
+import { Role } from '../../../shared/user.enums';
 import { Status, ethnicities, Referral } from '../../../shared/app.enums';
 import { ObjectId } from 'bson';
 

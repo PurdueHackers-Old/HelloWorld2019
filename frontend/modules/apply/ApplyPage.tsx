@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
 	sendSuccessMessage,
-	getApplication,
+	getOwnApplication,
 	sendApplication
 } from '../../redux/actions';
 import { IContext } from '../../@types';
@@ -26,6 +26,8 @@ type Props = {
 	application: ApplicationDto | null;
 };
 
+// TODO: Extract Apply form into its own component
+
 @((connect as any)(null, {
 	flashError: sendErrorMessage,
 	flashSuccess: sendSuccessMessage
@@ -35,7 +37,7 @@ export class ApplyPage extends Component<Props> {
 		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
 		let application: ApplicationDto;
 		try {
-			application = await getApplication(ctx);
+			application = await getOwnApplication(ctx);
 		} catch {}
 		return { application };
 	};
@@ -250,14 +252,3 @@ export class ApplyPage extends Component<Props> {
 		);
 	}
 }
-
-// const mapStateToProps = state => ({
-// 	...state.sessionState
-// });
-
-// const ConnectedApply = connect(
-// 	mapStateToProps,
-// 	{ signin: signIn, flashError: sendErrorMessage, flashSuccess: sendSuccessMessage }
-// )(ApplyPage);
-
-// export default ConnectedApply;

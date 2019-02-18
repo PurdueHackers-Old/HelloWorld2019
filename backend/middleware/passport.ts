@@ -1,10 +1,11 @@
 import * as passport from 'passport';
 import { Strategy } from 'passport-jwt';
 import { Request, Response, NextFunction } from 'express';
-import CONFIG from '../config';
-import { User, Role } from '../models/user';
-import { errorRes, hasPermission, extractToken } from '../utils';
 import { ObjectId } from 'bson';
+import CONFIG from '../config';
+import { User } from '../models/user';
+import { Role } from '../../shared/user.enums';
+import { errorRes, hasPermission, extractToken } from '../utils';
 
 export default (pass: any) =>
 	pass.use(

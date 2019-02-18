@@ -1,6 +1,4 @@
 import { ObjectId } from 'mongodb';
-import { User, UserDto, IUserModel, Role } from '../models/user';
-import { userMatches, multer, hasPermission } from '../utils';
 import {
 	JsonController,
 	Get,
@@ -18,8 +16,11 @@ import {
 	Params
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
+import { User, UserDto, IUserModel } from '../models/user';
 import { ValidationMiddleware } from '../middleware/validation';
 import { ApplicationDto, Application } from '../models/application';
+import { userMatches, multer, hasPermission } from '../utils';
+import { Role } from '../../shared/user.enums';
 
 @JsonController('/api/users')
 @UseAfter(ValidationMiddleware)

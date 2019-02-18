@@ -3,7 +3,8 @@ import { ObjectId } from 'mongodb';
 import * as Multer from 'multer';
 import { ExtractJwt } from 'passport-jwt';
 import * as jwt from 'jsonwebtoken';
-import { IUserModel, Role } from '../models/user';
+import { IUserModel } from '../models/user';
+import { Role } from '../../shared/user.enums';
 import CONFIG from '../config';
 
 export const multer = Multer({
