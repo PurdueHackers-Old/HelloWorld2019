@@ -1,8 +1,9 @@
 import 'jest';
 import * as supertest from 'supertest';
-import { generateUser, generateApplication, generateApplications, generateUsers } from '../helper';
-import { IUserModel, User, Role } from '../../models/user';
+import { generateUser, generateApplication, generateUsers } from '../helper';
 import Server from '../../server';
+import { Role } from '../../../shared/user.enums';
+import { IUserModel, User } from '../../models/user';
 import { IApplicationModel } from '../../models/application';
 
 let server: Server;
@@ -18,7 +19,7 @@ describe('Suite: /api/applications -- Integration', () => {
 			request = supertest(s.app);
 		});
 		await server.mongoose.connection.dropDatabase();
-		
+
 		users = await Promise.all<{ user: IUserModel; token: string }>(
 			generateUsers(6).map(u =>
 				request
@@ -40,7 +41,7 @@ describe('Suite: /api/applications -- Integration', () => {
 
 		user = users[0];
 	});
-	
+
 	afterEach(() => server.mongoose.disconnect());
 
 	describe('Get all Applications', () => {

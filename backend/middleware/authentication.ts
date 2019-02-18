@@ -1,7 +1,8 @@
 import { Action, UnauthorizedError } from 'routing-controllers';
 import { decode, verify } from 'jsonwebtoken';
-import { User, Role } from '../models/user';
 import { ObjectId } from 'bson';
+import { User } from '../models/user';
+import { Role } from '../../shared/user.enums';
 import CONFIG from '../config';
 import { hasPermission, extractToken } from '../utils';
 

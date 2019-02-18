@@ -131,14 +131,22 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 };
 
 // User Actions
-export const getApplication = async (ctx?: IContext, params?: any) => {
+export const getOwnApplication = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const id = (jwt.decode(token) as any)._id;
+		return getApplication(id, ctx);
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const getApplication = async (id: string, ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
 		const {
 			data: { response }
 		} = await api.get(`/users/${id}/application`, {
-			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		const app: ApplicationDto = response;
@@ -148,7 +156,6 @@ export const getApplication = async (ctx?: IContext, params?: any) => {
 	}
 };
 
-// User Actions
 export const sendApplication = async (body: ApplicationDto, ctx?: IContext, params?: any) => {
 	try {
 		const token = getToken(ctx);
@@ -166,19 +173,22 @@ export const sendApplication = async (body: ApplicationDto, ctx?: IContext, para
 	}
 };
 
-// Flash Actions
-// export const sendFlashMessage = (msg: string, ctx?: IContext, type: flashColor = 'red') => (
-// 	dispatch: Dispatch
-// ) => {
-// 	if (type === 'red') {
-// 		dispatch(setRedFlash(msg));
-// 		flash.set({ red: msg }, ctx);
-// 	} else {
-// 		dispatch(setGreenFlash(msg));
-// 		flash.set({ green: msg }, ctx);
-// 	}
-// };
+// Application Actions
+export const getStats = async (ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/applications/stats`, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
 
+// Flash Actions
 export const sendErrorMessage = (msg: string, ctx?: IContext) => (dispatch: Dispatch) => {
 	dispatch(setRedFlash(msg));
 	flash.set({ red: msg }, ctx);
@@ -193,7 +203,6 @@ export const clearFlashMessages = (ctx?: IContext) => (dispatch: Dispatch) => {
 	dispatch(setGreenFlash(''));
 	dispatch(setRedFlash(''));
 	removeCookie('flash', ctx);
-	// flash.get(ctx);
 };
 
 export const storageChanged = e => (dispatch, getState) => {
