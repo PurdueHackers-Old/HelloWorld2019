@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { sendErrorMessage, sendSuccessMessage, getStats } from '../../redux/actions';
+import { sendErrorMessage, getStats } from '../../redux/actions';
 import { IContext, IStatsResponse } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err } from '../../utils';
@@ -8,15 +7,9 @@ import { Role } from '../../../shared/user.enums';
 import Link from 'next/link';
 
 type Props = {
-	flashError: (msg: string, ctx?: IContext) => void;
-	flashSuccess: (msg: string, ctx?: IContext) => void;
 	stats: IStatsResponse;
 };
 
-@((connect as any)(null, {
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage
-}))
 export class DashboardPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};

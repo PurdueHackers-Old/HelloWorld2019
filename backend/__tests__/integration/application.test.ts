@@ -62,7 +62,7 @@ describe('Suite: /api/applications -- Integration', () => {
 			} = await request.get('/api/applications').auth(user.token, { type: 'bearer' });
 
 			expect(status).toEqual(401);
-			expect(error).toEqual('Unsufficient permissions');
+			expect(error).toEqual('Insufficient permissions');
 		});
 
 		it('Successfully gets all applications as exec', async () => {

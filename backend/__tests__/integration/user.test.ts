@@ -49,7 +49,7 @@ describe('Suite: /api/users -- Integration', () => {
 				status
 			} = await request.get('/api/users').auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(401);
-			expect(error).toEqual('Unsufficient permissions');
+			expect(error).toEqual('Insufficient permissions');
 		});
 
 		it('Successfully gets all users', async () => {
@@ -93,7 +93,7 @@ describe('Suite: /api/users -- Integration', () => {
 				.get(`/api/users/${user.user._id}`)
 				.auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(401);
-			expect(error).toEqual('Unsufficient permissions');
+			expect(error).toEqual('Insufficient permissions');
 		});
 
 		it('Fails to get a single user because invalid id', async () => {

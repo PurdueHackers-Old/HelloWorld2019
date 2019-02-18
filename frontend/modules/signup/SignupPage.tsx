@@ -1,9 +1,13 @@
 import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
-import { signUp, sendErrorMessage, sendSuccessMessage } from '../../redux/actions';
+import {
+	signUp,
+	sendErrorMessage,
+	sendSuccessMessage,
+	clearFlashMessages
+} from '../../redux/actions';
 import { ILoginResponse, ICreateUser, IContext } from '../../@types';
-import { ISessionState } from '../../redux/reducers/session';
 import { SignupForm } from './SignupForm';
 import { err } from '../../utils';
 
@@ -11,12 +15,14 @@ type Props = {
 	signup: (body: ICreateUser) => Promise<ILoginResponse>;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
-} & ISessionState;
+	clear: (ctx?: IContext) => void;
+};
 
 @((connect as any)(null, {
 	signup: signUp,
 	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage
+	flashSuccess: sendSuccessMessage,
+	clear: clearFlashMessages
 }))
 export class SignupPage extends Component<Props> {
 	state = {
@@ -31,8 +37,8 @@ export class SignupPage extends Component<Props> {
 
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { name, email, password, passwordConfirm } = this.state;
 		try {
+			this.props.clear();
 			const { user } = await this.props.signup(this.state);
 			Router.push('/');
 			this.props.flashSuccess(`Welcome ${user.name}!`);

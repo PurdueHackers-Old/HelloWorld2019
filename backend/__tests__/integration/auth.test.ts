@@ -147,7 +147,7 @@ describe('Suite: /api/auth -- Integration', () => {
 				password: generatedUser.password
 			});
 			expect(status).toStrictEqual(401);
-			expect(error).toEqual('Member not found');
+			expect(error).toEqual('User not found');
 		});
 
 		it('Fails because user the password is wrong', async () => {
@@ -266,7 +266,7 @@ describe('Suite: /api/auth -- Integration', () => {
 			} = await request.get('/api/auth/refresh').auth(token, { type: 'bearer' });
 
 			expect(status).toEqual(401);
-			expect(error).toEqual('Member not found');
+			expect(error).toEqual('User not found');
 		});
 
 		it('Successfully with non-expired token', async () => {

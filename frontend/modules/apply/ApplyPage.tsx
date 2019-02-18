@@ -4,7 +4,8 @@ import {
 	sendErrorMessage,
 	sendSuccessMessage,
 	getOwnApplication,
-	sendApplication
+	sendApplication,
+	clearFlashMessages
 } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
@@ -21,16 +22,18 @@ import {
 import { err } from '../../utils';
 
 type Props = {
+	application: ApplicationDto | null;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
-	application: ApplicationDto | null;
+	clear: (ctx?: IContext) => void;
 };
 
 // TODO: Extract Apply form into its own component
 
 @((connect as any)(null, {
 	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage
+	flashSuccess: sendSuccessMessage,
+	clear: clearFlashMessages
 }))
 export class ApplyPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
@@ -66,8 +69,9 @@ export class ApplyPage extends Component<Props> {
 
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { flashError, flashSuccess } = this.props;
+		const { flashError, flashSuccess, clear } = this.props;
 		try {
+			clear();
 			await sendApplication(this.state);
 			return flashSuccess('Application successful!');
 		} catch (error) {

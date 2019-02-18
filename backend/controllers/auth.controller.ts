@@ -67,7 +67,7 @@ export class AuthController extends BaseController {
 	async login(@Body() body: { email: string; password: string }) {
 		const { email, password } = body;
 		const user = await User.findOne({ email }, '+password').exec();
-		if (!user) throw new UnauthorizedError('Member not found');
+		if (!user) throw new UnauthorizedError('User not found');
 
 		// Check if password matches
 		if (!(await user.comparePassword(password))) throw new UnauthorizedError('Wrong password');
@@ -95,7 +95,7 @@ export class AuthController extends BaseController {
 		const user = await User.findById(payload._id)
 			.lean()
 			.exec();
-		if (!user) throw new UnauthorizedError('Member not found');
+		if (!user) throw new UnauthorizedError('User not found');
 		token = signToken(user);
 		return { user, token };
 	}

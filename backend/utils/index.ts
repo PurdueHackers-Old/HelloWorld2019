@@ -37,8 +37,6 @@ export const userMatches = (user: IUserModel, id: ObjectId | string, exec?: bool
 	if (isAdmin(user)) return true;
 	if (exec && hasPermission(user, Role.EXEC)) return true;
 	return new ObjectId(user._id).equals(id);
-	// return user._id === id ||
-	// 	(typeof user._id.equals === 'function' && user._id.equals(id));
 };
 
 export const escapeRegEx = (str: string) =>

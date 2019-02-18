@@ -135,6 +135,8 @@ export class UserController extends BaseController {
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
 
 		const app = await appQuery.exec();
+		user.application = app;
+		await user.save();
 		return app;
 	}
 }

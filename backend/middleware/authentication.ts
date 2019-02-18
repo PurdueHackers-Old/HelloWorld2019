@@ -30,6 +30,6 @@ export const authorizationChecker = async (action: Action, roles: Role[]) => {
 	if (!user) throw new UnauthorizedError('You must be logged in!');
 	if (!roles.length) return true;
 	if (!roles.some(role => hasPermission(user, role)))
-		throw new UnauthorizedError('Unsufficient permissions');
+		throw new UnauthorizedError('Insufficient permissions');
 	return true;
 };
