@@ -53,10 +53,10 @@ export class ApplicationController extends BaseController {
 	async getStats() {
 		const [total, pending, accepted, rejected, waitlist] = await Promise.all([
 			Application.countDocuments({}).exec(),
-			Application.countDocuments({ status: Status.PENDING }).exec(),
-			Application.countDocuments({ status: Status.ACCEPTED }).exec(),
-			Application.countDocuments({ status: Status.REJECTED }).exec(),
-			Application.countDocuments({ status: Status.WAITLIST }).exec()
+			Application.countDocuments({ statusInternal: Status.PENDING }).exec(),
+			Application.countDocuments({ statusInternal: Status.ACCEPTED }).exec(),
+			Application.countDocuments({ statusInternal: Status.REJECTED }).exec(),
+			Application.countDocuments({ statusInternal: Status.WAITLIST }).exec()
 		]);
 
 		return {

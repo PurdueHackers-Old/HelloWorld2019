@@ -39,7 +39,7 @@ describe('Suite: /api/exec -- Integration', () => {
 			const {
 				body: { error },
 				status
-			} = await request.post(`/api/exec/checkin/${user.user._id}`);
+			} = await request.post(`/api/exec/checkin/${user.user.email}`);
 
 			expect(status).toEqual(401);
 			expect(error).toEqual('You must be logged in!');
@@ -50,7 +50,7 @@ describe('Suite: /api/exec -- Integration', () => {
 				body: { error },
 				status
 			} = await request
-				.post(`/api/exec/checkin/${user.user._id}`)
+				.post(`/api/exec/checkin/${user.user.email}`)
 				.auth(user.token, { type: 'bearer' });
 
 			expect(status).toEqual(401);
@@ -64,18 +64,19 @@ describe('Suite: /api/exec -- Integration', () => {
 				{ new: true }
 			);
 
+			const email = 'blah';
 			const {
 				body: { error },
 				status
 			} = await request
-				.post(`/api/exec/checkin/${new ObjectId()}`)
+				.post(`/api/exec/checkin/${email}`)
 				.auth(user.token, { type: 'bearer' });
 
 			expect(status).toEqual(400);
-			expect(error).toEqual('User does not exist');
+			expect(error).toEqual(`There is no user with email: ${email}`);
 		});
 
-		it('Fails to checkin non existant user', async () => {
+		it('Successfully checks in user', async () => {
 			user.user = await User.findByIdAndUpdate(
 				user.user._id,
 				{ $set: { role: Role.EXEC } },
@@ -88,7 +89,7 @@ describe('Suite: /api/exec -- Integration', () => {
 				body: { response },
 				status
 			} = await request
-				.post(`/api/exec/checkin/${checkedinUser._id}`)
+				.post(`/api/exec/checkin/${checkedinUser.email}`)
 				.auth(user.token, { type: 'bearer' });
 
 			expect(status).toEqual(200);
