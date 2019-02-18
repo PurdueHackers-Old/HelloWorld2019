@@ -1,7 +1,7 @@
 import ReactGA from 'react-ga';
 import { ActionCreator, AnyAction, Dispatch } from 'redux';
 import * as jwt from 'jsonwebtoken';
-import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor } from '../../@types';
+import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor, IUser } from '../../@types';
 import { ApplicationDto } from '../../../backend/models/application';
 import { api, err } from '../../utils';
 import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
@@ -174,6 +174,21 @@ export const sendApplication = async (body: ApplicationDto, ctx?: IContext, para
 };
 
 // Application Actions
+export const getApplications = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/applications`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
 export const getStats = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
@@ -183,6 +198,43 @@ export const getStats = async (ctx?: IContext) => {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Exec Actions
+export const getCheckin = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/exec/checkin`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const users: IUser[] = response;
+		return users;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const checkinUser = async (email: string, ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/exec/checkin/${email}`,
+			{},
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		const user: IUser = response;
+		return user;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}

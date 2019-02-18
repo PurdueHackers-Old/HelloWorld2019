@@ -19,7 +19,12 @@ import { Role } from '../../shared/user.enums';
 export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
-	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
+	async getAll(
+		@QueryParam('sortBy') sortBy?: string,
+		@QueryParam('order') order?: number,
+		@QueryParam('status') status?: string,
+		@QueryParam('select') select?: string
+	) {
 		order = order === 1 ? 1 : -1;
 		sortBy = sortBy || 'createdAt';
 
@@ -29,12 +34,15 @@ export class ApplicationController extends BaseController {
 		});
 		if (!contains) sortBy = 'createdAt';
 
-		const results = await Application.find()
+		const conditions = status ? { statusPublic: status } : {};
+
+		const resultsQuery = Application.find(conditions)
 			.sort({ [sortBy]: order })
-			// .populate('user')
+			.populate('user', 'name email')
 			.select('+statusInternal')
-			.lean()
-			.exec();
+			.lean();
+
+		const results = await resultsQuery.exec();
 
 		return { applications: results };
 	}

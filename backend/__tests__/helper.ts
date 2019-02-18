@@ -20,10 +20,6 @@ export const generateUser = () => {
 	return {
 		name: `${first} ${last}`,
 		email,
-		graduationYear: faker.random.number({
-			min: 1900,
-			max: 2025
-		}),
 		password,
 		passwordConfirm: password
 	};

@@ -1,0 +1,1 @@
+export { CheckinPage } from './CheckinPage'
