@@ -41,6 +41,7 @@ export class ApplyPage extends Component<Props> {
 		let application: ApplicationDto;
 		try {
 			application = await getOwnApplication(ctx);
+			// tslint:disable-next-line: no-empty
 		} catch {}
 		return { application };
 	};

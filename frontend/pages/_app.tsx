@@ -15,6 +15,7 @@ import {
 import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
+import 'antd/dist/antd.less';
 
 type Props = { store: Store };
 
