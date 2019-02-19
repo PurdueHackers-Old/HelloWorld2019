@@ -23,7 +23,7 @@ export class ApplicationController extends BaseController {
 		@QueryParam('sortBy') sortBy?: string,
 		@QueryParam('order') order?: number,
 		@QueryParam('status') status?: string,
-		@QueryParam('select') select?: string
+		@QueryParam('filter') filter?: string
 	) {
 		order = order === 1 ? 1 : -1;
 		sortBy = sortBy || 'createdAt';

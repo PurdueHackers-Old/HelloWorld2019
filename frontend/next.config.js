@@ -1,20 +1,44 @@
 const withTypescript = require('@zeit/next-typescript');
+const withCss = require('@zeit/next-css');
+const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
 
+// fix: prevents error when .css/.less files are required by node
+if (typeof require !== 'undefined') {
+	// tslint:disable: no-empty
+	require.extensions['.less'] = file => {};
+	require.extensions['.css'] = file => {};
+}
+
 module.exports = withPlugins(
 	[
-		withTM({
-			transpileModules: ['shared']
-		}),
-		withTypescript
+		[
+			withTM,
+			{
+				transpileModules: ['shared']
+			}
+		],
+		[withTypescript],
+		[withCss],
+		[
+			withLess,
+			{
+				lessLoaderOptions: {
+					javascriptEnabled: true
+					// theme antd here
+					// modifyVars: { '@primary-color': '#1Dd57A' }
+				}
+			}
+		]
 	],
 	{
 		publicRuntimeConfig,
 		serverRuntimeConfig,
-		webpack(config, options) {
-			if (options.isServer && options.dev) {
+		webpack: (config, options) => {
+			const { dev, isServer } = options;
+			if (isServer && dev) {
 				const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 				config.plugins.push(
