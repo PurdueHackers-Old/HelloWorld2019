@@ -14,3 +14,19 @@ export const err = e =>
 		: e.error && typeof e.error === 'string'
 		? e.error
 		: 'Whoops, something went wrong!';
+
+const dateToString = (date: string) =>
+	new Date(date).toLocaleDateString('en-US', {
+		month: 'short',
+		day: 'numeric',
+		weekday: 'short',
+		hour: '2-digit',
+		minute: '2-digit',
+		timeZone: 'America/Indiana/Indianapolis'
+	});
+
+export const formatDate = (date: string) => {
+	if (!date) return 'N/A';
+	const str = dateToString(date);
+	return str !== 'Invalid Date' ? str : 'N/A';
+};

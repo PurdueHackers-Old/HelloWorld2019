@@ -19,7 +19,7 @@ import {
 	ShirtSize,
 	gradYears
 } from '../../../shared/app.enums';
-import { err } from '../../utils';
+import { err, formatDate } from '../../utils';
 
 type Props = {
 	application: ApplicationDto | null;
@@ -58,6 +58,8 @@ export class ApplyPage extends Component<Props> {
 		website: '',
 		answer1: '',
 		answer2: '',
+		updatedAt: null,
+		statusPublic: null,
 		...this.props.application
 	};
 
@@ -84,6 +86,27 @@ export class ApplyPage extends Component<Props> {
 			<div>
 				Apply Page
 				<br />
+				{this.state.updatedAt && (
+					<>
+						<br />
+						<div>
+							Last Updated:
+							<br />
+							{formatDate(this.state.updatedAt)}
+						</div>
+						<br />
+					</>
+				)}
+				{this.state.statusPublic && (
+					<>
+						<div>
+							Status:
+							<br />
+							{this.state.statusPublic}
+						</div>
+						<br />
+					</>
+				)}
 				<form onSubmit={this.onSubmit}>
 					<label htmlFor="gender">
 						Gender{' '}
