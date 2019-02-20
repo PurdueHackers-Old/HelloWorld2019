@@ -7,9 +7,8 @@ import {
 	sendApplication,
 	clearFlashMessages
 } from '../../redux/actions';
-import { IContext } from '../../@types';
+import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { ApplicationDto } from '../../../backend/models/application';
 import {
 	Gender,
 	ethnicities,
@@ -22,7 +21,7 @@ import {
 import { err, formatDate } from '../../utils';
 
 type Props = {
-	application: ApplicationDto | null;
+	application: IApplication | null;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
@@ -38,7 +37,7 @@ type Props = {
 export class ApplyPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
-		let application: ApplicationDto;
+		let application: IApplication;
 		try {
 			application = await getOwnApplication(ctx);
 			// tslint:disable-next-line: no-empty

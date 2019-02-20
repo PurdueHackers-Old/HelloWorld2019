@@ -3,14 +3,21 @@ const withCss = require('@zeit/next-css');
 const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
+const lessToJS = require('less-vars-to-js');
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
 
 // fix: prevents error when .css/.less files are required by node
 if (typeof require !== 'undefined') {
 	// tslint:disable: no-empty
-	require.extensions['.less'] = file => {};
-	require.extensions['.css'] = file => {};
+	require.extensions['.less'] = () => {};
+	require.extensions['.css'] = () => {};
 }
+
+const themeVariables = lessToJS(
+	readFileSync(resolve(__dirname, './assets/antd-theme.less'), 'utf8')
+);
 
 module.exports = withPlugins(
 	[
@@ -26,9 +33,8 @@ module.exports = withPlugins(
 			withLess,
 			{
 				lessLoaderOptions: {
-					javascriptEnabled: true
-					// theme antd here
-					// modifyVars: { '@primary-color': '#1Dd57A' }
+					javascriptEnabled: true,
+					modifyVars: themeVariables // Change antd theme
 				}
 			}
 		]
@@ -38,16 +44,16 @@ module.exports = withPlugins(
 		serverRuntimeConfig,
 		webpack: (config, options) => {
 			const { dev, isServer } = options;
-			if (isServer && dev) {
-				const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+			// if (isServer && dev) {
+			// 	const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-				config.plugins.push(
-					new ForkTsCheckerWebpackPlugin({
-						tsconfig: '../tsconfig.server.json',
-						tslint: '../tslint.json'
-					})
-				);
-			}
+			// 	config.plugins.push(
+			// 		new ForkTsCheckerWebpackPlugin({
+			// 			tsconfig: '../tsconfig.server.json',
+			// 			tslint: '../tslint.json'
+			// 		})
+			// 	);
+			// }
 
 			return config;
 		}

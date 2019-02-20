@@ -44,7 +44,7 @@ export class DashboardPage extends Component<Props> {
 				<br />
 				Admin Actions:
 				<br />
-				<Link href="/applications">
+				<Link href="/applications" prefetch>
 					<a>Applications</a>
 				</Link>
 				<br />

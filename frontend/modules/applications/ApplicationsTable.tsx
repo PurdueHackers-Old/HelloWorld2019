@@ -1,40 +1,69 @@
 import React, { Component } from 'react';
-
-import { Table } from 'antd';
+import { Table, Pagination } from 'antd';
+import { IApplication } from '../../@types';
+import { Gender, ClassYear, Major, Status } from '../../../shared/app.enums';
 
 const columns = [
 	{
 		title: 'Name',
-		dataIndex: 'user.name'
-		// sorter: true
+		dataIndex: 'name',
+		sorter: true
 	},
 	{
 		title: 'Email',
-		dataIndex: 'user.email'
+		dataIndex: 'email',
+		sorter: true
 	},
 	{
 		title: 'Gender',
-		dataIndex: 'gender'
-		// filters: [{ text: 'Male', value: 'Male' }, { text: 'Female', value: 'Female' }]
+		dataIndex: 'gender',
+		sorter: true,
+		filters: Object.values(Gender).map(value => ({ text: value, value }))
+	},
+	{
+		title: 'Year',
+		dataIndex: 'classYear',
+		sorter: true,
+		filters: Object.values(ClassYear).map(value => ({ text: value, value }))
+	},
+	{
+		title: 'Major',
+		dataIndex: 'major',
+		sorter: true,
+		filters: Object.values(Major).map(value => ({ text: value, value }))
+	},
+	{
+		title: 'Hackathons',
+		dataIndex: 'hackathons',
+		sorter: true
+	},
+	{
+		title: 'Status',
+		dataIndex: 'statusInternal',
+		sorter: true,
+		filters: Object.values(Status).map(value => ({ text: value, value }))
 	}
 ];
 
-export class ApplicationsTable extends Component {
-	state = {
-		data: this.props.data || [],
-		pagination: {},
-		loading: false
+type Props = {
+	applications: IApplication[];
+	pagination: {
+		total: number;
 	};
+	loading: boolean;
+	onChange: (pagination: any, filters: any, sorter: any) => void;
+};
 
+export class ApplicationsTable extends Component<Props> {
 	render() {
 		return (
 			<Table
 				columns={columns}
 				rowKey={record => record._id}
-				dataSource={this.state.data}
-				pagination={this.state.pagination}
-				loading={this.state.loading}
-				// onChange={this.handleTableChange}
+				dataSource={this.props.applications}
+				pagination={this.props.pagination}
+				loading={this.props.loading}
+				onChange={this.props.onChange}
 			/>
 		);
 	}

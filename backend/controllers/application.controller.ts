@@ -11,8 +11,9 @@ import {
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
-import { Status } from '../../shared/app.enums';
+import { Status, Gender } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { User } from '../models/user';
 
 @JsonController('/api/applications')
 @UseAfter(ValidationMiddleware)
@@ -20,31 +21,77 @@ export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(
-		@QueryParam('sortBy') sortBy?: string,
-		@QueryParam('order') order?: number,
-		@QueryParam('status') status?: string,
-		@QueryParam('filter') filter?: string
+		@QueryParam('sort') sort: string = 'createdAt',
+		@QueryParam('filter') filter: any = {},
+		@QueryParam('page') page: number = 1,
+		@QueryParam('limit') limit: number = 10,
+		@QueryParam('order') order?: number
 	) {
 		order = order === 1 ? 1 : -1;
-		sortBy = sortBy || 'createdAt';
+		const skip = limit * (page - 1);
 
-		let contains = false;
-		Application.schema.eachPath(path => {
-			if (path.toLowerCase() === sortBy.toLowerCase()) contains = true;
+		const paths = Object.keys((Application.schema as any).paths);
+		const contains = paths.some(path => path.toLowerCase() === sort.toLowerCase());
+		if (!contains) sort = 'createdAt';
+
+		Object.entries(filter).forEach(([key, value]) => {
+			if (Array.isArray(value)) {
+				if (value.length) filter[key] = { $in: value };
+				else delete filter[key];
+			}
 		});
-		if (!contains) sortBy = 'createdAt';
 
-		const conditions = status ? { statusPublic: status } : {};
+		// filter.gender = {
+		// 	$in: [Gender.FEMALE]
+		// };
 
-		const resultsQuery = Application.find(conditions)
-			.sort({ [sortBy]: order })
-			.populate('user', 'name email')
-			.select('+statusInternal')
-			.lean();
+		const resultsQuery = Application.aggregate([
+			{
+				$lookup: {
+					from: 'users',
+					let: { user_id: '$user' },
+					as: 'user',
+					pipeline: [
+						{
+							$match: { $expr: { $eq: ['$_id', '$$user_id'] } }
+						},
+						{
+							$project: {
+								_id: 0,
+								name: 1,
+								email: 1
+							}
+						}
+					]
+				}
+			},
+			{
+				$replaceRoot: {
+					newRoot: { $mergeObjects: [{ $arrayElemAt: ['$user', 0] }, '$$ROOT'] }
+				}
+			},
+			{ $project: { user: 0 } },
+			{ $sort: { [sort]: order } },
+			{ $match: filter },
+			{
+				$facet: {
+					applications: [
+						{ $sort: { [sort]: order } },
+						{ $skip: skip },
+						{ $limit: limit }
+					],
+					pagination: [
+						{ $count: 'total' },
+						{ $addFields: { pageSize: limit, current: page } }
+					]
+				}
+			},
+			{ $unwind: '$pagination' }
+		]);
 
-		const results = await resultsQuery.exec();
+		const [results] = await resultsQuery.exec();
 
-		return { applications: results };
+		return results;
 	}
 
 	// TODO: Add tests
