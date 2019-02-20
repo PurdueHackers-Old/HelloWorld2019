@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Table, Pagination } from 'antd';
+import { Table, Pagination, Icon, Tag } from 'antd';
 import { IApplication } from '../../@types';
 import { Gender, ClassYear, Major, Status } from '../../../shared/app.enums';
+import { ColumnProps } from 'antd/lib/table/interface';
 
-const columns = [
+const columns: ColumnProps<IApplication>[] = [
 	{
 		title: 'Name',
 		dataIndex: 'name',
@@ -36,6 +37,21 @@ const columns = [
 		title: 'Hackathons',
 		dataIndex: 'hackathons',
 		sorter: true
+	},
+	{
+		title: 'Resume',
+		dataIndex: 'resume',
+		sorter: true,
+		render: (_, record) =>
+			record.resume ? (
+				<Tag color="green">
+					<Icon type="check-circle" />
+				</Tag>
+			) : (
+				<Tag color="red">
+					<Icon type="close-circle" />
+				</Tag>
+			)
 	},
 	{
 		title: 'Status',

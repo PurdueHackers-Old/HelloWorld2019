@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { sendErrorMessage, getApplications } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
@@ -15,12 +15,7 @@ export class ApplicationsPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
 		try {
-			const applications = await getApplications(ctx, {
-				filter: {
-					// name: 'Test Testerson'
-					// statusPublic: Status.PENDING
-				}
-			});
+			const applications = await getApplications(ctx);
 			return applications;
 		} catch (error) {
 			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);

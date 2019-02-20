@@ -30,6 +30,8 @@ export interface IUser {
 
 export interface IApplication {
 	_id: string;
+	name: string;
+	email: string;
 	gender: Gender;
 	ethnicity: string;
 	classYear: ClassYear;
