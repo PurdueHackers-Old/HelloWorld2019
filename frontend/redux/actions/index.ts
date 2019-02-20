@@ -1,8 +1,7 @@
 import ReactGA from 'react-ga';
 import { ActionCreator, AnyAction, Dispatch } from 'redux';
 import * as jwt from 'jsonwebtoken';
-import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor, IUser } from '../../@types';
-import { ApplicationDto } from '../../../backend/models/application';
+import { ICreateUser, ILoginUser, ILoginResponse, IContext, IApplication, IUser } from '../../@types';
 import { api, err } from '../../utils';
 import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
@@ -149,14 +148,14 @@ export const getApplication = async (id: string, ctx?: IContext) => {
 		} = await api.get(`/users/${id}/application`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		const app: ApplicationDto = response;
+		const app: IApplication = response;
 		return app;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
 };
 
-export const sendApplication = async (body: ApplicationDto, ctx?: IContext, params?: any) => {
+export const sendApplication = async (body: IApplication, ctx?: IContext, params?: any) => {
 	try {
 		const token = getToken(ctx);
 		const id = (jwt.decode(token) as any)._id;
@@ -166,7 +165,7 @@ export const sendApplication = async (body: ApplicationDto, ctx?: IContext, para
 			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		const app: ApplicationDto = response;
+		const app: IApplication = response;
 		return app;
 	} catch (error) {
 		throw error.response ? error.response.data : error;

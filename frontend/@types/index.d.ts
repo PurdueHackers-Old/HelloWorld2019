@@ -4,6 +4,7 @@ import { IFlashState } from '../redux/reducers/flash';
 import { ISessionState } from '../redux/reducers/session';
 import { Request, Response } from 'express';
 import { Role } from '../../shared/user.enums';
+import { ClassYear, Gender, Major, Referral, ShirtSize, Status } from '../../shared/app.enums';
 
 export interface IStoreState {
 	flashState: IFlashState;
@@ -25,6 +26,25 @@ export interface IUser {
 	checkedin: boolean;
 	createdAt: string;
 	updatedAt: string;
+}
+
+export interface IApplication {
+	_id: string;
+	name: string;
+	email: string;
+	gender: Gender;
+	ethnicity: string;
+	classYear: ClassYear;
+	graduationYear: number;
+	major: Major;
+	referral: Referral;
+	hackathons: number;
+	shirtSize: ShirtSize;
+	dietaryRestrictions: string;
+	website: string;
+	answer1: string;
+	answer2: string;
+	resume: string;
 }
 
 export type flashColor = 'red' | 'green';
