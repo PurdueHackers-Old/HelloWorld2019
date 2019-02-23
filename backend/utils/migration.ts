@@ -17,18 +17,6 @@ const start = async () => {
 		const authController = new AuthController();
 		const userController = new UserController();
 		
-		// const user = await authController.signup('test123', 'test123', {
-		// 	name: 'Test Testerson',
-		// 	email: 'test@purdue.edu'
-		// } as any);
-		// await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
-		// const userApp = await userController.apply(
-		// 	user.user._id,
-		// 	generateApplication() as any,
-		// 	user.user
-		// );
-		// await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
-
 		const users = await Promise.all(
 			generateUsers(8).map(u => authController.signup(u.password, u.password, u as any))
 		);

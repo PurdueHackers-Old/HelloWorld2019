@@ -1,4 +1,5 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
+import Router from 'next/router';
 import { sendErrorMessage, getApplications } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
@@ -29,6 +30,17 @@ export class ApplicationsPage extends Component<Props> {
 		loading: false
 	};
 
+	fetch = async params => {
+		try {
+			this.setState({ loading: true });
+			const response = await getApplications(null, params);
+			response.pagination.showSizeChanger = true;
+			this.setState({ loading: false, ...response });
+		} catch (error) {
+			this.setState({ loading: false });
+		}
+	};
+
 	onChange = (pagination, filter, sorter) => {
 		// console.log('Pagination:', pagination);
 		// console.log('Filters:', filter);
@@ -50,15 +62,9 @@ export class ApplicationsPage extends Component<Props> {
 		this.fetch(params);
 	};
 
-	fetch = async params => {
-		try {
-			this.setState({ loading: true });
-			const response = await getApplications(null, params);
-			response.pagination.showSizeChanger = true;
-			this.setState({ loading: false, ...response });
-		} catch (error) {
-			this.setState({ loading: false });
-		}
+	onClick = (record: IApplication) => {
+		console.log('Record:', record);
+		Router.push(`/application?id=${record._id}`, `/application/${record._id}`);
 	};
 
 	render() {
@@ -67,7 +73,11 @@ export class ApplicationsPage extends Component<Props> {
 			<div>
 				Applications Page
 				<br />
-				<ApplicationsTable {...this.state} onChange={this.onChange} />
+				<ApplicationsTable
+					{...this.state}
+					onChange={this.onChange}
+					onClick={this.onClick}
+				/>
 			</div>
 		);
 	}
