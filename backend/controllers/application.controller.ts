@@ -122,6 +122,7 @@ export class ApplicationController extends BaseController {
 		const id = params[0];
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
 		const application = await Application.findById(id)
+			.populate('user')
 			.lean()
 			.exec();
 		if (!application) throw new BadRequestError('Application does not exist');

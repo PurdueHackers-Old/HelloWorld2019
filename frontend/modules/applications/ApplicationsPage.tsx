@@ -64,7 +64,7 @@ export class ApplicationsPage extends Component<Props> {
 
 	onClick = (record: IApplication) => {
 		console.log('Record:', record);
-		Router.push(`/application?id=${record._id}`, `/application/${record._id}`);
+		Router.push(`/application?id=${record._id}`);
 	};
 
 	render() {
