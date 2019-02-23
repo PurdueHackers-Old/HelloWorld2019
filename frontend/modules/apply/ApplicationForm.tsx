@@ -11,9 +11,9 @@ import {
 import { IApplication } from '../../@types';
 
 type Props = {
-	onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-	onSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+	onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	onSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 	disabled?: boolean;
 } & IApplication;
 
@@ -24,6 +24,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="gender">
 					Gender{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="gender"
 						onChange={this.props.onSelect}
@@ -40,6 +41,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="ethnicity">
 					Ethnicity{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="ethnicity"
 						onChange={this.props.onSelect}
@@ -56,6 +58,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="classYear">
 					Class Year{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="classYear"
 						onChange={this.props.onSelect}
@@ -72,6 +75,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="graduationYear">
 					Graduation Year{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="graduationYear"
 						onChange={this.props.onSelect}
@@ -88,6 +92,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="major">
 					Major{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="major"
 						onChange={this.props.onSelect}
@@ -104,6 +109,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="referral">
 					Referral{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="referral"
 						onChange={this.props.onSelect}
@@ -120,6 +126,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="hackathons">
 					Hackathons{' '}
 					<input
+						disabled={this.props.disabled}
 						required
 						min="0"
 						name="hackathons"
@@ -132,6 +139,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="shirtSize">
 					Shirt Size{' '}
 					<select
+						disabled={this.props.disabled}
 						required
 						name="shirtSize"
 						onChange={this.props.onSelect}
@@ -148,6 +156,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="dietaryRestrictions">
 					Dietary Restrictions{' '}
 					<input
+						disabled={this.props.disabled}
 						name="dietaryRestrictions"
 						onChange={this.props.onChange}
 						value={this.props.dietaryRestrictions}
@@ -157,6 +166,7 @@ export default class ApplicationForm extends Component<Props> {
 				<label htmlFor="website">
 					Website{' '}
 					<input
+						disabled={this.props.disabled}
 						name="website"
 						type="url"
 						onChange={this.props.onChange}
@@ -168,6 +178,7 @@ export default class ApplicationForm extends Component<Props> {
 					Answer 1
 					<br />
 					<textarea
+						disabled={this.props.disabled}
 						required
 						name="answer1"
 						value={this.props.answer1}
@@ -179,6 +190,7 @@ export default class ApplicationForm extends Component<Props> {
 					Answer 2
 					<br />
 					<textarea
+						disabled={this.props.disabled}
 						required
 						name="answer2"
 						value={this.props.answer2}

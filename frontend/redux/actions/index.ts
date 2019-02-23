@@ -162,14 +162,13 @@ export const getUserApplication = async (id: string, ctx?: IContext) => {
 	}
 };
 
-export const sendApplication = async (body: IApplication, ctx?: IContext, params?: any) => {
+export const sendApplication = async (body: IApplication, ctx?: IContext, id?: string) => {
 	try {
 		const token = getToken(ctx);
-		const id = (jwt.decode(token) as any)._id;
+		if (!id) id = (jwt.decode(token) as any)._id;
 		const {
 			data: { response }
 		} = await api.post(`/users/${id}/apply`, body, {
-			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		const app: IApplication = response;
