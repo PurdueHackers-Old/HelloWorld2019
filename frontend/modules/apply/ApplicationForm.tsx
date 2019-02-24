@@ -21,6 +21,11 @@ export default class ApplicationForm extends Component<Props> {
 	render() {
 		return (
 			<form onSubmit={this.props.onSubmit}>
+				<label>Name: {this.props.user.name}</label>
+				<br />
+				<label>Email: {this.props.user.email}</label>
+				<br />
+				<br />
 				<label htmlFor="gender">
 					Gender{' '}
 					<select

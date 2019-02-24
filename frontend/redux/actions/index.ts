@@ -13,6 +13,7 @@ import { api, err } from '../../utils';
 import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
+import { Status } from '../../../shared/app.enums';
 
 const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
 	...args: any[]
@@ -202,6 +203,25 @@ export const getApplication = async (id: string, ctx?: IContext) => {
 		} = await api.get(`/applications/${id}`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
+		const app: IApplication = response;
+		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateApplicationStatus = async (id: string, status: Status, ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/applications/${id}/status`,
+			{ status },
+			{
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
 		const app: IApplication = response;
 		return app;
 	} catch (error) {

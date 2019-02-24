@@ -42,18 +42,6 @@ export class ApplicationsPage extends Component<Props> {
 	};
 
 	onChange = (pagination, filter, sorter) => {
-		// console.log('Pagination:', pagination);
-		// console.log('Filters:', filter);
-		// console.log('Sorter:', sorter);
-		// Pagination: {total: 17, pageSize: 10, current: 1, showSizeChanger: true}
-		// Filters: {gender: Array(2), major: Array(2)}
-		// Sorter: {column: {…}, order: "ascend", field: "name", columnKey: "name"}
-
-		// sort: string = 'createdAt',
-		// filter: any = {},
-		// page: number = 1,
-		// limit: number = 10,
-		// order?: number
 		const page = pagination.current;
 		const limit = pagination.pageSize;
 		const sort = sorter.field;
@@ -63,12 +51,10 @@ export class ApplicationsPage extends Component<Props> {
 	};
 
 	onClick = (record: IApplication) => {
-		console.log('Record:', record);
 		Router.push(`/application?id=${record._id}`);
 	};
 
 	render() {
-		console.log('Applications:', this.state);
 		return (
 			<div>
 				Applications Page

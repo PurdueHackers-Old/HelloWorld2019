@@ -9,7 +9,8 @@ import {
 	Params,
 	Post,
 	BodyParam,
-	Req
+	Req,
+	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
@@ -72,7 +73,7 @@ export class ApplicationController extends BaseController {
 						{
 							$sort: {
 								[sort]: order,
-								createdAt: -1
+								createdAt: 1
 							}
 						},
 						{ $skip: skip },
@@ -115,11 +116,13 @@ export class ApplicationController extends BaseController {
 
 	// TODO: Add tests
 	@Get(/\/((?!stats)[a-zA-Z0-9]+)$/)
+	@Authorized([Role.EXEC])
 	async getById(@Params() params: string[]) {
 		const id = params[0];
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
 		const application = await Application.findById(id)
 			.populate('user')
+			.select('+statusInternal')
 			.lean()
 			.exec();
 		if (!application) throw new BadRequestError('Application does not exist');
@@ -128,7 +131,8 @@ export class ApplicationController extends BaseController {
 
 	// TODO: Add tests
 	@Post('/:id/status')
-	async updateStatus(@QueryParam('id') id: string, @BodyParam('status') status: Status) {
+	@Authorized([Role.EXEC])
+	async updateStatus(@Param('id') id: string, @BodyParam('status') status: string) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
 		const application = await Application.findByIdAndUpdate(
 			id,
@@ -136,6 +140,7 @@ export class ApplicationController extends BaseController {
 			{ new: true }
 		)
 			.populate('user')
+			.select('+statusInternal')
 			.lean()
 			.exec();
 		if (!application) throw new BadRequestError('Application does not exist');
