@@ -6,14 +6,17 @@ import {
 	BadRequestError,
 	UseAfter,
 	Authorized,
-	Params
+	Params,
+	Post,
+	BodyParam,
+	Req,
+	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
-import { Status, Gender } from '../../shared/app.enums';
+import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
-import { User } from '../models/user';
 
 @JsonController('/api/applications')
 @UseAfter(ValidationMiddleware)
@@ -30,20 +33,12 @@ export class ApplicationController extends BaseController {
 		order = order === 1 ? 1 : -1;
 		const skip = limit * (page - 1);
 
-		const paths = Object.keys((Application.schema as any).paths);
-		const contains = paths.some(path => path.toLowerCase() === sort.toLowerCase());
-		if (!contains) sort = 'createdAt';
-
 		Object.entries(filter).forEach(([key, value]) => {
 			if (Array.isArray(value)) {
 				if (value.length) filter[key] = { $in: value };
 				else delete filter[key];
 			}
 		});
-
-		// filter.gender = {
-		// 	$in: [Gender.FEMALE]
-		// };
 
 		const resultsQuery = Application.aggregate([
 			{
@@ -71,12 +66,16 @@ export class ApplicationController extends BaseController {
 				}
 			},
 			{ $project: { user: 0 } },
-			{ $sort: { [sort]: order } },
 			{ $match: filter },
 			{
 				$facet: {
 					applications: [
-						{ $sort: { [sort]: order } },
+						{
+							$sort: {
+								[sort]: order,
+								createdAt: 1
+							}
+						},
 						{ $skip: skip },
 						{ $limit: limit }
 					],
@@ -116,12 +115,32 @@ export class ApplicationController extends BaseController {
 	}
 
 	// TODO: Add tests
-	// @Get('/:id')
 	@Get(/\/((?!stats)[a-zA-Z0-9]+)$/)
+	@Authorized([Role.EXEC])
 	async getById(@Params() params: string[]) {
 		const id = params[0];
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
 		const application = await Application.findById(id)
+			.populate('user')
+			.select('+statusInternal')
+			.lean()
+			.exec();
+		if (!application) throw new BadRequestError('Application does not exist');
+		return application;
+	}
+
+	// TODO: Add tests
+	@Post('/:id/status')
+	@Authorized([Role.EXEC])
+	async updateStatus(@Param('id') id: string, @BodyParam('status') status: string) {
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
+		const application = await Application.findByIdAndUpdate(
+			id,
+			{ statusInternal: status },
+			{ new: true }
+		)
+			.populate('user')
+			.select('+statusInternal')
 			.lean()
 			.exec();
 		if (!application) throw new BadRequestError('Application does not exist');

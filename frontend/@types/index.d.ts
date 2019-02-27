@@ -45,6 +45,8 @@ export interface IApplication {
 	answer1: string;
 	answer2: string;
 	resume: string;
+	statusInternal: Status;
+	user: IUser;
 }
 
 export type flashColor = 'red' | 'green';

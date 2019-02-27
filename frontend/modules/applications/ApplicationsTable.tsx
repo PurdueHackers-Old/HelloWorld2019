@@ -68,6 +68,7 @@ type Props = {
 	};
 	loading: boolean;
 	onChange: (pagination: any, filters: any, sorter: any) => void;
+	onClick: (record: IApplication) => any;
 };
 
 export class ApplicationsTable extends Component<Props> {
@@ -80,6 +81,13 @@ export class ApplicationsTable extends Component<Props> {
 				pagination={this.props.pagination}
 				loading={this.props.loading}
 				onChange={this.props.onChange}
+				onRow={record => {
+					return {
+						onClick: () => {
+							this.props.onClick(record);
+						}
+					};
+				}}
 			/>
 		);
 	}

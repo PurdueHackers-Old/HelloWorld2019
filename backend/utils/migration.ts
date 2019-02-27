@@ -16,13 +16,25 @@ const start = async () => {
 		server = await Server.createInstance();
 		const authController = new AuthController();
 		const userController = new UserController();
-		
-		// const user = await authController.signup('test123', 'test123', {
+
+		// let user = await authController.signup('test123', 'test123', {
 		// 	name: 'Test Testerson',
 		// 	email: 'test@purdue.edu'
 		// } as any);
+		// await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.ADMIN });
+		// let userApp = await userController.apply(
+		// 	user.user._id,
+		// 	generateApplication() as any,
+		// 	user.user
+		// );
+		// await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
+
+		// user = await authController.signup('test123', 'test123', {
+		// 	name: 'Exec User',
+		// 	email: 'exec@purdue.edu'
+		// } as any);
 		// await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
-		// const userApp = await userController.apply(
+		// userApp = await userController.apply(
 		// 	user.user._id,
 		// 	generateApplication() as any,
 		// 	user.user

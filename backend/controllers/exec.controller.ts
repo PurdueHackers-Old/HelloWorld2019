@@ -34,7 +34,6 @@ export class ExecController extends BaseController {
 
 	@Get('/checkin')
 	async getCheckin(@QueryParam('email') email?: string) {
-		// const match: any = { $match: { verified: true, checkedin: false } };
 		const match: any = { $match: { checkedin: false } };
 		if (email) match.$match.email = new RegExp(escapeRegEx(email), 'i');
 
