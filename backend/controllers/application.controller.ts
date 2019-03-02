@@ -25,13 +25,11 @@ export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(
-		@QueryParam('sort') sort: string = 'createdAt',
 		@QueryParam('filter') filter: any = {},
 		@QueryParam('page') page: number = 1,
 		@QueryParam('limit') limit: number = 10,
-		@QueryParam('order') order?: number
+		@QueryParam('sort') sort: { [x: string]: number } = {}
 	) {
-		order = order === 1 ? 1 : -1;
 		const skip = limit * (page - 1);
 
 		Object.entries(filter).forEach(([key, value]) => {
@@ -74,8 +72,8 @@ export class ApplicationController extends BaseController {
 					applications: [
 						{
 							$sort: {
-								createdAt: 1,
-								[sort]: order
+								...sort,
+								createdAt: 1
 							}
 						},
 						{ $skip: skip },
@@ -97,8 +95,6 @@ export class ApplicationController extends BaseController {
 		]);
 
 		const [results] = await resultsQuery.exec();
-
-		console.log('Server pagination:', results.pagination);
 		return results;
 	}
 

@@ -56,16 +56,14 @@ export class ApplicationsPage extends Component<Props> {
 	onFetchData = state => {
 		const page: number = state.page + 1;
 		const limit: number = state.pageSize;
-		let sort: string;
-		let order: number;
-		if (state.sorted[0]) {
-			sort = state.sorted[0].id;
-			order = state.sorted[0].desc ? -1 : 1;
-		}
+		const sort = state.sorted.reduce(
+			(prev, curr) => ({ ...prev, [curr.id]: curr.desc ? -1 : 1 }),
+			{}
+		);
 		const filter = this.filtered
 			.filter(val => val.value !== 'all')
 			.reduce((prev, curr) => ({ ...prev, [curr.id]: curr.value }), {});
-		const params = { page, limit, filter, sort, order };
+		const params = { page, limit, filter, sort };
 		this.fetch(params);
 	};
 
