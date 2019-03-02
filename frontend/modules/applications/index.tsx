@@ -1,2 +1,1 @@
-// export { ApplicationsPage } from './ApplicationsPage';
-export { ApplicationsPage } from './Page';
+export { ApplicationsPage } from './ApplicationsPage';

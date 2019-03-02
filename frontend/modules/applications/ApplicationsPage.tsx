@@ -1,18 +1,32 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
-import { sendErrorMessage, getApplications } from '../../redux/actions';
+import {
+	sendErrorMessage,
+	getApplications,
+	sendSuccessMessage,
+	clearFlashMessages
+} from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err } from '../../utils';
 import { Role } from '../../../shared/user.enums';
-import { ApplicationsTable } from './Table';
+import { ApplicationsTable } from './ApplicationsTable';
 import { RowInfo } from 'react-table';
+import { connect } from 'react-redux';
 
 type Props = {
 	applications: IApplication[];
 	pagination: any;
+	flashError: (msg: string, ctx?: IContext) => void;
+	flashSuccess: (msg: string, ctx?: IContext) => void;
+	clear: (ctx?: IContext) => void;
 };
 
+@((connect as any)(null, {
+	flashError: sendErrorMessage,
+	flashSuccess: sendSuccessMessage,
+	clear: clearFlashMessages
+}))
 export class ApplicationsPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
@@ -27,12 +41,15 @@ export class ApplicationsPage extends Component<Props> {
 	filtered = [];
 
 	fetch = async params => {
+		const { flashError, clear } = this.props;
 		try {
+			clear();
 			this.setState({ loading: true });
 			const response = await getApplications(null, params);
 			this.setState({ loading: false, ...response });
 		} catch (error) {
 			this.setState({ loading: false });
+			flashError(err(error));
 		}
 	};
 
