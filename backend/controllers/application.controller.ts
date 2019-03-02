@@ -68,17 +68,16 @@ export class ApplicationController extends BaseController {
 				}
 			},
 			{ $project: { user: 0 } },
-			// { $match: filter },
+			{ $match: filter },
 			{
 				$facet: {
 					applications: [
 						{
 							$sort: {
-								[sort]: order,
-								createdAt: 1
+								createdAt: 1,
+								[sort]: order
 							}
 						},
-						{ $match: filter },
 						{ $skip: skip },
 						{ $limit: limit }
 					],
@@ -88,11 +87,7 @@ export class ApplicationController extends BaseController {
 							$addFields: {
 								pageSize: limit,
 								page,
-								pages: {
-									$floor: {
-										$add: [{ $divide: ['$total', limit] }, 1]
-									}
-								}
+								pages: { $ceil: { $divide: ['$total', limit] } }
 							}
 						}
 					]
@@ -103,6 +98,7 @@ export class ApplicationController extends BaseController {
 
 		const [results] = await resultsQuery.exec();
 
+		console.log('Server pagination:', results.pagination);
 		return results;
 	}
 
