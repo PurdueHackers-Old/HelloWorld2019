@@ -1,8 +1,8 @@
 import React from 'react';
 import Table, { RowInfo } from 'react-table';
 import { IApplication } from '../../@types';
-import 'react-table/react-table.css';
 import { columns } from './columns';
+import 'react-table/react-table.css';
 
 type Props = {
 	applications: IApplication[];

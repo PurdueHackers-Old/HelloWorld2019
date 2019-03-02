@@ -27,7 +27,7 @@ export class ApplicationController extends BaseController {
 	async getAll(
 		@QueryParam('filter') filter: any = {},
 		@QueryParam('page') page: number = 1,
-		@QueryParam('limit') limit: number = 10,
+		@QueryParam('limit') limit: number = 20,
 		@QueryParam('sort') sort: { [x: string]: number } = {}
 	) {
 		const skip = limit * (page - 1);
