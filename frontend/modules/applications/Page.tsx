@@ -5,54 +5,58 @@ import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err } from '../../utils';
 import { Role } from '../../../shared/user.enums';
-import { ApplicationsTable } from './ApplicationsTable';
+import { ApplicationsTable } from './Table';
+import { RowInfo } from 'react-table';
 
 type Props = {
 	applications: IApplication[];
-	pagination: { total: number };
+	pagination: any;
 };
 
 export class ApplicationsPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
-		try {
-			const applications = await getApplications(ctx);
-			return applications;
-		} catch (error) {
-			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);
-			return { applications: [], pagination: { total: 0 } };
-		}
 	};
 
 	state = {
-		applications: this.props.applications,
-		pagination: { ...this.props.pagination, showSizeChanger: true },
-		loading: false
+		applications: [],
+		pagination: { pageSize: 10, page: 1, pages: 1 },
+		loading: true
 	};
+
+	filtered = [];
 
 	fetch = async params => {
 		try {
 			this.setState({ loading: true });
 			const response = await getApplications(null, params);
-			response.pagination.showSizeChanger = true;
 			this.setState({ loading: false, ...response });
 		} catch (error) {
 			this.setState({ loading: false });
 		}
 	};
 
-	onChange = (pagination, filter, sorter) => {
-		const page = pagination.current;
-		const limit = pagination.pageSize;
-		const sort = sorter.field;
-		const order = sorter.order === 'ascend' ? 1 : -1;
+	onFetchData = state => {
+		const page: number = state.page + 1;
+		const limit: number = state.pageSize;
+		let sort: string;
+		let order: number;
+		if (state.sorted[0]) {
+			sort = state.sorted[0].id;
+			order = state.sorted[0].desc ? -1 : 1;
+		}
+		const filter = this.filtered
+			.filter(val => val.value !== 'all')
+			.reduce((prev, curr) => ({ ...prev, [curr.id]: curr.value }), {});
 		const params = { page, limit, filter, sort, order };
 		this.fetch(params);
 	};
 
-	onClick = (record: IApplication) => {
-		Router.push(`/application?id=${record._id}`);
+	onClick = (rowInfo: RowInfo) => () => {
+		if (rowInfo && rowInfo.original) Router.push(`/application?id=${rowInfo.original._id}`);
 	};
+
+	onFilter = filtered => (this.filtered = filtered);
 
 	render() {
 		return (
@@ -61,8 +65,10 @@ export class ApplicationsPage extends Component<Props> {
 				<br />
 				<ApplicationsTable
 					{...this.state}
-					onChange={this.onChange}
+					onFetchData={this.onFetchData}
 					onClick={this.onClick}
+					onFilter={this.onFilter}
+					filtered={this.filtered}
 				/>
 			</div>
 		);

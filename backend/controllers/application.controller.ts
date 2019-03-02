@@ -17,6 +17,7 @@ import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
 @UseAfter(ValidationMiddleware)
@@ -37,7 +38,8 @@ export class ApplicationController extends BaseController {
 			if (Array.isArray(value)) {
 				if (value.length) filter[key] = { $in: value };
 				else delete filter[key];
-			}
+			} else if (key === 'name' || key === 'email')
+				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
 		});
 
 		const resultsQuery = Application.aggregate([
@@ -66,7 +68,7 @@ export class ApplicationController extends BaseController {
 				}
 			},
 			{ $project: { user: 0 } },
-			{ $match: filter },
+			// { $match: filter },
 			{
 				$facet: {
 					applications: [
@@ -76,12 +78,23 @@ export class ApplicationController extends BaseController {
 								createdAt: 1
 							}
 						},
+						{ $match: filter },
 						{ $skip: skip },
 						{ $limit: limit }
 					],
 					pagination: [
 						{ $count: 'total' },
-						{ $addFields: { pageSize: limit, current: page } }
+						{
+							$addFields: {
+								pageSize: limit,
+								page,
+								pages: {
+									$floor: {
+										$add: [{ $divide: ['$total', limit] }, 1]
+									}
+								}
+							}
+						}
 					]
 				}
 			},

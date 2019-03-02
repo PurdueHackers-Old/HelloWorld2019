@@ -1169,6 +1169,13 @@
     "@types/react" "*"
     redux "^4.0.0"
 
+"@types/react-table@^6.7.22":
+  version "6.7.22"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-6.7.22.tgz#ce7c327f7f4b4ac04c6b4e92ffd090f8c8534d97"
+  integrity sha512-gFW1QLTMmcPKUVsb2YCF9m6FwwTelVRehb8hjJRluM9KKJl5ANA0jSYZz4zN9fVFsMn11BoYO43a/3jKi2XH/w==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^16.8.1":
   version "16.8.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.3.tgz#7b67956f682bea30a5a09b3242c0784ff196c848"
@@ -8483,6 +8490,13 @@ react-slick@~0.23.2:
     lodash.debounce "^4.0.8"
     prettier "^1.14.3"
     resize-observer-polyfill "^1.5.0"
+
+react-table@^6.9.2:
+  version "6.9.2"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.9.2.tgz#6a59adfeb8d5deced288241ed1c7847035b5ec5f"
+  integrity sha512-sTbNHU8Um0xRtmCd1js873HXnXaMWeBwZoiljuj0l1d44eaqjKyYPK/3HCBbJg1yeE2O5pQJ3Km0tlm9niNL9w==
+  dependencies:
+    classnames "^2.2.5"
 
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.7.0:
   version "16.8.2"
