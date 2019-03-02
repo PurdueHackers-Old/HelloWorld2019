@@ -1,94 +1,51 @@
-import React, { Component } from 'react';
-import { Table, Pagination, Icon, Tag } from 'antd';
+import React from 'react';
+import Table, { RowInfo } from 'react-table';
 import { IApplication } from '../../@types';
-import { Gender, ClassYear, Major, Status } from '../../../shared/app.enums';
-import { ColumnProps } from 'antd/lib/table/interface';
-
-const columns: ColumnProps<IApplication>[] = [
-	{
-		title: 'Name',
-		dataIndex: 'name',
-		sorter: true
-	},
-	{
-		title: 'Email',
-		dataIndex: 'email',
-		sorter: true
-	},
-	{
-		title: 'Gender',
-		dataIndex: 'gender',
-		sorter: true,
-		filters: Object.values(Gender).map(value => ({ text: value, value }))
-	},
-	{
-		title: 'Year',
-		dataIndex: 'classYear',
-		sorter: true,
-		filters: Object.values(ClassYear).map(value => ({ text: value, value }))
-	},
-	{
-		title: 'Major',
-		dataIndex: 'major',
-		sorter: true,
-		filters: Object.values(Major).map(value => ({ text: value, value }))
-	},
-	{
-		title: 'Hackathons',
-		dataIndex: 'hackathons',
-		sorter: true
-	},
-	{
-		title: 'Resume',
-		dataIndex: 'resume',
-		sorter: true,
-		render: (_, record) =>
-			record.resume ? (
-				<Tag color="green">
-					<Icon type="check-circle" />
-				</Tag>
-			) : (
-				<Tag color="red">
-					<Icon type="close-circle" />
-				</Tag>
-			)
-	},
-	{
-		title: 'Status',
-		dataIndex: 'statusInternal',
-		sorter: true,
-		filters: Object.values(Status).map(value => ({ text: value, value }))
-	}
-];
+import { columns } from './columns';
+import 'react-table/react-table.css';
 
 type Props = {
 	applications: IApplication[];
-	pagination: {
-		total: number;
-	};
+	pagination: { pageSize: number; page: number; pages: number };
 	loading: boolean;
-	onChange: (pagination: any, filters: any, sorter: any) => void;
-	onClick: (record: IApplication) => any;
+	filtered: any[];
+	onClick: (rowInfo: RowInfo) => () => void;
+	onFetchData: (state: any, instance: any) => void;
+	onFilter: (filtered: any) => void;
 };
 
-export class ApplicationsTable extends Component<Props> {
-	render() {
-		return (
-			<Table
-				columns={columns}
-				rowKey={record => record._id}
-				dataSource={this.props.applications}
-				pagination={this.props.pagination}
-				loading={this.props.loading}
-				onChange={this.props.onChange}
-				onRow={record => {
-					return {
-						onClick: () => {
-							this.props.onClick(record);
-						}
-					};
-				}}
-			/>
-		);
-	}
-}
+export const ApplicationsTable = ({
+	applications,
+	pagination,
+	loading,
+	filtered,
+	onClick,
+	onFetchData,
+	onFilter
+}: Props) => {
+	return (
+		<Table
+			data={applications}
+			pages={pagination.pages}
+			loading={loading}
+			noDataText={!loading ? 'No rows found' : ''}
+			columns={columns}
+			manual
+			filtered={filtered}
+			onFilteredChange={onFilter}
+			filterable
+			onFetchData={onFetchData}
+			getTdProps={(state, rowInfo) => {
+				return {
+					onClick: onClick(rowInfo),
+					style: {
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						textAlign: 'center'
+					}
+				};
+			}}
+		/>
+	);
+};

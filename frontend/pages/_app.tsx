@@ -2,8 +2,6 @@ import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import Router from 'next/router';
 import withRedux from 'next-redux-wrapper';
-// import { PersistGate } from 'redux-persist/integration/react';
-// import { persistStore } from 'redux-persist';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
 import {
@@ -15,7 +13,7 @@ import {
 import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
-import 'antd/dist/antd.less';
+import '../assets/theme.less';
 
 type Props = { store: Store };
 
@@ -56,16 +54,13 @@ class MyApp extends App<Props> {
 
 	render() {
 		const { Component, pageProps, store } = this.props as any;
-		// const persistor = persistStore(store);
 
 		return (
 			<Container>
 				<Provider store={store}>
-					{/* <PersistGate persistor={persistor}> */}
 					<Layout>
 						<Component {...pageProps} />
 					</Layout>
-					{/* </PersistGate> */}
 				</Provider>
 			</Container>
 		);

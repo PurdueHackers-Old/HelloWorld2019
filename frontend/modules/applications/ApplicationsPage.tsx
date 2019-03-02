@@ -1,58 +1,77 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
-import { sendErrorMessage, getApplications } from '../../redux/actions';
+import {
+	sendErrorMessage,
+	getApplications,
+	sendSuccessMessage,
+	clearFlashMessages
+} from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsTable } from './ApplicationsTable';
+import { RowInfo } from 'react-table';
+import { connect } from 'react-redux';
 
 type Props = {
 	applications: IApplication[];
-	pagination: { total: number };
+	pagination: any;
+	flashError: (msg: string, ctx?: IContext) => void;
+	flashSuccess: (msg: string, ctx?: IContext) => void;
+	clear: (ctx?: IContext) => void;
 };
 
+@((connect as any)(null, {
+	flashError: sendErrorMessage,
+	flashSuccess: sendSuccessMessage,
+	clear: clearFlashMessages
+}))
 export class ApplicationsPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
-		try {
-			const applications = await getApplications(ctx);
-			return applications;
-		} catch (error) {
-			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);
-			return { applications: [], pagination: { total: 0 } };
-		}
 	};
 
 	state = {
-		applications: this.props.applications,
-		pagination: { ...this.props.pagination, showSizeChanger: true },
-		loading: false
+		applications: [],
+		pagination: { pageSize: 10, page: 1, pages: 1 },
+		loading: true
 	};
 
+	filtered = [];
+
 	fetch = async params => {
+		const { flashError, clear } = this.props;
 		try {
+			clear();
 			this.setState({ loading: true });
 			const response = await getApplications(null, params);
-			response.pagination.showSizeChanger = true;
 			this.setState({ loading: false, ...response });
 		} catch (error) {
 			this.setState({ loading: false });
+			flashError(err(error));
 		}
 	};
 
-	onChange = (pagination, filter, sorter) => {
-		const page = pagination.current;
-		const limit = pagination.pageSize;
-		const sort = sorter.field;
-		const order = sorter.order === 'ascend' ? 1 : -1;
-		const params = { page, limit, filter, sort, order };
+	onFetchData = state => {
+		const page: number = state.page + 1;
+		const limit: number = state.pageSize;
+		const sort = state.sorted.reduce(
+			(prev, curr) => ({ ...prev, [curr.id]: curr.desc ? -1 : 1 }),
+			{}
+		);
+		const filter = this.filtered
+			.filter(val => val.value !== 'all')
+			.reduce((prev, curr) => ({ ...prev, [curr.id]: curr.value }), {});
+		const params = { page, limit, filter, sort };
 		this.fetch(params);
 	};
 
-	onClick = (record: IApplication) => {
-		Router.push(`/application?id=${record._id}`);
+	onClick = (rowInfo: RowInfo) => () => {
+		if (rowInfo && rowInfo.original) Router.push(`/application?id=${rowInfo.original._id}`);
 	};
+
+	onFilter = filtered => (this.filtered = filtered);
 
 	render() {
 		return (
@@ -61,8 +80,10 @@ export class ApplicationsPage extends Component<Props> {
 				<br />
 				<ApplicationsTable
 					{...this.state}
-					onChange={this.onChange}
+					onFetchData={this.onFetchData}
 					onClick={this.onClick}
+					onFilter={this.onFilter}
+					filtered={this.filtered}
 				/>
 			</div>
 		);

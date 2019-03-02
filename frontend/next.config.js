@@ -15,9 +15,7 @@ if (typeof require !== 'undefined') {
 	require.extensions['.css'] = () => {};
 }
 
-const themeVariables = lessToJS(
-	readFileSync(resolve(__dirname, './assets/antd-theme.less'), 'utf8')
-);
+const themeVariables = lessToJS(readFileSync(resolve(__dirname, './assets/theme.less'), 'utf8'));
 
 module.exports = withPlugins(
 	[
@@ -34,7 +32,7 @@ module.exports = withPlugins(
 			{
 				lessLoaderOptions: {
 					javascriptEnabled: true,
-					modifyVars: themeVariables // Change antd theme
+					modifyVars: themeVariables // Change theme
 				}
 			}
 		]

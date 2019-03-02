@@ -17,6 +17,7 @@ import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
 @UseAfter(ValidationMiddleware)
@@ -24,20 +25,19 @@ export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(
-		@QueryParam('sort') sort: string = 'createdAt',
 		@QueryParam('filter') filter: any = {},
 		@QueryParam('page') page: number = 1,
-		@QueryParam('limit') limit: number = 10,
-		@QueryParam('order') order?: number
+		@QueryParam('limit') limit: number = 20,
+		@QueryParam('sort') sort: { [x: string]: number } = {}
 	) {
-		order = order === 1 ? 1 : -1;
 		const skip = limit * (page - 1);
 
 		Object.entries(filter).forEach(([key, value]) => {
 			if (Array.isArray(value)) {
 				if (value.length) filter[key] = { $in: value };
 				else delete filter[key];
-			}
+			} else if (key === 'name' || key === 'email')
+				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
 		});
 
 		const resultsQuery = Application.aggregate([
@@ -72,7 +72,7 @@ export class ApplicationController extends BaseController {
 					applications: [
 						{
 							$sort: {
-								[sort]: order,
+								...sort,
 								createdAt: 1
 							}
 						},
@@ -81,7 +81,13 @@ export class ApplicationController extends BaseController {
 					],
 					pagination: [
 						{ $count: 'total' },
-						{ $addFields: { pageSize: limit, current: page } }
+						{
+							$addFields: {
+								pageSize: limit,
+								page,
+								pages: { $ceil: { $divide: ['$total', limit] } }
+							}
+						}
 					]
 				}
 			},
@@ -89,7 +95,6 @@ export class ApplicationController extends BaseController {
 		]);
 
 		const [results] = await resultsQuery.exec();
-
 		return results;
 	}
 
