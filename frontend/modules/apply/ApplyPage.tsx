@@ -7,7 +7,7 @@ import {
 	sendApplication,
 	clearFlashMessages
 } from '../../redux/actions';
-import { IContext, IApplication } from '../../@types';
+import { IContext, IApplication, IStoreState, IUser } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
 	Gender,
@@ -15,22 +15,20 @@ import {
 	ClassYear,
 	Major,
 	Referral,
-	ShirtSize,
-	gradYears
+	ShirtSize
 } from '../../../shared/app.enums';
 import { err, formatDate } from '../../utils';
-import ApplicationForm from './ApplicationForm';
+import { ApplicationForm } from './ApplicationForm';
 
 type Props = {
+	user: IUser;
 	application: IApplication | null;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 };
 
-// TODO: Extract Apply form into its own component
-
-@((connect as any)(null, {
+@((connect as any)((state: IStoreState) => ({ user: state.sessionState.user }), {
 	flashError: sendErrorMessage,
 	flashSuccess: sendSuccessMessage,
 	clear: clearFlashMessages
@@ -110,6 +108,7 @@ export class ApplyPage extends Component<Props> {
 				)}
 				<ApplicationForm
 					{...this.state}
+					user={this.props.user}
 					onChange={this.onChange}
 					onSelect={this.onSelect}
 					onSubmit={this.onSubmit}

@@ -14,6 +14,7 @@ import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '.
 import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
 import { Status } from '../../../shared/app.enums';
+import { ThunkAction } from 'redux-thunk';
 
 const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
 	...args: any[]
