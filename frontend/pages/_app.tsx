@@ -14,17 +14,19 @@ import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import '../assets/theme.less';
+import { IStoreState } from '../@types';
 
-type Props = { store: Store };
+type Props = { store: Store<IStoreState> };
 
-class MyApp extends App<Props> {
+@((withRedux as any)(makeStore))
+export default class MyApp extends App<Props> {
 	static async getInitialProps({ Component, ctx }) {
 		if (ctx.req) {
-			await refreshToken(ctx)(ctx.store.dispatch);
+			await ctx.store.dispatch(refreshToken(ctx));
 			if (!ctx.res.headersSent) {
 				const messages = flash.get(ctx);
-				if (messages.red) sendErrorMessage(messages.red, ctx)(ctx.store.dispatch);
-				if (messages.green) sendSuccessMessage(messages.green, ctx)(ctx.store.dispatch);
+				if (messages.red) ctx.store.dispatch(sendErrorMessage(messages.red, ctx));
+				if (messages.green) ctx.store.dispatch(sendSuccessMessage(messages.green, ctx));
 			}
 		}
 
@@ -35,26 +37,27 @@ class MyApp extends App<Props> {
 
 	componentWillMount() {
 		Router.onRouteChangeStart = () => {
-			const state = this.props.store.getState().flashState;
-			if (state.green || state.red) clearFlashMessages()(this.props.store.dispatch);
+			const { store } = this.props;
+			const { flashState } = store.getState();
+			if (flashState.green || flashState.red) store.dispatch(clearFlashMessages() as any);
 		};
 	}
 
 	componentDidMount() {
-		const state = this.props.store.getState().sessionState;
-		const uid = state.user && state.user._id;
+		const { store } = this.props;
+		const { sessionState } = store.getState();
+		const uid = sessionState.user && sessionState.user._id;
 		initGA(uid);
 		logPageView();
 		Router.router.events.on('routeChangeComplete', logPageView);
 		window.onbeforeunload = () => {
-			const { flashState } = this.props.store.getState();
-			if (flashState.green || flashState.red) clearFlashMessages()(this.props.store.dispatch);
+			const { flashState } = store.getState();
+			if (flashState.green || flashState.red) store.dispatch(clearFlashMessages() as any);
 		};
 	}
 
 	render() {
 		const { Component, pageProps, store } = this.props as any;
-
 		return (
 			<Container>
 				<Provider store={store}>
@@ -66,5 +69,3 @@ class MyApp extends App<Props> {
 		);
 	}
 }
-
-export default withRedux(makeStore)(MyApp);
