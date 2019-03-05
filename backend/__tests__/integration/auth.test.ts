@@ -5,12 +5,14 @@ import { ObjectId } from 'bson';
 import { generateUser, sleep } from '../helper';
 import Server from '../../server';
 import CONFIG from '../../config';
+import { User } from '../../models/user';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
 
 describe('Suite: /api/auth -- Integration', () => {
 	beforeEach(async () => {
+		jest.mock('../../services/email.service.ts');
 		await Server.createInstance().then(s => {
 			server = s;
 			request = supertest(s.app);
@@ -18,7 +20,10 @@ describe('Suite: /api/auth -- Integration', () => {
 		await server.mongoose.connection.dropDatabase();
 	});
 
-	afterEach(() => server.mongoose.disconnect());
+	afterEach(async () => {
+		jest.unmock('../../services/email.service.ts');
+		await server.mongoose.disconnect();
+	});
 
 	describe('Signup Tests', () => {
 		it('Fails because no name', async () => {
@@ -171,7 +176,6 @@ describe('Suite: /api/auth -- Integration', () => {
 			} = await request.post('/api/auth/login').send({
 				email: generatedUser.email,
 				password: 'Wrongpassword'
-				// generatedUser.password + generatedUser.password
 			}));
 
 			expect(statusCode).toStrictEqual(401);
@@ -311,6 +315,381 @@ describe('Suite: /api/auth -- Integration', () => {
 			expect(payload._id).toEqual(user.user._id);
 			const isExpired = Date.now() / 1000 > payload.exp;
 			expect(isExpired).toEqual(false);
+		});
+	});
+
+	describe('Forgot Password Tests', () => {
+		it('Fails because no email', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			let {
+				body: { error },
+				status
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			({
+				body: { error },
+				status
+			} = await request.post('/api/auth/forgot'));
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please provide a valid email');
+		});
+
+		it('Fails because invalid email', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			let {
+				body: { error },
+				status
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			({
+				body: { error },
+				status
+			} = await request.post('/api/auth/forgot').send({
+				email: 'invalidemail'
+			}));
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please provide a valid email');
+		});
+
+		it('Fails because no user exists', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			let {
+				body: { error },
+				status
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			const fakeEmail = 'nouser@exists.com';
+			({
+				body: { error },
+				status
+			} = await request.post('/api/auth/forgot').send({
+				email: fakeEmail
+			}));
+			expect(status).toEqual(400);
+			expect(error).toEqual(`There is no user with the email: ${fakeEmail}`);
+		});
+
+		it('Successfully creates a reset password token', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			let {
+				body: { response },
+				status
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			const user = response;
+
+			({
+				body: { response },
+				status
+			} = await request.post('/api/auth/forgot').send({
+				email: generatedUser.email
+			}));
+			expect(status).toEqual(200);
+			expect(response).toEqual(
+				`A link to reset your password has been sent to: ${generatedUser.email}`
+			);
+
+			const dbUser = await User.findById(user.user._id)
+				.select('+resetPasswordToken')
+				.exec();
+			expect(dbUser.resetPasswordToken).toBeTruthy();
+			expect(dbUser.resetPasswordToken).toHaveProperty('length');
+			expect(dbUser.resetPasswordToken.length).toBeGreaterThan(1);
+		});
+	});
+
+	describe('Reset Password Tests', () => {
+		it('Fails because no password', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset');
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('A password longer than 5 characters is required');
+		});
+
+		it('Fails because password is too short', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+			const newPassword = 'a';
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({ password: newPassword });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('A password longer than 5 characters is required');
+		});
+
+		it('Fails because no password confirm', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+			const newPassword = 'test123';
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({ password: newPassword });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please confirm your password');
+		});
+
+		it('Fails because passwords do not match', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+			const newPassword = 'test123';
+			const {
+				body: { error },
+				status
+			} = await request
+				.post('/api/auth/reset')
+				.send({ password: newPassword, passwordConfirm: 'nomatch' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Passwords did not match');
+		});
+
+		it('Fails because no token', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+			const newPassword = 'test123';
+			const {
+				body: { error },
+				status
+			} = await request
+				.post('/api/auth/reset')
+				.send({ password: newPassword, passwordConfirm: newPassword });
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Invalid reset password token');
+		});
+
+		it('Fails because expired token', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const token = jwt.sign({ _id: user.user._id }, CONFIG.SECRET, {
+				expiresIn: '1ms'
+			});
+
+			await sleep(2000);
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Invalid reset password token');
+		});
+
+		it('Fails because invalid token payload', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const token = 'token';
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Invalid reset password token');
+		});
+
+		it('Fails because empty token payload', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const token = jwt.sign({}, CONFIG.SECRET, {
+				expiresIn: '2 days'
+			});
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Reset password token corresponds to an invalid user');
+		});
+
+		it('Fails because token corresponds to an invalid user', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const token = jwt.sign({ id: 'invalid' }, CONFIG.SECRET, {
+				expiresIn: '2 days'
+			});
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Reset password token corresponds to an invalid user');
+		});
+
+		it('Fails because using token for non existant user', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const token = jwt.sign({ id: new ObjectId() }, CONFIG.SECRET, {
+				expiresIn: '2 days'
+			});
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Reset password token corresponds to a non existing user');
+		});
+
+		it('Fails because reset tokens do not match', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			const fakeUser = await User.create(generateUser());
+			const token = jwt.sign({ id: fakeUser.id }, CONFIG.SECRET, {
+				expiresIn: '2 days'
+			});
+
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token
+			});
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Wrong reset password token for this user');
+		});
+
+		it('Successfully resets a users password', async () => {
+			const generatedUser = generateUser();
+			generatedUser.email = 'gokhale0@purdue.edu';
+			const {
+				body: { response: user }
+			} = await request.post('/api/auth/signup').send(generatedUser);
+
+			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
+
+			const newPassword = 'test123';
+			let { resetPasswordToken } = await User.findById(user.user._id)
+				.select('+resetPasswordToken')
+				.exec();
+
+			const {
+				body: { response },
+				status
+			} = await request.post('/api/auth/reset').send({
+				password: newPassword,
+				passwordConfirm: newPassword,
+				token: resetPasswordToken
+			});
+
+			expect(status).toEqual(200);
+			expect(response).toEqual(`Successfully changed password for: ${user.user.name}`);
+
+			({ resetPasswordToken } = await User.findById(user.user._id)
+				.select('+resetPasswordToken')
+				.exec());
+			expect(resetPasswordToken).toBeDefined();
+			expect(resetPasswordToken).toEqual('');
 		});
 	});
 });
