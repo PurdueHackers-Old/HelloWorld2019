@@ -10,6 +10,7 @@ import {
 import { LoginForm } from './LoginForm';
 import { ILoginUser, ILoginResponse, IContext } from '../../@types';
 import { err } from '../../utils';
+import Link from 'next/link';
 
 type Props = {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
@@ -51,6 +52,11 @@ export class LoginPage extends Component<Props> {
 				Login Page
 				<br />
 				<LoginForm onSubmit={this.onSubmit} onChange={this.onChange} {...this.state} />
+				<br />
+				Forgot your password?{' '}
+				<Link href="/forgot">
+					<a>Click Here</a>
+				</Link>
 			</div>
 		);
 	}
