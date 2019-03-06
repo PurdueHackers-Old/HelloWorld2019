@@ -17,9 +17,7 @@ import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
 
 // Auth Actions
 // TODO: Signing up should not log user in
-export const signUp = (body: ICreateUser) => async (
-	dispatch: Dispatch
-): Promise<ILoginResponse> => {
+export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -27,13 +25,14 @@ export const signUp = (body: ICreateUser) => async (
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
 		setCookie('token', response.token);
-		return response;
+		const resp: ILoginResponse = response;
+		return resp;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
 };
 
-export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<ILoginResponse> => {
+export const signIn = (body: ILoginUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -42,7 +41,8 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<
 		dispatch(setUser(response.user));
 		setCookie('token', response.token);
 		ReactGA.set({ userId: response.user._id });
-		return response;
+		const resp: ILoginResponse = response;
+		return resp;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
@@ -116,7 +116,6 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		removeCookie('token', ctx);
 		ReactGA.set({ userId: null });
 		return null;
-		// throw error.response ? error.response.data : error;
 	}
 };
 
