@@ -14,6 +14,7 @@ import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
 import { Status } from '../../../shared/app.enums';
 import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
+import { Role } from '../../../shared/user.enums';
 
 // Auth Actions
 // TODO: Signing up should not log user in
@@ -250,6 +251,43 @@ export const checkinUser = async (email: string, ctx?: IContext, params?) => {
 		} = await api.post(
 			`/exec/checkin/${email}`,
 			{},
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		const user: IUser = response;
+		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Admin Actions
+export const getUsers = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/admin/users`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const users: IUser[] = response;
+		return users;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateRole = async (email: string, role: Role, ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/admin/role/`,
+			{ email, role },
 			{
 				params,
 				headers: { Authorization: `Bearer ${token}` }
