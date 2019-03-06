@@ -1,5 +1,5 @@
 import ReactGA from 'react-ga';
-import { ActionCreator, AnyAction, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import * as jwt from 'jsonwebtoken';
 import {
 	ICreateUser,
@@ -9,29 +9,11 @@ import {
 	IApplication,
 	IUser
 } from '../../@types';
-import { api, err } from '../../utils';
-import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
+import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
 import { Status } from '../../../shared/app.enums';
-import { ThunkAction } from 'redux-thunk';
-
-const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
-	...args: any[]
-) => {
-	const action = { type };
-	argNames.forEach((_, index) => {
-		action[argNames[index]] = args[index];
-	});
-	return action;
-};
-
-// Action Creators
-export const setUser = makeCreator(AUTH_USER_SET, 'user');
-export const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
-
-const setGreenFlash = makeCreator(FLASH_GREEN_SET, 'green');
-const setRedFlash = makeCreator(FLASH_RED_SET, 'red');
+import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
 
 // Auth Actions
 // TODO: Signing up should not log user in
