@@ -25,7 +25,6 @@ import { Role } from '../../shared/user.enums';
 @JsonController('/api/users')
 @UseAfter(ValidationMiddleware)
 export class UserController extends BaseController {
-	// TODO: Add tests
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
@@ -75,6 +74,7 @@ export class UserController extends BaseController {
 	}
 
 	// Regex because route clashes with get application route above ^
+	// Get('/:id')
 	@Get(/\/((?!application)[a-zA-Z0-9]+)$/)
 	@Authorized([Role.EXEC])
 	async getById(@Params() params: string[]) {
