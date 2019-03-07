@@ -25,7 +25,6 @@ export class AdminController extends BaseController {
 		return results;
 	}
 
-	// TODO: Add tests
 	@Post('/role')
 	@Authorized([Role.ADMIN])
 	async checkin(@BodyParam('email') email?: string, @BodyParam('role') r?: string) {
