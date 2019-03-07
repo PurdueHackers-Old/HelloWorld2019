@@ -16,8 +16,6 @@ export class GlobalsController extends BaseController {
 	@Get('/')
 	async getGlobals() {
 		const globals = await Globals.findOneAndUpdate({}, {}, { upsert: true, new: true }).exec();
-		console.log('Globals:', globals);
-
 		return globals;
 	}
 
@@ -25,7 +23,7 @@ export class GlobalsController extends BaseController {
 	@Post('/status')
 	@Authorized([Role.ADMIN])
 	async updateStatus(@BodyParam('status') s: string) {
-		const status: ApplicationsStatus = ApplicationsStatus[s];
+		const status = Object.values(ApplicationsStatus).find(stat => stat === s);
 		if (!status) throw new BadRequestError('Invalid status');
 		const globals = await Globals.findOneAndUpdate(
 			{},
@@ -33,23 +31,15 @@ export class GlobalsController extends BaseController {
 			{ upsert: true, new: true }
 		).exec();
 		return globals;
-		// const globals = await Globals.findOne().exec();
-		// globals.applicationsStatus = status;
-		// await globals.save();
-		// return globals;
 	}
 
 	// TODO: Add tests
 	@Post('/public')
 	@Authorized([Role.ADMIN])
-	async updatePublicStatus(@BodyParam('public') pub: boolean) {
-		// const globals = await Globals.findOne().exec();
-		// globals.applicationsPublic = pub;
-		// await globals.save();
-		// return globals;
+	async updatePublicStatus(@BodyParam('status') status: boolean) {
 		const globals = await Globals.findOneAndUpdate(
 			{},
-			{ applicationsPublic: pub },
+			{ applicationsPublic: status },
 			{ upsert: true, new: true }
 		).exec();
 		return globals;
