@@ -37,7 +37,6 @@ const Admin = ({
 		e.preventDefault();
 		try {
 			clear();
-			console.log('Status:', status);
 			await updateApplicationsStatus(status);
 			flashSuccess('Successfully updated applications status');
 		} catch (error) {

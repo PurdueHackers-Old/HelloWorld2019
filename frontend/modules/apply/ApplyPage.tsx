@@ -5,9 +5,10 @@ import {
 	sendSuccessMessage,
 	getOwnApplication,
 	sendApplication,
-	clearFlashMessages
+	clearFlashMessages,
+	fetchGlobals
 } from '../../redux/actions';
-import { IContext, IApplication, IStoreState, IUser } from '../../@types';
+import { IContext, IApplication, IStoreState, IUser, IGlobals } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
 	Gender,
@@ -19,10 +20,13 @@ import {
 } from '../../../shared/app.enums';
 import { err, formatDate } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
+import { ApplicationsStatus } from '../../../shared/globals.enums';
+import { Role } from '../../../shared/user.enums';
 
 type Props = {
 	user: IUser;
 	application: IApplication | null;
+	closed: boolean;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
@@ -37,11 +41,22 @@ export class ApplyPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
 		let application: IApplication;
+		let globals: IGlobals;
 		try {
 			application = await getOwnApplication(ctx);
+			globals = await fetchGlobals(ctx);
+			// return globals;
 			// tslint:disable-next-line: no-empty
 		} catch {}
-		return { application };
+		const { user } = ctx.store.getState().sessionState;
+		// let closed: boolean;
+		// if (user.role === Role.ADMIN) closed = false;
+		// else closed = globals.applicationsStatus === ApplicationsStatus.CLOSED;
+		const closed =
+			user.role === Role.ADMIN
+				? false
+				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
+		return { application, closed };
 	};
 
 	state = {
@@ -106,8 +121,10 @@ export class ApplyPage extends Component<Props> {
 						<br />
 					</>
 				)}
+				{this.props.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
 				<ApplicationForm
 					{...this.state}
+					disabled={this.props.closed}
 					user={this.props.user}
 					onChange={this.onChange}
 					onSelect={this.onSelect}

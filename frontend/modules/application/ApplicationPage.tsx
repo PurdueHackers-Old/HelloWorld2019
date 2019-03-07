@@ -16,7 +16,7 @@ import {
 } from '../../utils/session';
 import { err } from '../../utils';
 import { Role } from '../../../shared/user.enums';
-import ApplicationForm from '../apply/ApplicationForm';
+import { ApplicationForm } from '../apply/ApplicationForm';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
 
