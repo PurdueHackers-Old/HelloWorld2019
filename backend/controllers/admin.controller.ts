@@ -27,7 +27,7 @@ export class AdminController extends BaseController {
 
 	@Post('/role')
 	@Authorized([Role.ADMIN])
-	async checkin(@BodyParam('email') email?: string, @BodyParam('role') r?: string) {
+	async updateRole(@BodyParam('email') email?: string, @BodyParam('role') r?: string) {
 		if (!email) throw new BadRequestError('Please provide an email');
 
 		const role = Object.values(Role).find(ro => ro === r);

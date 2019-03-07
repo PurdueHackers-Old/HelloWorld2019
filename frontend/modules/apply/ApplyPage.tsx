@@ -45,13 +45,9 @@ export class ApplyPage extends Component<Props> {
 		try {
 			application = await getOwnApplication(ctx);
 			globals = await fetchGlobals(ctx);
-			// return globals;
 			// tslint:disable-next-line: no-empty
 		} catch {}
 		const { user } = ctx.store.getState().sessionState;
-		// let closed: boolean;
-		// if (user.role === Role.ADMIN) closed = false;
-		// else closed = globals.applicationsStatus === ApplicationsStatus.CLOSED;
 		const closed =
 			user.role === Role.ADMIN
 				? false

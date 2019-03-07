@@ -90,6 +90,7 @@ Admin.getInitialProps = async (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
 	try {
 		const globals = await fetchGlobals(ctx);
+		console.log('Globals:', globals)
 		return globals;
 	} catch (error) {
 		ctx.store.dispatch(sendErrorMessage(err(error), ctx) as any);

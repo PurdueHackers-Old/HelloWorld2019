@@ -18,9 +18,14 @@ import { User, UserDto, IUserModel } from '../models/user';
 import { ApplicationDto, Application } from '../models/application';
 import { userMatches, hasPermission } from '../utils';
 import { Role } from '../../shared/user.enums';
+import { Inject } from 'typedi';
+import { GlobalsController } from './globals.controller';
+import { ApplicationsStatus } from '../../shared/globals.enums';
 
 @JsonController('/api/users')
 export class UserController extends BaseController {
+	@Inject() globalController: GlobalsController;
+
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
@@ -116,6 +121,14 @@ export class UserController extends BaseController {
 		if (!user) throw new BadRequestError('User not found');
 		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this application');
+
+		const globals = await this.globalController.getGlobals();
+		const closed =
+			currentUser.role === Role.ADMIN
+				? false
+				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
+
+		if (closed) throw new UnauthorizedError('Sorry, applications are closed!');
 
 		const appQuery = Application.findOneAndUpdate(
 			{ user },
