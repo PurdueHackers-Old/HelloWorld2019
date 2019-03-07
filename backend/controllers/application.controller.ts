@@ -4,23 +4,19 @@ import {
 	Get,
 	QueryParam,
 	BadRequestError,
-	UseAfter,
 	Authorized,
 	Params,
 	Post,
 	BodyParam,
-	Req,
 	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
-import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
-@UseAfter(ValidationMiddleware)
 export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])

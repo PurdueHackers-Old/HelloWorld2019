@@ -1,24 +1,18 @@
-import { ObjectId } from 'mongodb';
 import {
 	JsonController,
 	Get,
 	QueryParam,
 	BadRequestError,
-	UseAfter,
 	Authorized,
-	Params,
 	Post,
-	BodyParam,
-	Param
+	BodyParam
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
-import { ValidationMiddleware } from '../middleware/validation';
 import { Role } from '../../shared/user.enums';
 import { User } from '../models/user';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/admin')
-@UseAfter(ValidationMiddleware)
 export class AdminController extends BaseController {
 	// TODO: Add tests
 	@Get('/users')

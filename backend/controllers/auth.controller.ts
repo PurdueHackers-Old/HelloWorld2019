@@ -5,20 +5,17 @@ import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
 import CONFIG from '../config';
 import { User, UserDto } from '../models/user';
-import { multer, extractToken, signToken } from '../utils';
+import { extractToken, signToken } from '../utils';
 import {
 	JsonController,
 	Post,
 	Req,
-	UseBefore,
 	Body,
-	UseAfter,
 	BadRequestError,
 	UnauthorizedError,
 	Get,
 	BodyParam
 } from 'routing-controllers';
-import { ValidationMiddleware } from '../middleware/validation';
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
@@ -26,14 +23,12 @@ import { StorageService } from '../services/storage.service';
 export const router = express.Router();
 
 @JsonController('/api/auth')
-@UseAfter(ValidationMiddleware)
 export class AuthController extends BaseController {
 	constructor(private emailService?: EmailService, private storageService?: StorageService) {
 		super();
 	}
 
 	@Post('/signup')
-	@UseBefore(multer.any())
 	async signup(
 		@BodyParam('password') password: string,
 		@BodyParam('passwordConfirm') passwordConfirm: string,

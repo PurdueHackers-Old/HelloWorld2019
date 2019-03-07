@@ -1,26 +1,19 @@
-import { ObjectId } from 'mongodb';
 import {
 	JsonController,
 	Get,
 	QueryParam,
 	BadRequestError,
-	UseAfter,
 	Authorized,
-	Params,
 	Post,
-	BodyParam,
 	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
-import { ValidationMiddleware } from '../middleware/validation';
-import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { User } from '../models/user';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/exec')
-@UseAfter(ValidationMiddleware)
 export class ExecController extends BaseController {
 	@Post('/checkin/:email')
 	@Authorized([Role.EXEC])

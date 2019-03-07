@@ -7,23 +7,19 @@ import {
 	BadRequestError,
 	Put,
 	Body,
-	UseBefore,
 	CurrentUser,
 	UnauthorizedError,
-	UseAfter,
 	Post,
 	Authorized,
 	Params
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { User, UserDto, IUserModel } from '../models/user';
-import { ValidationMiddleware } from '../middleware/validation';
 import { ApplicationDto, Application } from '../models/application';
-import { userMatches, multer, hasPermission } from '../utils';
+import { userMatches, hasPermission } from '../utils';
 import { Role } from '../../shared/user.enums';
 
 @JsonController('/api/users')
-@UseAfter(ValidationMiddleware)
 export class UserController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
@@ -91,7 +87,6 @@ export class UserController extends BaseController {
 	// TODO: Add tests
 	@Put('/:id')
 	@Authorized()
-	@UseBefore(multer.any())
 	async updateById(
 		@Param('id') id: string,
 		@Body() userDto: UserDto,
@@ -111,7 +106,6 @@ export class UserController extends BaseController {
 
 	@Post('/:id/apply')
 	@Authorized()
-	@UseBefore(multer.any())
 	async apply(
 		@Param('id') id: string,
 		@Body() applicationDto: ApplicationDto,
