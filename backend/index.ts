@@ -25,7 +25,6 @@ const start = async () => {
 		return server;
 	} catch (error) {
 		console.error('Error:', error);
-		// return null;
 		throw error;
 	}
 };

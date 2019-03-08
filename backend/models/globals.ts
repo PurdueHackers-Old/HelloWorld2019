@@ -1,9 +1,5 @@
 import { Document, Schema, model } from 'mongoose';
-
-export enum ApplicationsStatus {
-	OPEN = 'OPEN',
-	CLOSED = 'CLOSED'
-}
+import { ApplicationsStatus } from '../../shared/globals.enums';
 
 export interface IGlobalsModel extends Document {
 	applicationsStatus: ApplicationsStatus;

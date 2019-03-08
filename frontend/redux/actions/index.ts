@@ -15,6 +15,7 @@ import * as flash from '../../utils/flash';
 import { Status } from '../../../shared/app.enums';
 import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
 import { Role } from '../../../shared/user.enums';
+import { ApplicationsStatus } from '../../../shared/globals.enums';
 
 // Auth Actions
 // TODO: Signing up should not log user in
@@ -86,7 +87,7 @@ export const resetPassword = async (password: string, passwordConfirm: string, t
 	}
 };
 
-// Should only be called in the "server-side" context in _app
+// Should only be called in the "server-side" context in _app.tsx
 export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: Dispatch) => {
 	try {
 		if (ctx && ctx.res && ctx.res.headersSent) return;
@@ -295,6 +296,65 @@ export const updateRole = async (email: string, role: Role, ctx?: IContext, para
 		);
 		const user: IUser = response;
 		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Globals Actions
+export const fetchGlobals = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/globals/`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateApplicationsStatus = async (
+	status: ApplicationsStatus,
+	ctx?: IContext,
+	params?
+) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/globals/status/`,
+			{ status },
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// TODO: Rename to something better
+export const updatePublicApplications = async (status: boolean, ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/globals/public/`,
+			{ status },
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		return response;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}

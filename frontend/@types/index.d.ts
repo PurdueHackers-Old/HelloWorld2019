@@ -5,6 +5,7 @@ import { ISessionState } from '../redux/reducers/session';
 import { Request, Response } from 'express';
 import { Role } from '../../shared/user.enums';
 import { ClassYear, Gender, Major, Referral, ShirtSize, Status } from '../../shared/app.enums';
+import { ApplicationsStatus } from '../../shared/globals.enums';
 
 export interface IStoreState {
 	flashState: IFlashState;
@@ -47,6 +48,11 @@ export interface IApplication {
 	resume: string;
 	statusInternal: Status;
 	user: IUser;
+}
+
+export interface IGlobals {
+	applicationsPublic: boolean;
+	applicationsStatus: ApplicationsStatus;
 }
 
 export type flashColor = 'red' | 'green';
