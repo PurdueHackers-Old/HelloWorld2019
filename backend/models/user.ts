@@ -82,6 +82,4 @@ schema.methods.comparePassword = async function(password: string) {
 	return password && (await bcrypt.compare(password, user.password));
 };
 
-schema.index({ email: 'text' });
-
 export const User = model<IUserModel>('User', schema, 'users');

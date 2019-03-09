@@ -48,6 +48,7 @@ export class ExecController extends BaseController {
 				}
 			},
 			{ $match: { 'application.statusPublic': Status.ACCEPTED } },
+			{ $limit: 10 },
 			{ $project: { _id: 1, name: 1, email: 1 } }
 		]);
 		return results;
