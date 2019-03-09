@@ -18,7 +18,7 @@ type Props = {
 	clear: (ctx?: IContext) => void;
 };
 
-export const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
+const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 	const [users, setUsers] = useState<IUser[]>([]);
 	const [email, setEmail] = useState('');
 
