@@ -40,7 +40,7 @@ const Scan = ({ flashError, flashSuccess, clear }: Props) => {
 
 	return (
 		<div>
-			Checkin Scan
+			<h3>Checkin Scan</h3>
 			<br />
 			<QrReader delay={750} onError={onError} onScan={onScan} />
 		</div>

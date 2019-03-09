@@ -49,7 +49,7 @@ export class LoginPage extends Component<Props> {
 	render() {
 		return (
 			<div>
-				Login Page
+				<h3>Login Page</h3>
 				<br />
 				<LoginForm onSubmit={this.onSubmit} onChange={this.onChange} {...this.state} />
 				<br />

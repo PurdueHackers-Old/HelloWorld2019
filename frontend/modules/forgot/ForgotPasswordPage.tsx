@@ -43,7 +43,15 @@ export class ForgotPasswordPage extends Component<Props> {
 	};
 	render() {
 		return (
-			<ForgotPasswordForm {...this.state} onChange={this.onChange} onSubmit={this.onSubmit} />
+			<div>
+				<h3>Forgot Password</h3>
+				<br />
+				<ForgotPasswordForm
+					{...this.state}
+					onChange={this.onChange}
+					onSubmit={this.onSubmit}
+				/>
+			</div>
 		);
 	}
 }

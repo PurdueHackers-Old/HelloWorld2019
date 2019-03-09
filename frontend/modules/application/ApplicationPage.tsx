@@ -88,7 +88,7 @@ export class ApplicationPage extends Component<Props> {
 		const disabled = !userMatches(user, application.user._id);
 		return (
 			<div>
-				Application Page
+				<h3>Application Page</h3>
 				<br />
 				<br />
 				<form onSubmit={this.onStatusSubmit}>

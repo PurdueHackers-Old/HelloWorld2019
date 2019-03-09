@@ -50,7 +50,7 @@ export class SignupPage extends Component<Props> {
 	render() {
 		return (
 			<div>
-				Signup Page
+				<h3>Signup Page</h3>
 				<br />
 				<SignupForm onSubmit={this.onSubmit} onChange={this.onChange} {...this.state} />
 			</div>
