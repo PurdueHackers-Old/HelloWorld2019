@@ -29,6 +29,14 @@ const Header = ({ token, role }: Props) => {
 				</>
 			)}
 			{token && (
+				<>
+					<Link href="/profile">
+						<a>Profile</a>
+					</Link>{' '}
+					|{' '}
+				</>
+			)}
+			{token && (
 				<Link href="/logout">
 					<a>Logout</a>
 				</Link>
