@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { redirectIfNotAuthenticated } from '../../../utils/session';
-import { IContext } from '../../../@types';
-import { Role } from '../../../../shared/user.enums';
+import { redirectIfNotAuthenticated } from '../../utils/session';
+import { IContext } from '../../@types';
+import { Role } from '../../../shared/user.enums';
 import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
@@ -9,8 +9,8 @@ import {
 	clearFlashMessages,
 	updateRole,
 	getUsers
-} from '../../../redux/actions';
-import { err } from '../../../utils';
+} from '../../redux/actions';
+import { err } from '../../utils';
 
 type Props = {
 	flashError: (msg: string, ctx?: IContext) => void;

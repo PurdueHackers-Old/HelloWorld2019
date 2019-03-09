@@ -1,2 +1,2 @@
-export { AdminRolesPage } from './roles';
+export { AdminRolesPage } from './AdminRolesPage';
 export { AdminPage } from './AdminPage';

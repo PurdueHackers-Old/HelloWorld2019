@@ -11,6 +11,7 @@ import {
 } from '../../redux/actions';
 import { err } from '../../utils';
 import { connect } from 'react-redux';
+import Link from 'next/link';
 
 type Props = {
 	flashError: (msg: string, ctx?: IContext) => void;
@@ -43,7 +44,11 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 
 	return (
 		<div>
-			Checkin Page
+			<h3>Checkin Page</h3>
+			<Link href="/checkin/scan">
+				<a>Scan QR Code</a>
+			</Link>
+			<br />
 			<br />
 			<form onSubmit={onSubmit}>
 				<input
