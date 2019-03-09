@@ -4,7 +4,9 @@ import Link from 'next/link';
 export const HomePage = () => {
 	return (
 		<div>
-			<div>Home Page</div>
+			<div>
+				<h3>Home Page</h3>
+			</div>
 			<br />
 			<Link href="/apply">
 				<button>Apply</button>

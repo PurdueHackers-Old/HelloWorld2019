@@ -10,7 +10,6 @@ const start = async () => {
 		await server.initFrontend();
 
 		const httpServer = server.app.listen(PORT, () => {
-			// if (CONFIG.NODE_ENV === 'production')
 			server.logger.info('CONFIG:', CONFIG);
 			server.logger.info(`Listening on port: ${PORT}`);
 		});

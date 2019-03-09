@@ -8,10 +8,12 @@
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
-		"build": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && cp -r frontend/.next dist/frontend",
+		"build": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && cp -r frontend/assets dist/frontend && cp -r frontend/.next dist/frontend",
+		"rbuild": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && rimraf dist/frontend/* && cp -r frontend/assets frontend/next.config.js frontend/.next dist/frontend",
 		"test": "NODE_ENV=test jest -i --detectOpenHandles",
 		"start": "NODE_ENV=production node dist/backend/index.js",
-		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts"
+		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts",
+		"start-client": "cd frontend && next start"
 	},
 	"repository": {
 		"type": "git",
@@ -49,6 +51,7 @@
 		"react": "^16.8.1",
 		"react-dom": "^16.8.1",
 		"react-ga": "^2.5.7",
+		"react-qr-reader": "^2.2.1",
 		"react-redux": "^6.0.0",
 		"react-table": "^6.9.2",
 		"redux": "^4.0.1",
@@ -83,6 +86,7 @@
 		"@types/passport-jwt": "^3.0.1",
 		"@types/qrcode.react": "^0.8.2",
 		"@types/react": "^16.8.1",
+		"@types/react-qr-reader": "^2.1.2",
 		"@types/react-redux": "^7.0.1",
 		"@types/react-table": "^6.7.22",
 		"@types/redux": "^3.6.0",

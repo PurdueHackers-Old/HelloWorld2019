@@ -100,6 +100,7 @@ export default class Server {
 				useFindAndModify: false
 			});
 			this.mongoose.Promise = Promise;
+			this.logger.info('Connected to mongo:', DB);
 			return this.mongoose;
 		} catch (error) {
 			this.logger.error('Error connecting to mongo:', error);

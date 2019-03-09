@@ -26,7 +26,7 @@ export class DashboardPage extends Component<Props> {
 	render() {
 		return (
 			<div>
-				Dashboard
+				<h3>Dashboard</h3>
 				<br />
 				<br />
 				Application Stats:

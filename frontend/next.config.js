@@ -4,6 +4,7 @@ const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
 const lessToJS = require('less-vars-to-js');
+const webpack = require('webpack');
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
@@ -52,6 +53,11 @@ module.exports = withPlugins(
 			// 		})
 			// 	);
 			// }
+			// config.plugins.push(
+			// 	new webpack.DefinePlugin({
+			// 		'process.env.NODE_ENV': process.env.NODE_ENV
+			// 	})
+			// );
 
 			return config;
 		}

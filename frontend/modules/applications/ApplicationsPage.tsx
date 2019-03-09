@@ -76,7 +76,7 @@ export class ApplicationsPage extends Component<Props> {
 	render() {
 		return (
 			<div>
-				Applications Page
+				<h3>Applications Page</h3>
 				<br />
 				<ApplicationsTable
 					{...this.state}

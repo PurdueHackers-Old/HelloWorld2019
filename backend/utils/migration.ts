@@ -8,6 +8,7 @@ import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { UserController } from '../controllers/user.controller';
 import { ApplicationController } from '../controllers/application.controller';
+import { GlobalsController } from '../controllers/globals.controller';
 
 let server: Server;
 
@@ -16,6 +17,7 @@ const start = async () => {
 		server = await Server.createInstance();
 		const authController = new AuthController();
 		const userController = new UserController();
+		userController.globalController = new GlobalsController();
 
 		// let user = await authController.signup('test123', 'test123', {
 		// 	name: 'Test Testerson',

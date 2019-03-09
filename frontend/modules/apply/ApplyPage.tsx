@@ -94,7 +94,7 @@ export class ApplyPage extends Component<Props> {
 	render() {
 		return (
 			<div>
-				Apply Page
+				<h3>Apply Page</h3>
 				<br />
 				{this.state.updatedAt && (
 					<>

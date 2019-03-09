@@ -15,7 +15,7 @@ const Profile = ({ email }: Props) => {
 			<h3>Profile Page</h3>
 			QR Code:
 			<br />
-			<QRCode size={128} value={email} renderAs="svg" />
+			<QRCode value={email} />
 		</div>
 	);
 };
