@@ -1,1 +1,1 @@
-export { CheckinPage } from './CheckinPage'
+export { CheckinPage } from './CheckinPage';

@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import { IContext, IUser } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { redirectIfNotAuthenticated } from '../../utils/session';
@@ -13,75 +13,68 @@ import { err } from '../../utils';
 import { connect } from 'react-redux';
 
 type Props = {
-	users: IUser[];
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 };
 
-@((connect as any)(null, {
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-export class CheckinPage extends Component<Props> {
-	static getInitialProps = async (ctx: IContext) => {
-		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
-		try {
-			const users = (await getCheckin(ctx)) || [];
-			return { users };
-		} catch (error) {
-			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);
-		}
-	};
+export const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
+	const [users, setUsers] = useState<IUser[]>([]);
+	const [email, setEmail] = useState('');
 
-	state = {
-		users: this.props.users,
-		email: ''
-	};
+	useEffect(() => {
+		getCheckin(null, { email })
+			.then(val => setUsers(val))
+			.catch(error => flashError(err(error)));
+	}, [email]);
 
-	onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		this.setState({ [e.target.name]: e.target.value });
-	};
-
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			this.props.clear();
-			const user = await checkinUser(this.state.email);
-			this.setState({
-				users: this.props.users.filter(u => u._id !== user._id),
-				email: ''
-			});
-			this.props.flashSuccess(`Successfully checked in: ${user.name}`);
+			clear();
+			const user = await checkinUser(email);
+			setUsers(users.filter(u => u._id !== user._id));
+			setEmail('');
+			flashSuccess(`Successfully checked in: ${user.name}`);
 		} catch (error) {
-			this.props.flashError(err(error));
+			flashError(err(error));
 		}
 	};
 
-	render() {
-		return (
-			<div>
-				Checkin Page
-				<br />
-				<form onSubmit={this.onSubmit}>
-					<input
-						autoComplete="off"
-						list="emails"
-						name="email"
-						value={this.state.email}
-						onChange={this.onChange}
-					/>
-					<datalist id="emails">
-						{this.state.users.map(user => (
-							<option key={user._id} id={user._id} value={user.email}>
-								{user.email}
-							</option>
-						))}
-					</datalist>
-					<input type="submit" />
-				</form>
-			</div>
-		);
+	return (
+		<div>
+			Checkin Page
+			<br />
+			<form onSubmit={onSubmit}>
+				<input
+					autoComplete="off"
+					list="emails"
+					name="email"
+					value={email}
+					onChange={e => setEmail(e.target.value)}
+				/>
+				<datalist id="emails">
+					{users.map(user => (
+						<option key={user._id} id={user._id} value={user.email}>
+							{user.email}
+						</option>
+					))}
+				</datalist>
+				<input type="submit" />
+			</form>
+		</div>
+	);
+};
+
+Checkin.getInitialProps = async (ctx: IContext) => {
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+};
+
+export const CheckinPage = connect(
+	null,
+	{
+		flashError: sendErrorMessage,
+		flashSuccess: sendSuccessMessage,
+		clear: clearFlashMessages
 	}
-}
+)(Checkin);
