@@ -7,25 +7,25 @@ import {
 	BadRequestError,
 	Put,
 	Body,
-	UseBefore,
 	CurrentUser,
 	UnauthorizedError,
-	UseAfter,
 	Post,
 	Authorized,
 	Params
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { User, UserDto, IUserModel } from '../models/user';
-import { ValidationMiddleware } from '../middleware/validation';
 import { ApplicationDto, Application } from '../models/application';
-import { userMatches, multer, hasPermission } from '../utils';
+import { userMatches, hasPermission } from '../utils';
 import { Role } from '../../shared/user.enums';
+import { Inject } from 'typedi';
+import { GlobalsController } from './globals.controller';
+import { ApplicationsStatus } from '../../shared/globals.enums';
 
 @JsonController('/api/users')
-@UseAfter(ValidationMiddleware)
 export class UserController extends BaseController {
-	// TODO: Add tests
+	@Inject() globalController: GlobalsController;
+
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
@@ -75,6 +75,7 @@ export class UserController extends BaseController {
 	}
 
 	// Regex because route clashes with get application route above ^
+	// Get('/:id')
 	@Get(/\/((?!application)[a-zA-Z0-9]+)$/)
 	@Authorized([Role.EXEC])
 	async getById(@Params() params: string[]) {
@@ -91,7 +92,6 @@ export class UserController extends BaseController {
 	// TODO: Add tests
 	@Put('/:id')
 	@Authorized()
-	@UseBefore(multer.any())
 	async updateById(
 		@Param('id') id: string,
 		@Body() userDto: UserDto,
@@ -111,7 +111,6 @@ export class UserController extends BaseController {
 
 	@Post('/:id/apply')
 	@Authorized()
-	@UseBefore(multer.any())
 	async apply(
 		@Param('id') id: string,
 		@Body() applicationDto: ApplicationDto,
@@ -122,6 +121,14 @@ export class UserController extends BaseController {
 		if (!user) throw new BadRequestError('User not found');
 		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this application');
+
+		const globals = await this.globalController.getGlobals();
+		const closed =
+			currentUser.role === Role.ADMIN
+				? false
+				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
+
+		if (closed) throw new UnauthorizedError('Sorry, applications are closed!');
 
 		const appQuery = Application.findOneAndUpdate(
 			{ user },

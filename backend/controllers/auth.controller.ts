@@ -5,20 +5,17 @@ import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
 import CONFIG from '../config';
 import { User, UserDto } from '../models/user';
-import { multer, extractToken, signToken } from '../utils';
+import { extractToken, signToken } from '../utils';
 import {
 	JsonController,
 	Post,
 	Req,
-	UseBefore,
 	Body,
-	UseAfter,
 	BadRequestError,
 	UnauthorizedError,
 	Get,
 	BodyParam
 } from 'routing-controllers';
-import { ValidationMiddleware } from '../middleware/validation';
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
@@ -26,32 +23,30 @@ import { StorageService } from '../services/storage.service';
 export const router = express.Router();
 
 @JsonController('/api/auth')
-@UseAfter(ValidationMiddleware)
 export class AuthController extends BaseController {
 	constructor(private emailService?: EmailService, private storageService?: StorageService) {
 		super();
 	}
 
 	@Post('/signup')
-	@UseBefore(multer.any())
 	async signup(
 		@BodyParam('password') password: string,
 		@BodyParam('passwordConfirm') passwordConfirm: string,
-		@Body() member: UserDto
+		@Body() userDto: UserDto
 	) {
 		if (!password || password.length < 5)
 			throw new BadRequestError('A password longer than 5 characters is required');
 		if (!passwordConfirm) throw new BadRequestError('Please confirm your password');
 		if (passwordConfirm !== password) throw new BadRequestError('Passwords did not match');
-		member.password = password;
+		userDto.password = password;
 
-		if (!member.email.endsWith('purdue.edu'))
+		if (!userDto.email.endsWith('purdue.edu'))
 			throw new BadRequestError('You must register with a @purdue.edu email');
 
-		const exists = await User.findOne({ email: member.email }).exec();
+		const exists = await User.findOne({ email: userDto.email }).exec();
 		if (exists) throw new BadRequestError('An account already exists with that email');
 
-		const user = new User(member);
+		const user = new User(userDto);
 		await user.save();
 		const u = user.toJSON();
 		delete u.password;
@@ -104,13 +99,12 @@ export class AuthController extends BaseController {
 	async forgot(@Body() body: { email: string }) {
 		const { email } = body;
 		if (!email || !isEmail(email)) throw new BadRequestError('Please provide a valid email');
-		const member = await User.findOne({ email }).exec();
-		if (!member) throw new BadRequestError(`There is no member with the email: ${email}`);
-		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, { expiresIn: '2 days' });
-		member.resetPasswordToken = token;
-		await member.save();
-		const res = await this.emailService.sendResetEmail(member);
-		this.logger.info('Sent email:', res);
+		const user = await User.findOne({ email }).exec();
+		if (!user) throw new BadRequestError(`There is no user with the email: ${email}`);
+		const token = jwt.sign({ id: user._id }, CONFIG.SECRET, { expiresIn: '2 days' });
+		user.resetPasswordToken = token;
+		await user.save();
+		await this.emailService.sendResetEmail(user);
 		return `A link to reset your password has been sent to: ${email}`;
 	}
 
@@ -132,15 +126,17 @@ export class AuthController extends BaseController {
 		if (!payload) throw new UnauthorizedError('Invalid reset password token');
 		const { id } = payload;
 		if (!id || !ObjectId.isValid(id))
-			throw new BadRequestError('Reset password token corresponds to an invalid member');
-		const member = await User.findById(id).exec();
-		if (!member)
-			throw new BadRequestError('Reset password token corresponds to a non existing member');
-		if (member.resetPasswordToken !== token)
-			throw new UnauthorizedError('Wrong reset password token for this member');
-		member.password = password;
-		member.resetPasswordToken = '';
-		await member.save();
-		return `Successfully changed password for: ${member.name}`;
+			throw new BadRequestError('Reset password token corresponds to an invalid user');
+		const user = await User.findById(id)
+			.select('+resetPasswordToken')
+			.exec();
+		if (!user)
+			throw new BadRequestError('Reset password token corresponds to a non existing user');
+		if (user.resetPasswordToken !== token)
+			throw new UnauthorizedError('Wrong reset password token for this user');
+		user.password = password;
+		user.resetPasswordToken = '';
+		await user.save();
+		return `Successfully changed password for: ${user.name}`;
 	}
 }

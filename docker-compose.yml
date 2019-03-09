@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 services:
     mongo:
         image: mongo
         ports:
-            - '27017:27017'
+            - "27017:27017"
         volumes:
             - ./data:/data/db:Z
         logging:
@@ -14,11 +14,11 @@ services:
         depends_on:
             - mongo
         ports:
-            - '1234:1234'
+            - "1234:1234"
         network_mode: host
         logging:
             driver: none
-        command: /bin/sh -c "node app.js && rm ./config/app.json"
+        command: /bin/sh -c "rm ./config/app.json && node app.js"
         environment:
             - CONN_NAME=HelloWorld
             - DB_HOST=localhost
@@ -37,9 +37,9 @@ services:
             - mongo-express
             # - mongo
         ports:
-            - '5000:5000'
-            - '9229:9229'
-            - '5858:5858'
+            - "5000:5000"
+            - "9229:9229"
+            - "5858:5858"
         network_mode: host
         # env_file: ./.env # TODO - uncomment this to auto-load your .env file!
         environment:

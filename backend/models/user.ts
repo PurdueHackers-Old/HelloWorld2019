@@ -5,13 +5,6 @@ import { Exclude, Expose } from 'class-transformer';
 import { IApplicationModel } from './application';
 import { Role } from '../../shared/user.enums';
 
-// export enum Role {
-// 	USER = 'USER',
-// 	MENTOR = 'MENTOR',
-// 	EXEC = 'EXEC',
-// 	ADMIN = 'ADMIN'
-// }
-
 @Exclude()
 export class UserDto {
 	@IsNotEmpty({ message: 'Please provide your first and last name' })

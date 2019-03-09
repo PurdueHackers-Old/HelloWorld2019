@@ -1,4 +1,3 @@
-import * as jwt from 'jsonwebtoken';
 import * as sendGrid from '@sendgrid/mail';
 import CONFIG from '../config';
 import { IUserModel, UserDto } from '../models/user';
@@ -8,50 +7,38 @@ sendGrid.setApiKey(CONFIG.SENDGRID_KEY);
 
 @Service('emailService')
 export class EmailService {
-	async sendResetEmail(member: IUserModel) {
-		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, {
-			expiresIn: '2 days'
-		});
-		member.resetPasswordToken = token;
-		await member.save();
-
+	async sendResetEmail(user: IUserModel) {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
-				? 'http://localhost:3000'
+				? 'http://localhost:5000'
 				: 'https://purduehackers.com';
 
 		return sendGrid.send({
-			templateId: 'd-850d406dbbf240bc9f53f455ed975321',
-			from: `"${CONFIG.ORG_NAME}" <${CONFIG.EMAIL}>`,
-			to: member.email,
+			templateId: 'd-f534db9ac5df4fa5a0dc273095582e9d',
+			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
+			to: user.email,
 			dynamicTemplateData: {
-				name: member.name,
+				name: user.name,
 				url,
-				token
+				token: user.resetPasswordToken
 			}
 		} as any);
 	}
 
-	async sendAccountCreatedEmail(member: IUserModel) {
-		const token = jwt.sign({ id: member._id }, CONFIG.SECRET, {
-			expiresIn: '2 days'
-		});
-		member.resetPasswordToken = token;
-		await member.save();
-
+	async sendAccountCreatedEmail(user: IUserModel) {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
-				? 'http://localhost:3000'
+				? 'http://localhost:5000'
 				: 'https://purduehackers.com';
 
 		return await sendGrid.send({
 			templateId: 'd-0bba1a0346c24bd69a46d81d2e950e55',
-			from: `"${CONFIG.ORG_NAME}" <${CONFIG.EMAIL}>`,
-			to: member.email,
+			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
+			to: user.email,
 			dynamicTemplateData: {
-				name: member.name,
+				name: user.name,
 				url,
-				token
+				token: user.resetPasswordToken
 			}
 		} as any);
 	}
@@ -59,7 +46,7 @@ export class EmailService {
 	async sendErrorEmail(error: Error, user?: UserDto) {
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',
-			from: `"${CONFIG.ORG_NAME}" <${CONFIG.EMAIL}>`,
+			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
 			to: 'purduehackers@gmail.com',
 			dynamicTemplateData: {
 				timestamp: new Date(Date.now()).toLocaleString(),

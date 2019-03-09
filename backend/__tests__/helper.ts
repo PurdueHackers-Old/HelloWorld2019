@@ -14,7 +14,7 @@ export const generateUser = () => {
 	const first = faker.name.firstName();
 	const last = faker.name.lastName();
 	const domain = 'purdue.edu';
-	const email = faker.internet.email(first, last, domain);
+	const email = faker.internet.email(first, last, domain).toLowerCase();
 
 	const password = faker.internet.password(8);
 	return {

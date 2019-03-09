@@ -1,26 +1,19 @@
-import { ObjectId } from 'mongodb';
 import {
 	JsonController,
 	Get,
 	QueryParam,
 	BadRequestError,
-	UseAfter,
 	Authorized,
-	Params,
 	Post,
-	BodyParam,
 	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
-import { ValidationMiddleware } from '../middleware/validation';
-import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { User } from '../models/user';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/exec')
-@UseAfter(ValidationMiddleware)
 export class ExecController extends BaseController {
 	@Post('/checkin/:email')
 	@Authorized([Role.EXEC])
@@ -33,8 +26,8 @@ export class ExecController extends BaseController {
 	}
 
 	@Get('/checkin')
+	@Authorized([Role.EXEC])
 	async getCheckin(@QueryParam('email') email?: string) {
-		// const match: any = { $match: { verified: true, checkedin: false } };
 		const match: any = { $match: { checkedin: false } };
 		if (email) match.$match.email = new RegExp(escapeRegEx(email), 'i');
 

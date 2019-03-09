@@ -1,35 +1,25 @@
 import ReactGA from 'react-ga';
-import { ActionCreator, AnyAction, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import * as jwt from 'jsonwebtoken';
-import { ICreateUser, ILoginUser, ILoginResponse, IContext, flashColor, IUser } from '../../@types';
-import { ApplicationDto } from '../../../backend/models/application';
-import { api, err } from '../../utils';
-import { AUTH_USER_SET, AUTH_TOKEN_SET, FLASH_GREEN_SET, FLASH_RED_SET } from '../constants';
+import {
+	ICreateUser,
+	ILoginUser,
+	ILoginResponse,
+	IContext,
+	IApplication,
+	IUser
+} from '../../@types';
+import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
-
-const makeCreator = (type: string, ...argNames: string[]): ActionCreator<AnyAction> => (
-	...args: any[]
-) => {
-	const action = { type };
-	argNames.forEach((_, index) => {
-		action[argNames[index]] = args[index];
-	});
-	return action;
-};
-
-// Action Creators
-export const setUser = makeCreator(AUTH_USER_SET, 'user');
-export const setToken = makeCreator(AUTH_TOKEN_SET, 'token');
-
-const setGreenFlash = makeCreator(FLASH_GREEN_SET, 'green');
-const setRedFlash = makeCreator(FLASH_RED_SET, 'red');
+import { Status } from '../../../shared/app.enums';
+import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
+import { Role } from '../../../shared/user.enums';
+import { ApplicationsStatus } from '../../../shared/globals.enums';
 
 // Auth Actions
 // TODO: Signing up should not log user in
-export const signUp = (body: ICreateUser) => async (
-	dispatch: Dispatch
-): Promise<ILoginResponse> => {
+export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -37,13 +27,14 @@ export const signUp = (body: ICreateUser) => async (
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
 		setCookie('token', response.token);
-		return response;
+		const resp: ILoginResponse = response;
+		return resp;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
 };
 
-export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<ILoginResponse> => {
+export const signIn = (body: ILoginUser) => async (dispatch: Dispatch) => {
 	try {
 		const {
 			data: { response }
@@ -52,7 +43,8 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch): Promise<
 		dispatch(setUser(response.user));
 		setCookie('token', response.token);
 		ReactGA.set({ userId: response.user._id });
-		return response;
+		const resp: ILoginResponse = response;
+		return resp;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
@@ -95,7 +87,7 @@ export const resetPassword = async (password: string, passwordConfirm: string, t
 	}
 };
 
-// Should only be called in the "server-side" context in _app
+// Should only be called in the "server-side" context in _app.tsx
 export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: Dispatch) => {
 	try {
 		if (ctx && ctx.res && ctx.res.headersSent) return;
@@ -126,7 +118,6 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		removeCookie('token', ctx);
 		ReactGA.set({ userId: null });
 		return null;
-		// throw error.response ? error.response.data : error;
 	}
 };
 
@@ -135,13 +126,13 @@ export const getOwnApplication = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const id = (jwt.decode(token) as any)._id;
-		return getApplication(id, ctx);
+		return getUserApplication(id, ctx);
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
 };
 
-export const getApplication = async (id: string, ctx?: IContext) => {
+export const getUserApplication = async (id: string, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
@@ -149,24 +140,23 @@ export const getApplication = async (id: string, ctx?: IContext) => {
 		} = await api.get(`/users/${id}/application`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		const app: ApplicationDto = response;
+		const app: IApplication = response;
 		return app;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
 };
 
-export const sendApplication = async (body: ApplicationDto, ctx?: IContext, params?: any) => {
+export const sendApplication = async (body: IApplication, ctx?: IContext, id?: string) => {
 	try {
 		const token = getToken(ctx);
-		const id = (jwt.decode(token) as any)._id;
+		if (!id) id = (jwt.decode(token) as any)._id;
 		const {
 			data: { response }
 		} = await api.post(`/users/${id}/apply`, body, {
-			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		const app: ApplicationDto = response;
+		const app: IApplication = response;
 		return app;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
@@ -184,6 +174,40 @@ export const getApplications = async (ctx?: IContext, params?) => {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const getApplication = async (id: string, ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/applications/${id}`, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const app: IApplication = response;
+		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateApplicationStatus = async (id: string, status: Status, ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/applications/${id}/status`,
+			{ status },
+			{
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		const app: IApplication = response;
+		return app;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
@@ -235,6 +259,102 @@ export const checkinUser = async (email: string, ctx?: IContext, params?) => {
 		);
 		const user: IUser = response;
 		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Admin Actions
+export const getUsers = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/admin/users`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const users: IUser[] = response;
+		return users;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateRole = async (email: string, role: Role, ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/admin/role/`,
+			{ email, role },
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		const user: IUser = response;
+		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// Globals Actions
+export const fetchGlobals = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/globals/`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const updateApplicationsStatus = async (
+	status: ApplicationsStatus,
+	ctx?: IContext,
+	params?
+) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/globals/status/`,
+			{ status },
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+// TODO: Rename to something better
+export const updatePublicApplications = async (status: boolean, ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/globals/public/`,
+			{ status },
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		return response;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}

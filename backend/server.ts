@@ -19,6 +19,8 @@ import { globalError } from './middleware/globalError';
 import { SuccessInterceptor } from './interceptors/success.interceptor';
 import { currentUserChecker, authorizationChecker } from './middleware/authentication';
 import { createLogger } from './utils/logger';
+import { ValidationMiddleware } from './middleware/validation';
+import { multer } from './utils';
 
 const { NODE_ENV, DB } = CONFIG;
 
@@ -67,7 +69,8 @@ export default class Server {
 			controllers: [__dirname + '/controllers/*'],
 			interceptors: [SuccessInterceptor],
 			currentUserChecker,
-			authorizationChecker
+			authorizationChecker,
+			middlewares: [ValidationMiddleware]
 		});
 		// Any unhandled errors will be caught in this middleware
 		this.app.use(globalError);
@@ -86,6 +89,7 @@ export default class Server {
 		this.app.use(passportMiddleWare(passport).initialize());
 		this.app.use(cors());
 		this.app.use(extractUser());
+		this.app.use(multer.any());
 	}
 
 	private async setupMongo() {

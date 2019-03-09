@@ -4,47 +4,94 @@ import {
 	Get,
 	QueryParam,
 	BadRequestError,
-	UseAfter,
 	Authorized,
-	Params
+	Params,
+	Post,
+	BodyParam,
+	Param
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
-import { ValidationMiddleware } from '../middleware/validation';
 import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
-@UseAfter(ValidationMiddleware)
 export class ApplicationController extends BaseController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(
-		@QueryParam('sortBy') sortBy?: string,
-		@QueryParam('order') order?: number,
-		@QueryParam('status') status?: string,
-		@QueryParam('select') select?: string
+		@QueryParam('filter') filter: any = {},
+		@QueryParam('page') page: number = 1,
+		@QueryParam('limit') limit: number = 20,
+		@QueryParam('sort') sort: { [x: string]: number } = {}
 	) {
-		order = order === 1 ? 1 : -1;
-		sortBy = sortBy || 'createdAt';
+		const skip = limit * (page - 1);
 
-		let contains = false;
-		Application.schema.eachPath(path => {
-			if (path.toLowerCase() === sortBy.toLowerCase()) contains = true;
+		Object.entries(filter).forEach(([key, value]) => {
+			if (Array.isArray(value)) {
+				if (value.length) filter[key] = { $in: value };
+				else delete filter[key];
+			} else if (key === 'name' || key === 'email')
+				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
 		});
-		if (!contains) sortBy = 'createdAt';
 
-		const conditions = status ? { statusPublic: status } : {};
+		const resultsQuery = Application.aggregate([
+			{
+				$lookup: {
+					from: 'users',
+					let: { user_id: '$user' },
+					as: 'user',
+					pipeline: [
+						{
+							$match: { $expr: { $eq: ['$_id', '$$user_id'] } }
+						},
+						{
+							$project: {
+								_id: 0,
+								name: 1,
+								email: 1
+							}
+						}
+					]
+				}
+			},
+			{
+				$replaceRoot: {
+					newRoot: { $mergeObjects: [{ $arrayElemAt: ['$user', 0] }, '$$ROOT'] }
+				}
+			},
+			{ $project: { user: 0 } },
+			{ $match: filter },
+			{
+				$facet: {
+					applications: [
+						{
+							$sort: {
+								...sort,
+								createdAt: 1
+							}
+						},
+						{ $skip: skip },
+						{ $limit: limit }
+					],
+					pagination: [
+						{ $count: 'total' },
+						{
+							$addFields: {
+								pageSize: limit,
+								page,
+								pages: { $ceil: { $divide: ['$total', limit] } }
+							}
+						}
+					]
+				}
+			},
+			{ $unwind: '$pagination' }
+		]);
 
-		const resultsQuery = Application.find(conditions)
-			.sort({ [sortBy]: order })
-			.populate('user', 'name email')
-			.select('+statusInternal')
-			.lean();
-
-		const results = await resultsQuery.exec();
-
-		return { applications: results };
+		const [results] = await resultsQuery.exec();
+		return results;
 	}
 
 	// TODO: Add tests
@@ -69,12 +116,32 @@ export class ApplicationController extends BaseController {
 	}
 
 	// TODO: Add tests
-	// @Get('/:id')
 	@Get(/\/((?!stats)[a-zA-Z0-9]+)$/)
+	@Authorized([Role.EXEC])
 	async getById(@Params() params: string[]) {
 		const id = params[0];
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
 		const application = await Application.findById(id)
+			.populate('user')
+			.select('+statusInternal')
+			.lean()
+			.exec();
+		if (!application) throw new BadRequestError('Application does not exist');
+		return application;
+	}
+
+	// TODO: Add tests
+	@Post('/:id/status')
+	@Authorized([Role.EXEC])
+	async updateStatus(@Param('id') id: string, @BodyParam('status') status: string) {
+		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid application ID');
+		const application = await Application.findByIdAndUpdate(
+			id,
+			{ statusInternal: status },
+			{ new: true }
+		)
+			.populate('user')
+			.select('+statusInternal')
 			.lean()
 			.exec();
 		if (!application) throw new BadRequestError('Application does not exist');

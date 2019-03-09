@@ -6,6 +6,8 @@ import { IUserModel, User } from '../../models/user';
 import { Role } from '../../../shared/user.enums';
 import { Status, ethnicities, Referral } from '../../../shared/app.enums';
 import { ObjectId } from 'bson';
+import { GlobalsController } from '../../controllers/globals.controller';
+import { ApplicationsStatus } from '../../../shared/globals.enums';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
@@ -352,6 +354,23 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(error).toEqual('You are unauthorized to edit this application');
 		});
 
+		it('Fails to create an application because applications are closed', async () => {
+			const globalsController = new GlobalsController();
+			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
+
+			const app = generateApplication();
+			const {
+				body: { error },
+				status
+			} = await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Sorry, applications are closed!');
+		});
+
 		it('Successfully creates an application for a user', async () => {
 			const app = generateApplication();
 			const {
@@ -395,6 +414,58 @@ describe('Suite: /api/users -- Integration', () => {
 				{ role: Role.ADMIN },
 				{ new: true }
 			).exec();
+
+			const app = generateApplication();
+			const {
+				body: { response },
+				status
+			} = await request
+				.post(`/api/users/${user.user._id}/apply`)
+				.send(app)
+				.auth(admin.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toHaveProperty('_id');
+			expect(response.statusInternal).toEqual(Status.PENDING);
+			expect(response.statusPublic).toEqual(Status.PENDING);
+			expect(response.emailSent).toEqual(false);
+			expect(response).toEqual(
+				expect.objectContaining({
+					gender: app.gender,
+					ethnicity: app.ethnicity,
+					classYear: app.classYear,
+					graduationYear: app.graduationYear,
+					major: app.major,
+					referral: app.referral,
+					hackathons: app.hackathons,
+					shirtSize: app.shirtSize,
+					dietaryRestrictions: app.dietaryRestrictions,
+					website: app.website,
+					answer1: app.answer1,
+					answer2: app.answer2,
+					user: expect.objectContaining({
+						_id: user.user._id,
+						name: user.user.name,
+						email: user.user.email
+					})
+				})
+			);
+		});
+
+		it('Successfully creates an application for another user by an admin while apps are closed', async () => {
+			const globalsController = new GlobalsController();
+			const admin = await request
+				.post('/api/auth/signup')
+				.send(generateUser())
+				.then(resp => resp.body.response);
+
+			admin.user = await User.findByIdAndUpdate(
+				admin.user._id,
+				{ role: Role.ADMIN },
+				{ new: true }
+			).exec();
+
+			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
 
 			const app = generateApplication();
 			const {

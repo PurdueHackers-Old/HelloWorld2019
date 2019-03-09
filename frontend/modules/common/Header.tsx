@@ -20,6 +20,14 @@ const Header = ({ token, role }: Props) => {
 					|{' '}
 				</>
 			)}
+			{role && roleMatches(role, Role.ADMIN) && (
+				<>
+					<Link href="/admin">
+						<a>Admin</a>
+					</Link>{' '}
+					|{' '}
+				</>
+			)}
 			{token && (
 				<Link href="/logout">
 					<a>Logout</a>

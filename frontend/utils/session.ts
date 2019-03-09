@@ -46,12 +46,18 @@ export const redirect = (target: string, ctx?: IContext, replace?: boolean) => {
 	return true;
 };
 
-const extractUser = (ctx: IContext) => {
+export const extractUser = (ctx: IContext) => {
 	// Try to get from redux, and if not, req.user
 	let user = ctx && ctx.store && ctx.store.getState().sessionState.user;
 	if (user) return user;
 	user = ctx && ctx.req && ctx.req.user;
 	return user;
+};
+
+export const userMatches = (user: IUser, id: string) => {
+	if (!user || !id) return false;
+	if (hasPermission(user, Role.ADMIN)) return true;
+	return user._id === id;
 };
 
 export const roleMatches = (role: Role, name: Role) => {
