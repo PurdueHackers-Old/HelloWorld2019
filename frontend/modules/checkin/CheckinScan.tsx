@@ -27,7 +27,6 @@ const Scan = ({ flashError, flashSuccess, clear }: Props) => {
 	};
 
 	const onScan = async data => {
-		console.log('Got Data:', data);
 		if (!data) return;
 		try {
 			clear();
