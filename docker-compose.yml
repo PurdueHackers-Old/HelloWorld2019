@@ -1,23 +1,22 @@
 version: "3"
 services:
     mongo:
+        container_name: mongo
         image: mongo
         ports:
             - "27017:27017"
         volumes:
             - ./data:/data/db:Z
-        network_mode: host
         logging:
             driver: none
-        command: --bind_ip_all
 
     mongo-express:
+        container_name: mongo-express
         image: mrvautin/adminmongo
         depends_on:
             - mongo
         ports:
             - "1234:1234"
-        network_mode: host
         logging:
             driver: none
         command: /bin/sh -c "rm ./config/app.json && node app.js"
@@ -38,9 +37,12 @@ services:
             - ./:/usr/app
             - /usr/app/node_modules
         depends_on:
-            - mongo-express
+            - mongo
         ports:
             - "5000:5000"
             - "9229:9229"
             - "5858:5858"
-        network_mode: host
+        restart: on-failure
+        environment:
+            - WAIT_HOSTS=mongo:27017
+            - DB=mongodb://mongo/HelloWorld
