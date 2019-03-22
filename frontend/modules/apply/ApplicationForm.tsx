@@ -128,6 +128,15 @@ export const ApplicationForm = (props: Props) => {
 				</select>
 			</label>
 			<br />
+			<label htmlFor="referral">
+				Resume{' '}
+				<input
+					type="file"
+					name="resume"
+					id="resume"
+				/>
+			</label>
+			<br />
 			<label htmlFor="hackathons">
 				Hackathons{' '}
 				<input
