@@ -48,9 +48,12 @@ const Admin = ({
 		e.preventDefault();
 		try {
 			clear();
+			flashSuccess('Updating application public status');
 			await updatePublicApplications(pub === 'true');
+			clear();
 			flashSuccess('Successfully updated applications public status');
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};

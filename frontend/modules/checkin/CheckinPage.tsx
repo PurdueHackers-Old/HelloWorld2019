@@ -33,11 +33,14 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 		e.preventDefault();
 		try {
 			clear();
+			flashSuccess('Checking in...');
 			const user = await checkinUser(email);
 			setUsers(users.filter(u => u._id !== user._id));
 			setEmail('');
+			clear();
 			flashSuccess(`Successfully checked in: ${user.name}`);
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};

@@ -84,9 +84,12 @@ export class ApplyPage extends Component<Props> {
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
+			flashSuccess('Submitting application...');
 			await sendApplication(this.state);
+			clear();
 			flashSuccess('Application successful!');
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};

@@ -54,8 +54,8 @@ export class ApplicationDto {
 	@IsNumber({}, { message: 'Please provide a valid hackathon number' })
 	hackathons: number;
 
-	@IsNotEmpty({ message: 'Please provide a valid class year' })
-	@IsEnum(ShirtSize, { message: 'Please provide a valid class year' })
+	@IsNotEmpty({ message: 'Please provide a valid shirt size' })
+	@IsEnum(ShirtSize, { message: 'Please provide a valid shirt size' })
 	shirtSize: ShirtSize;
 
 	dietaryRestrictions: string;

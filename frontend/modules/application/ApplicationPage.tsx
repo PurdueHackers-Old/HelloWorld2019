@@ -76,9 +76,12 @@ export class ApplicationPage extends Component<Props> {
 		const { flashError, flashSuccess, clear, application } = this.props;
 		try {
 			clear();
+			flashSuccess('Updating application...');
 			await sendApplication(this.state, null, application.user._id);
+			clear();
 			return flashSuccess('Application successful!');
 		} catch (error) {
+			clear();
 			return flashError(err(error));
 		}
 	};
