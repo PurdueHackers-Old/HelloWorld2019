@@ -21,6 +21,7 @@ import { Role } from '../../shared/user.enums';
 import { Inject } from 'typedi';
 import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { Status } from '../../shared/app.enums';
 
 @JsonController('/api/users')
 export class UserController extends BaseController {
@@ -61,6 +62,7 @@ export class UserController extends BaseController {
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
 
 		const application = await appQuery.exec();
+		console.log('Fetched application:', application);
 		return application;
 	}
 
@@ -134,9 +136,9 @@ export class UserController extends BaseController {
 			{ user },
 			{ ...applicationDto, user },
 			{
+				new: true,
 				upsert: true,
-				setDefaultsOnInsert: true,
-				new: true
+				setDefaultsOnInsert: true
 			}
 		).populate('user');
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');

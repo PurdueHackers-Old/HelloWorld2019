@@ -47,6 +47,7 @@ export interface IApplication {
 	answer2: string;
 	resume: string;
 	statusInternal: Status;
+	statusPublic: Status;
 	user: IUser;
 }
 
