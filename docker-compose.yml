@@ -9,22 +9,22 @@ services:
             - ./data:/data/db:Z
         logging:
             driver: none
+        healthcheck:
+            test: nc -z 27017
 
     mongo-express:
         container_name: mongo-express
-        image: mrvautin/adminmongo
+        build:
+            context: .
+            dockerfile: Dockerfile-ME
         depends_on:
             - mongo
         ports:
             - "1234:1234"
+            - "8081:8081"
         logging:
             driver: none
-        command: /bin/sh -c "rm ./config/app.json && node app.js"
-        environment:
-            - CONN_NAME=HelloWorld
-            - DB_HOST=mongo
-            - DB_PORT=27017
-            - DB_NAME=HelloWorld
+        entrypoint: ./wait.sh mongo:27017 -- node app
 
     app:
         tty: true
@@ -32,7 +32,6 @@ services:
         container_name: app
         build:
             context: ./
-        command: yarn dev
         volumes:
             - ./:/usr/app
             - /usr/app/node_modules
@@ -44,5 +43,5 @@ services:
             - "5858:5858"
         restart: on-failure
         environment:
-            - WAIT_HOSTS=mongo:27017
             - DB=mongodb://mongo/HelloWorld
+        entrypoint: wait-for-it mongo:27017 -- yarn dev

@@ -10,9 +10,5 @@ COPY . .
 RUN yarn
 EXPOSE 5000
 
-## THE LIFE SAVER
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
-
-## Launch the wait tool and then your application
-CMD /wait && yarn dev
+RUN apt-get update && apt-get install -y wait-for-it
+CMD yarn dev
