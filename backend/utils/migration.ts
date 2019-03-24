@@ -14,37 +14,42 @@ let server: Server;
 
 const start = async () => {
 	try {
+		const NUM_USERS = 50;
 		server = await Server.createInstance();
 		const authController = new AuthController();
 		const userController = new UserController();
 		userController.globalController = new GlobalsController();
 
-		// let user = await authController.signup('test123', 'test123', {
-		// 	name: 'Test Testerson',
-		// 	email: 'test@purdue.edu'
-		// } as any);
-		// await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.ADMIN });
-		// let userApp = await userController.apply(
-		// 	user.user._id,
-		// 	generateApplication() as any,
-		// 	user.user
-		// );
-		// await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
+		let user = await authController.signup('test123', 'test123', {
+			name: 'Test Testerson',
+			email: 'test@purdue.edu'
+		} as any);
+		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.ADMIN });
+		let userApp = await userController.apply(
+			user.user._id,
+			generateApplication() as any,
+			user.user
+		);
+		await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
 
-		// user = await authController.signup('test123', 'test123', {
-		// 	name: 'Exec User',
-		// 	email: 'exec@purdue.edu'
-		// } as any);
-		// await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
-		// userApp = await userController.apply(
-		// 	user.user._id,
-		// 	generateApplication() as any,
-		// 	user.user
-		// );
-		// await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
+		user = await authController.signup('test123', 'test123', {
+			name: 'Exec User',
+			email: 'exec@purdue.edu'
+		} as any);
+		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
+		userApp = await userController.apply(
+			user.user._id,
+			generateApplication() as any,
+			user.user
+		);
+		await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
 
+
+		
 		const users = await Promise.all(
-			generateUsers(8).map(u => authController.signup(u.password, u.password, u as any))
+			generateUsers(NUM_USERS).map(u =>
+				authController.signup(u.password, u.password, u as any)
+			)
 		);
 
 		const applications = await Promise.all(
@@ -52,13 +57,14 @@ const start = async () => {
 		);
 
 		await Promise.all(
-			applications.map((app, i) => {
+			applications.map(app => {
 				let update;
-				if (i < 2)
+				const i = Math.floor(Math.random() * 12) + 0;
+				if (i < 6)
 					update = { statusPublic: Status.PENDING, statusInternal: Status.PENDING };
-				else if (i < 4)
+				else if (i < 8)
 					update = { statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED };
-				else if (i < 6)
+				else if (i < 10)
 					update = { statusPublic: Status.REJECTED, statusInternal: Status.REJECTED };
 				else update = { statusPublic: Status.WAITLIST, statusInternal: Status.WAITLIST };
 

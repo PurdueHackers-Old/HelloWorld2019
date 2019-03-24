@@ -112,7 +112,7 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
-		if (!error.response) throw error;
+		// if (!error.response) throw error;
 		dispatch(setUser(null));
 		dispatch(setToken(''));
 		removeCookie('token', ctx);

@@ -14,4 +14,4 @@ travis.yml
 dist
 coverage
 data
-.next
+# .next
