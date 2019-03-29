@@ -3,6 +3,7 @@ import { Column } from 'react-table';
 import { IApplication } from '../../@types';
 import filter from './filter';
 import { Gender, ClassYear, Major, Status } from '../../../shared/app.enums';
+import { StatusSelector } from '../common/StatusSelector';
 
 export const columns: Column<IApplication>[] = [
 	{
@@ -42,6 +43,10 @@ export const columns: Column<IApplication>[] = [
 	{
 		Header: 'Status',
 		accessor: 'statusInternal',
+		Cell: (props) => {
+			console.log(props.original._id as string);
+			return <StatusSelector id={props.original._id as string}></StatusSelector>
+		},
 		Filter: filter(Object.values(Status).map(value => ({ text: value, value })))
 	}
 ];

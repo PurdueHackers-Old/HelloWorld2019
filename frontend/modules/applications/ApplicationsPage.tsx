@@ -67,8 +67,8 @@ export class ApplicationsPage extends Component<Props> {
 		this.fetch(params);
 	};
 
-	onClick = (rowInfo: RowInfo) => () => {
-		if (rowInfo && rowInfo.original) Router.push(`/application?id=${rowInfo.original._id}`);
+	onClick = (rowInfo: RowInfo, column) => () => {
+		if (rowInfo && rowInfo.original && column.Header !== "Status") Router.push(`/application?id=${rowInfo.original._id}`);
 	};
 
 	onFilter = filtered => (this.filtered = filtered);
