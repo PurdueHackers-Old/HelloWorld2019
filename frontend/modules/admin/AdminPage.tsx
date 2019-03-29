@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
@@ -16,22 +16,35 @@ import { err } from '../../utils';
 import { connect } from 'react-redux';
 
 type Props = {
-	applicationsPublic: boolean;
-	applicationsStatus: ApplicationsStatus;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 };
 
-const Admin = ({
-	applicationsPublic,
-	applicationsStatus,
-	flashError,
-	flashSuccess,
-	clear
-}: Props) => {
-	const [status, setStatus] = useState(applicationsStatus);
-	const [pub, setPub] = useState(`${applicationsPublic}`);
+const Admin = ({ flashError, flashSuccess, clear }: Props) => {
+	const [status, setStatus] = useState(null);
+	const [pub, setPub] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const globals = await fetchGlobals(null);
+				console.log('Globals: ', globals);
+				setStatus(globals.applicationsStatus);
+				setPub(`${globals.applicationsPublic}`);
+			} catch (error) {
+				clear();
+				flashError('Couldnt load globals');
+				setStatus(ApplicationsStatus.CLOSED);
+				setPub(`false`);
+			}
+
+			setLoading(false);
+		};
+
+		fetchData();
+	}, []);
 
 	const onUpdateStatus = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -58,6 +71,7 @@ const Admin = ({
 		}
 	};
 
+	if (loading) return <span>Loading...</span>;
 	return (
 		<div>
 			<h3>Admin Dashboard</h3>
@@ -91,13 +105,6 @@ const Admin = ({
 
 Admin.getInitialProps = async (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
-	try {
-		const globals = await fetchGlobals(ctx);
-		return globals;
-	} catch (error) {
-		ctx.store.dispatch(sendErrorMessage(err(error), ctx) as any);
-		return { applicationsPublic: false, applicationsStatus: ApplicationsStatus.OPEN };
-	}
 };
 
 export const AdminPage = connect(

@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IContext, IStoreState, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { getOwnApplication } from '../../redux/actions';
 import { QRCode } from './QRCode';
 
-type Props = { email: string; application: IApplication };
+type Props = { email: string };
 
 const Profile = (props: Props) => {
-	const { email, application } = props;
+	const { email } = props;
+
+	const [application, setApplication] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const ownApplication = await getOwnApplication(null);
+			console.log(ownApplication);
+			setApplication(ownApplication);
+
+			setLoading(false);
+		};
+
+		fetchData();
+	}, [loading]);
+
+	if (loading) return <span>Loading...</span>;
 	return (
 		<div>
 			<h2>Profile Page</h2>
@@ -28,12 +45,6 @@ const Profile = (props: Props) => {
 
 Profile.getInitialProps = async (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' })) return {};
-	let application: IApplication;
-	try {
-		application = await getOwnApplication(ctx);
-		// tslint:disable-next-line: no-empty
-	} catch {}
-	return { application };
 };
 
 export const ProfilePage = connect((state: IStoreState) => ({
