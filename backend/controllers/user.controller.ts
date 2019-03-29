@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import {
 	JsonController,
@@ -6,6 +7,7 @@ import {
 	Param,
 	BadRequestError,
 	Put,
+	Req,
 	Body,
 	CurrentUser,
 	UnauthorizedError,
@@ -21,10 +23,15 @@ import { Role } from '../../shared/user.enums';
 import { Inject } from 'typedi';
 import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
-import { Status } from '../../shared/app.enums';
+import { storageService } from '../services/storage.service.ts'
 
 @JsonController('/api/users')
 export class UserController extends BaseController {
+
+	constructor(private storageService?: storageService) {
+		super();
+	}
+
 	@Inject() globalController: GlobalsController;
 
 	@Get('/')
@@ -114,6 +121,7 @@ export class UserController extends BaseController {
 	@Post('/:id/apply')
 	@Authorized()
 	async apply(
+		@Req() req: Request,
 		@Param('id') id: string,
 		@Body() applicationDto: ApplicationDto,
 		@CurrentUser({ required: true }) currentUser: IUserModel
@@ -142,6 +150,24 @@ export class UserController extends BaseController {
 			}
 		).populate('user');
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
+
+		const files: Express.Multer.File[] = req.files
+			? (req.files as Express.Multer.File[])
+			: new Array<Express.Multer.File>();
+
+		const resume = files.find(file => file.fieldname === 'resume');
+		if (resume) {
+			try {
+				applicationDto.resume = await this.storageService.uploadToStorage(
+					resume,
+					'resumes',
+					applicationDto
+				);
+			} catch (error) {
+				this.logger.emerg('Error uploading resume:', error);
+				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
+			}
+		}
 
 		const app = await appQuery.exec();
 		user.application = app;
