@@ -21,6 +21,11 @@ export class EmailService {
 				name: user.name,
 				url,
 				token: user.resetPasswordToken
+			},
+			mailSettings: {
+				sandboxMode: {
+					enable: CONFIG.NODE_ENV === 'test'
+				}
 			}
 		} as any);
 	}
@@ -39,11 +44,14 @@ export class EmailService {
 				name: user.name,
 				url,
 				token: user.resetPasswordToken
+			},
+			mailSettings: {
+				sandboxMode: {
+					enable: CONFIG.NODE_ENV === 'test'
+				}
 			}
 		} as any);
 	}
-
-	
 
 	sendErrorEmail(error: Error, user?: UserDto) {
 		return sendGrid.send({
@@ -55,6 +63,11 @@ export class EmailService {
 				message: error.message.replace(/\n/g, '<br>'),
 				stack: error.stack.replace(/\n/g, '<br>&emsp;'),
 				user
+			},
+			mailSettings: {
+				sandboxMode: {
+					enable: CONFIG.NODE_ENV === 'test'
+				}
 			}
 		} as any);
 	}
@@ -81,7 +94,12 @@ export class EmailService {
 					name: user.name
 				}
 			})),
-			isMultiple: true
+			isMultiple: true,
+			mailSettings: {
+				sandboxMode: {
+					enable: CONFIG.NODE_ENV === 'test'
+				}
+			}
 		});
 	}
 }

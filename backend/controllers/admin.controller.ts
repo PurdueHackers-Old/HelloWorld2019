@@ -9,13 +9,12 @@ import {
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
-import { User, IUserModel } from '../models/user';
+import { User } from '../models/user';
 import { escapeRegEx, getUsersWithStatus } from '../utils';
 import { Inject } from 'typedi';
 import { EmailService } from '../services/email.service';
-import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
-import { Globals, IGlobalsModel } from '../models/globals';
+import { Globals } from '../models/globals';
 
 @JsonController('/api/admin')
 export class AdminController extends BaseController {
@@ -50,6 +49,7 @@ export class AdminController extends BaseController {
 
 	// TODO: Add tests
 	@Post('/emails')
+	@Authorized([Role.ADMIN])
 	async sendMassEmails() {
 		const [accepted, rejected, waitlisted] = await Promise.all([
 			getUsersWithStatus(Status.ACCEPTED),
