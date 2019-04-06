@@ -28,7 +28,7 @@ export class GlobalsController extends BaseController {
 	// TODO: Add tests
 	@Post('/status')
 	@Authorized([Role.ADMIN])
-	async updateStatus(@BodyParam('status') s: string) {
+	async updateApplicationsStatus(@BodyParam('status') s: string) {
 		const status = Object.values(ApplicationsStatus).find(stat => stat === s);
 		if (!status) throw new BadRequestError('Invalid status');
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
@@ -44,7 +44,7 @@ export class GlobalsController extends BaseController {
 	// TODO: Add tests
 	@Post('/public')
 	@Authorized([Role.ADMIN])
-	async updatePublicStatus(@BodyParam('status') status: boolean) {
+	async makeApplicationsPublic(@BodyParam('status') status: boolean) {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
 			{},
 			{ applicationsPublic: status },

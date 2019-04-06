@@ -6,6 +6,8 @@ import * as jwt from 'jsonwebtoken';
 import { IUserModel } from '../models/user';
 import { Role } from '../../shared/user.enums';
 import CONFIG from '../config';
+import { Application } from '../models/application';
+import { Status } from '../../shared/app.enums';
 
 export const multer = Multer({
 	storage: Multer.memoryStorage(),
@@ -58,7 +60,10 @@ export const formatDate = date => {
 
 export const toBoolean = (val: any, obj: any, type) => `${val}`.toLowerCase() === 'true';
 
-export const isNotEmpty = (obj: any, val: any) => val !== '' && val !== null && val !== undefined;
+// export const isNotEmpty = (obj: any, val: any) => val !== '' && val !== null && val !== undefined;
+
+export const isNotEmpty = (field: string) => (obj: any, val: any) =>
+	obj[field] !== '' && obj[field] !== null && obj[field] !== undefined;
 
 export const extractToken = (req: Request) =>
 	ExtractJwt.fromExtractors([
@@ -77,3 +82,23 @@ export const signToken = (user: IUserModel, expiresIn = CONFIG.EXPIRES_IN) =>
 	jwt.sign({ _id: user._id, role: user.role }, CONFIG.SECRET, {
 		expiresIn
 	});
+
+export const getUsersWithStatus = (status: Status): IUserModel[] =>
+	Application.aggregate([
+		{ $match: { statusPublic: status } },
+		{
+			$lookup: {
+				from: 'users',
+				localField: 'user',
+				foreignField: '_id',
+				as: 'user'
+			}
+		},
+		{ $project: { user: 1 } },
+		{
+			$replaceRoot: {
+				newRoot: { $mergeObjects: [{ $arrayElemAt: ['$user', 0] }, '$$ROOT'] }
+			}
+		},
+		{ $project: { user: 0 } }
+	]).exec();

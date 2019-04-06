@@ -356,7 +356,7 @@ describe('Suite: /api/users -- Integration', () => {
 
 		it('Fails to create an application because applications are closed', async () => {
 			const globalsController = new GlobalsController();
-			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
+			await globalsController.updateApplicationsStatus(ApplicationsStatus.CLOSED);
 
 			const app = generateApplication();
 			const {
@@ -465,7 +465,7 @@ describe('Suite: /api/users -- Integration', () => {
 				{ new: true }
 			).exec();
 
-			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
+			await globalsController.updateApplicationsStatus(ApplicationsStatus.CLOSED);
 
 			const app = generateApplication();
 			const {

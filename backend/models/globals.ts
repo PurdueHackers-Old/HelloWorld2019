@@ -4,6 +4,7 @@ import { ApplicationsStatus } from '../../shared/globals.enums';
 export interface IGlobalsModel extends Document {
 	applicationsStatus: ApplicationsStatus;
 	applicationsPublic: boolean;
+	emailsSent: Date;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -18,7 +19,8 @@ const schema = new Schema(
 		applicationsPublic: {
 			type: Boolean,
 			default: false
-		}
+		},
+		emailsSent: { type: Date, default: null }
 	},
 	{ timestamps: true }
 );
