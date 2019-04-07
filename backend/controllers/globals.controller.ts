@@ -18,7 +18,7 @@ export class GlobalsController extends BaseController {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
 			{},
 			{},
-			{ upsert: true, new: true }
+			{ upsert: true, setDefaultsOnInsert: true, new: true }
 		)
 			.lean()
 			.exec();
@@ -34,7 +34,7 @@ export class GlobalsController extends BaseController {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
 			{},
 			{ applicationsStatus: status },
-			{ upsert: true, new: true }
+			{ upsert: true, setDefaultsOnInsert: true, new: true }
 		)
 			.lean()
 			.exec();
@@ -48,7 +48,7 @@ export class GlobalsController extends BaseController {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
 			{},
 			{ applicationsPublic: status },
-			{ upsert: true, new: true }
+			{ upsert: true, setDefaultsOnInsert: true, new: true }
 		)
 			.lean()
 			.exec();

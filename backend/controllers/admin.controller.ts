@@ -63,7 +63,11 @@ export class AdminController extends BaseController {
 			this.emailService.sendWaitlistedEmails(waitlisted)
 		]);
 
-		await Globals.findOneAndUpdate({}, { emailsSent: new Date() }, { upsert: true })
+		await Globals.findOneAndUpdate(
+			{},
+			{ emailsSent: new Date() },
+			{ upsert: true, setDefaultsOnInsert: true }
+		)
 			.lean()
 			.exec();
 
