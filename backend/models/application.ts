@@ -105,14 +105,13 @@ const schema = new Schema(
 		website: { type: String, default: '' },
 		answer1: { type: String, required: true },
 		answer2: { type: String, required: true },
-		emailSent: { type: Boolean, default: false },
+		statusPublic: { type: String, default: Status.PENDING, enum: Object.values(Status) },
 		statusInternal: {
 			type: String,
 			default: Status.PENDING,
 			enum: Object.values(Status),
 			select: false
-		},
-		statusPublic: { type: String, default: Status.PENDING, enum: Object.values(Status) }
+		}
 	},
 	{ timestamps: true }
 );
