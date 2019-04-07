@@ -21,7 +21,8 @@ import {
 	ShirtSize,
 	Status
 } from '../../shared/app.enums';
-import { isNotEmpty } from '../utils';
+
+const isNotEmpty = (obj: any, val: any) => val !== '' && val !== null && val !== undefined;
 
 export class ApplicationDto {
 	@IsNotEmpty({ message: 'Please provide a valid gender' })
