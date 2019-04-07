@@ -10,10 +10,16 @@ import {
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { User } from '../models/user';
-import { escapeRegEx } from '../utils';
+import { escapeRegEx, getUsersWithStatus } from '../utils';
+import { Inject } from 'typedi';
+import { EmailService } from '../services/email.service';
+import { Status } from '../../shared/app.enums';
+import { Globals } from '../models/globals';
 
 @JsonController('/api/admin')
 export class AdminController extends BaseController {
+	@Inject() private emailService: EmailService;
+
 	// TODO: Add tests
 	@Get('/users')
 	@Authorized([Role.ADMIN])
@@ -39,5 +45,32 @@ export class AdminController extends BaseController {
 		user.role = role;
 		await user.save();
 		return user;
+	}
+
+	// TODO: Add tests
+	@Post('/emails')
+	@Authorized([Role.ADMIN])
+	async sendMassEmails() {
+		const [accepted, rejected, waitlisted] = await Promise.all([
+			getUsersWithStatus(Status.ACCEPTED),
+			getUsersWithStatus(Status.REJECTED),
+			getUsersWithStatus(Status.WAITLIST)
+		]);
+
+		await Promise.all([
+			this.emailService.sendAcceptanceEmails(accepted),
+			this.emailService.sendRejectedEmails(rejected),
+			this.emailService.sendWaitlistedEmails(waitlisted)
+		]);
+
+		await Globals.findOneAndUpdate(
+			{},
+			{ emailsSent: new Date() },
+			{ upsert: true, setDefaultsOnInsert: true }
+		)
+			.lean()
+			.exec();
+
+		return { accepted, rejected, waitlisted };
 	}
 }
