@@ -112,7 +112,7 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
-		if (!error.response) throw error;
+		// if (!error.response) throw error;
 		dispatch(setUser(null));
 		dispatch(setToken(''));
 		removeCookie('token', ctx);
@@ -301,6 +301,25 @@ export const updateRole = async (email: string, role: Role, ctx?: IContext, para
 	}
 };
 
+export const sendMassEmails = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post(
+			`/admin/emails/`,
+			{},
+			{
+				params,
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
 // Globals Actions
 export const fetchGlobals = async (ctx?: IContext, params?) => {
 	try {
@@ -340,8 +359,7 @@ export const updateApplicationsStatus = async (
 	}
 };
 
-// TODO: Rename to something better
-export const updatePublicApplications = async (status: boolean, ctx?: IContext, params?) => {
+export const makePublicApplications = async (status: boolean, ctx?: IContext, params?) => {
 	try {
 		const token = getToken(ctx);
 		const {

@@ -1,27 +1,42 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import dynamic from 'next/dynamic';
-import { IContext, IStoreState } from '../../@types';
+import { IContext, IStoreState, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
+import { getOwnApplication } from '../../redux/actions';
+import { QRCode } from './QRCode';
+import { Status } from '../../../shared/app.enums';
 
-// @ts-ignore
-const QRCode = dynamic(() => import('qrcode.react'), { ssr: false });
+type Props = { email: string; application: IApplication };
 
-type Props = { email: string };
-
-const Profile = ({ email }: Props) => {
+const Profile = (props: Props) => {
+	const { email, application } = props;
 	return (
 		<div>
-			<h3>Profile Page</h3>
-			QR Code:
-			<br />
-			<QRCode value={email} />
+			<h2>Profile Page</h2>
+			<h4>Application Status:</h4>
+			{!application ? (
+				<div>You have not applied yet!</div>
+			) : application.statusPublic !== Status.ACCEPTED ? (
+				<div>{application.statusPublic}</div>
+			) : (
+				<div>
+					<b>{application.statusPublic}</b>
+					<h4>QR Code:</h4>
+					<QRCode email={email} />
+				</div>
+			)}
 		</div>
 	);
 };
 
 Profile.getInitialProps = async (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' })) return {};
+	let application: IApplication;
+	try {
+		application = await getOwnApplication(ctx);
+		// tslint:disable-next-line: no-empty
+	} catch {}
+	return { application };
 };
 
 export const ProfilePage = connect((state: IStoreState) => ({
