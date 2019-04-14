@@ -30,7 +30,6 @@ const Admin = ({ flashError, flashSuccess, clear }: Props) => {
 		const fetchData = async () => {
 			try {
 				const globals = await fetchGlobals(null);
-				console.log('Globals: ', globals);
 				setStatus(globals.applicationsStatus);
 				setPub(`${globals.applicationsPublic}`);
 			} catch (error) {
