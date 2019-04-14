@@ -38,10 +38,13 @@ export class LoginPage extends Component<Props> {
 		e.preventDefault();
 		try {
 			this.props.clear();
+			this.props.flashSuccess('Signing in...');
 			const { user } = await this.props.signin(this.state);
 			Router.push('/');
+			this.props.clear();
 			this.props.flashSuccess(`Welcome ${user.name}!`);
 		} catch (error) {
+			this.props.clear();
 			this.props.flashError(err(error));
 		}
 	};

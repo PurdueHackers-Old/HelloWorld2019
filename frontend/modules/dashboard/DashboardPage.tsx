@@ -6,24 +6,28 @@ import { err } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 import Link from 'next/link';
 
-type Props = {
-	stats: IStatsResponse;
-};
-
-export class DashboardPage extends Component<Props> {
+export class DashboardPage extends Component {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
-		try {
-			const stats = await getStats(ctx);
-			return { stats };
-		} catch (error) {
-			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);
-		}
 	};
 
-	state = { total: 0, pending: 0, accepted: 0, rejected: 0, waitlist: 0, ...this.props.stats };
+	constructor(props) {
+		super(props);
+		this.state = { loading: true };
+	}
+
+	componentDidMount = async () => {
+		try {
+			const stats = await getStats(null);
+			this.setState({ total: 0, pending: 0, accepted: 0, rejected: 0, waitlist: 0, ...stats, loading: false});
+		} catch {
+			this.setState({loading: false});
+		}
+	}
 
 	render() {
+		const { loading } = this.state;
+		if (loading) return <span>Loading...</span>
 		return (
 			<div>
 				<h3>Dashboard</h3>

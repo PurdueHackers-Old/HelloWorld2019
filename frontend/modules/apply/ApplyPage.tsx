@@ -25,8 +25,6 @@ import { Role } from '../../../shared/user.enums';
 
 type Props = {
 	user: IUser;
-	application: IApplication | null;
-	closed: boolean;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
@@ -40,38 +38,55 @@ type Props = {
 export class ApplyPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
+		const { user } = ctx.store.getState().sessionState;
+		return { user };
+	};
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			gender: Gender.MALE,
+			ethnicity: ethnicities[0],
+			classYear: ClassYear.FRESHMAN,
+			graduationYear: new Date().getFullYear() + 4,
+			major: Major.COMPUTER_SCIENCE,
+			referral: Referral.CLASS,
+			hackathons: 0,
+			shirtSize: ShirtSize.SMALL,
+			dietaryRestrictions: '',
+			website: '',
+			answer1: '',
+			answer2: '',
+			updatedAt: null,
+			statusPublic: null,
+			loading: true
+			// ...this.props.application
+		};
+	}
+
+	componentDidMount = async () => {
+		const { user, flashError } = this.props;
+
 		let application: IApplication;
 		let globals: IGlobals;
 		try {
-			application = await getOwnApplication(ctx);
-			globals = await fetchGlobals(ctx);
+			application = await getOwnApplication(null);
+			globals = await fetchGlobals(null);
 			// tslint:disable-next-line: no-empty
 		} catch {}
-		const { user } = ctx.store.getState().sessionState;
+
 		const closed =
 			user.role === Role.ADMIN
 				? false
 				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
-		return { application, closed };
-	};
-
-	state = {
-		gender: Gender.MALE,
-		ethnicity: ethnicities[0],
-		classYear: ClassYear.FRESHMAN,
-		graduationYear: new Date().getFullYear() + 4,
-		major: Major.COMPUTER_SCIENCE,
-		referral: Referral.CLASS,
-		hackathons: 0,
-		shirtSize: ShirtSize.SMALL,
-		dietaryRestrictions: '',
-		website: '',
-		answer1: '',
-		answer2: '',
-		updatedAt: null,
-		statusPublic: null,
-		...this.props.application
-	};
+				
+		this.setState({
+			...this.state,
+			...application,
+			closed,
+			loading: false
+		})
+	}
 
 	onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
 		this.setState({ [e.target.name]: e.target.value });
@@ -84,43 +99,49 @@ export class ApplyPage extends Component<Props> {
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
+			flashSuccess('Submitting application...');
 			await sendApplication(this.state);
+			clear();
 			flashSuccess('Application successful!');
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};
 
 	render() {
+		const { updatedAt, statusPublic, closed, loading} = this.state;
+		if (loading) return <span>Loading...</span>
+
 		return (
 			<div>
 				<h3>Apply Page</h3>
 				<br />
-				{this.state.updatedAt && (
+				{updatedAt && (
 					<>
 						<br />
 						<div>
 							Last Updated:
 							<br />
-							{formatDate(this.state.updatedAt)}
+							{formatDate(updatedAt)}
 						</div>
 						<br />
 					</>
 				)}
-				{this.state.statusPublic && (
+				{statusPublic && (
 					<>
 						<div>
 							Status:
 							<br />
-							{this.state.statusPublic}
+							{statusPublic}
 						</div>
 						<br />
 					</>
 				)}
-				{this.props.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
+				{closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
 				<ApplicationForm
 					{...this.state}
-					disabled={this.props.closed}
+					disabled={closed}
 					user={this.props.user}
 					onChange={this.onChange}
 					onSelect={this.onSelect}

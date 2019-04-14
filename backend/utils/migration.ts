@@ -52,6 +52,14 @@ const start = async () => {
 			)
 		);
 
+		const admin = await authController.signup('admin', 'admin', {
+			name: 'admin',
+			email: 'admin@purdue.edu',
+			password: 'admin',
+			passwordConfirm: 'admin',
+			role: Role.ADMIN
+		} as any);
+
 		const applications = await Promise.all(
 			users.map(u => userController.apply(u.user._id, generateApplication() as any, u.user))
 		);
