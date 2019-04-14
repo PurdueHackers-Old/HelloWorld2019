@@ -16,7 +16,6 @@ const Profile = (props: Props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const ownApplication = await getOwnApplication(null);
-			console.log(ownApplication);
 			setApplication(ownApplication);
 
 			setLoading(false);
