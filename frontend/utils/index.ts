@@ -15,7 +15,7 @@ export const err = e =>
 		? e.error
 		: 'Whoops, something went wrong!';
 
-const dateToString = (date: string) =>
+const dateToString = (date: string | number | Date) =>
 	new Date(date).toLocaleDateString('en-US', {
 		month: 'short',
 		day: 'numeric',
@@ -25,7 +25,7 @@ const dateToString = (date: string) =>
 		timeZone: 'America/Indiana/Indianapolis'
 	});
 
-export const formatDate = (date: string) => {
+export const formatDate = (date: string | number | Date) => {
 	if (!date) return 'N/A';
 	const str = dateToString(date);
 	return str !== 'Invalid Date' ? str : 'N/A';

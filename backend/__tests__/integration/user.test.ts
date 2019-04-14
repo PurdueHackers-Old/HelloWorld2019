@@ -356,7 +356,7 @@ describe('Suite: /api/users -- Integration', () => {
 
 		it('Fails to create an application because applications are closed', async () => {
 			const globalsController = new GlobalsController();
-			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
+			await globalsController.updateApplicationsStatus(ApplicationsStatus.CLOSED);
 
 			const app = generateApplication();
 			const {
@@ -384,7 +384,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -428,7 +427,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(response).toHaveProperty('_id');
 			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -465,7 +463,7 @@ describe('Suite: /api/users -- Integration', () => {
 				{ new: true }
 			).exec();
 
-			await globalsController.updateStatus(ApplicationsStatus.CLOSED);
+			await globalsController.updateApplicationsStatus(ApplicationsStatus.CLOSED);
 
 			const app = generateApplication();
 			const {
@@ -480,7 +478,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(response).toHaveProperty('_id');
 			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -519,7 +516,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -551,7 +547,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -595,7 +590,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(response).toHaveProperty('_id');
 			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -656,7 +650,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(status).toEqual(200);
 			expect(response).toHaveProperty('_id');
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -709,7 +702,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(response).toHaveProperty('_id');
 			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,
@@ -762,7 +754,6 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(response).toHaveProperty('_id');
 			expect(response.statusInternal).toEqual(Status.PENDING);
 			expect(response.statusPublic).toEqual(Status.PENDING);
-			expect(response.emailSent).toEqual(false);
 			expect(response).toEqual(
 				expect.objectContaining({
 					gender: app.gender,

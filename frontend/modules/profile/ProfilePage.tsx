@@ -4,6 +4,7 @@ import { IContext, IStoreState, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { getOwnApplication } from '../../redux/actions';
 import { QRCode } from './QRCode';
+import { Status } from '../../../shared/app.enums';
 
 type Props = { email: string };
 
@@ -29,14 +30,16 @@ const Profile = (props: Props) => {
 		<div>
 			<h2>Profile Page</h2>
 			<h4>Application Status:</h4>
-			{application ? (
+			{!application ? (
+				<div>You have not applied yet!</div>
+			) : application.statusPublic !== Status.ACCEPTED ? (
+				<div>{application.statusPublic}</div>
+			) : (
 				<div>
 					<b>{application.statusPublic}</b>
 					<h4>QR Code:</h4>
 					<QRCode email={email} />
 				</div>
-			) : (
-				<div>You have not applied yet!</div>
 			)}
 		</div>
 	);

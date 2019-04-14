@@ -62,7 +62,6 @@ export class UserController extends BaseController {
 		if (hasPermission(currentUser, Role.EXEC)) appQuery.select('+statusInternal');
 
 		const application = await appQuery.exec();
-		console.log('Fetched application:', application);
 		return application;
 	}
 
