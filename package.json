@@ -99,6 +99,7 @@
 		"enzyme": "^3.8.0",
 		"enzyme-adapter-react-16": "^1.8.0",
 		"faker": "^4.1.0",
+		"file-loader": "^3.0.1",
 		"fork-ts-checker-webpack-plugin": "^0.5.2",
 		"jest": "^23.6.0",
 		"jest-environment-node": "^24.0.0",
