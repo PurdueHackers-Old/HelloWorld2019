@@ -37,10 +37,13 @@ export class ResetPasswordPage extends Component<Props> {
 		try {
 			clear();
 			const token = this.props.router.query.token as string;
+			flashSuccess('Resetting password...');
 			const response = await resetPassword(password, passwordConfirm, token);
 			Router.push('/login');
+			clear();
 			return flashSuccess(response);
 		} catch (error) {
+			this.props.clear();
 			console.error('EditProfile Page error:', error);
 			return flashError(err(error));
 		}

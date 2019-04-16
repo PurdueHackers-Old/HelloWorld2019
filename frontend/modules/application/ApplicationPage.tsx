@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
 
 type Props = {
-	application: IApplication;
+	id: string;
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
@@ -37,19 +37,35 @@ export class ApplicationPage extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
 		try {
-			const application = await getApplication(ctx.query.id as string, ctx);
+			const id = ctx.query.id as string;
 			const user = extractUser(ctx);
-			return { application, user };
+			return { user, id };
 		} catch (error) {
 			redirect('/applications', ctx, true);
 			sendErrorMessage(err(error), ctx)(ctx.store.dispatch);
 		}
 	};
 
-	state = {
-		...this.props.application,
-		status: this.props.application.statusInternal
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: true
+		};
+	}
+
+	componentDidMount = async () => {
+		const { id } = this.props;
+		const application: IApplication = await getApplication(id, null);
+		this.setState({
+			loading: false,
+			...application,
+			status: application.statusInternal
+		})
+	}
+	// state = {
+	// 	...this.props.application,
+	// 	status: this.props.application.statusInternal
+	// };
 
 	onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
 		this.setState({ [e.target.name]: e.target.value });
@@ -73,19 +89,25 @@ export class ApplicationPage extends Component<Props> {
 
 	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { flashError, flashSuccess, clear, application } = this.props;
+		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
-			await sendApplication(this.state, null, application.user._id);
+			flashSuccess('Updating application...');
+			await sendApplication(this.state, null, this.state.user._id);
+			clear();
 			return flashSuccess('Application successful!');
 		} catch (error) {
+			clear();
 			return flashError(err(error));
 		}
 	};
 
 	render() {
-		const { application, user } = this.props;
-		const disabled = !userMatches(user, application.user._id);
+		const { loading } = this.state;
+		if (loading) return <span>...Loading</span>
+
+		const { user } = this.props;
+		const disabled = !userMatches(user, this.state.user._id);
 		return (
 			<div>
 				<h3>Application Page</h3>
