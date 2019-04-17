@@ -12,7 +12,7 @@ const res: IResourcePage[] = [
           "https://purduehackers.gitbook.io/tutorials/workshops/nodejs-workshop"
       },
     ],
-    image: "../../static/images/nodejslogo.png",
+    image: "static/images/nodejslogo.png",
   },
   {
     name: "SIG Apps",
@@ -22,7 +22,7 @@ const res: IResourcePage[] = [
         link: "https://vidia.gitbooks.io/hello-android/content/building/adding_text_input.html"
       }
     ],
-    image: "../../static/images/android.png"
+    image: "static/images/android.png"
   },
   {
     name: "Backend / Database",
@@ -32,7 +32,7 @@ const res: IResourcePage[] = [
         link: "https://nodejs.org/en/"
       }
     ],
-    image: "../../static/images/express-node-mongo.png"
+    image: "static/images/express-node-mongo.png"
   },
   {
     name: "Purdue WebDev Club",
@@ -46,7 +46,7 @@ const res: IResourcePage[] = [
         link: "https://maneesht.gitbooks.io/hello-spotify/content/"
       }
     ],
-    image: "../../static/images/webDevClub.png"
+    image: "static/images/webDevClub.png"
   },
   {
     name: "Purdue Hackers",
@@ -56,7 +56,7 @@ const res: IResourcePage[] = [
         link: "https://purduehackers.gitbook.io/tutorials/workshops/react-workshop"
       }
     ],
-    image: "../../static/images/logo.svg"
+    image: "static/images/logo.svg"
   },
   {
     name: "iOS Dev Club",
@@ -66,7 +66,7 @@ const res: IResourcePage[] = [
         link: "https://nodejs.org/en/"
       }
     ],
-    image: "../../static/images/iOS.jpg"
+    image: "static/images/iOS.jpg"
   },
   // {
   //   name: "res4",
