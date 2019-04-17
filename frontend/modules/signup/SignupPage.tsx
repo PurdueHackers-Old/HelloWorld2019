@@ -39,10 +39,13 @@ export class SignupPage extends Component<Props> {
 		e.preventDefault();
 		try {
 			this.props.clear();
+			this.props.flashSuccess('Signing up...');
 			const { user } = await this.props.signup(this.state);
 			Router.push('/');
+			this.props.clear();
 			this.props.flashSuccess(`Welcome ${user.name}!`);
 		} catch (error) {
+			this.props.clear();
 			this.props.flashError(err(error));
 		}
 	};

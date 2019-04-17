@@ -35,9 +35,9 @@ export const ApplicationsTable = ({
 			onFilteredChange={onFilter}
 			filterable
 			onFetchData={onFetchData}
-			getTdProps={(state, rowInfo) => {
+			getTdProps={(state, rowInfo, column) => {
 				return {
-					onClick: onClick(rowInfo),
+					onClick: onClick(rowInfo, column),
 					style: {
 						display: 'flex',
 						flexDirection: 'column',
