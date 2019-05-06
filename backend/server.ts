@@ -10,21 +10,11 @@ import * as helmet from 'helmet';
 import * as yes from 'yes-https';
 import * as next from 'next';
 import { join } from 'path';
-import {
-	useExpressServer,
-	useContainer,
-	getMetadataArgsStorage,
-	RoutingControllersOptions
-} from 'routing-controllers';
+import { useExpressServer, useContainer, getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import {
-	getFromContainer,
-	IsOptional,
-	IsString,
-	MaxLength,
-	MetadataStorage
-} from 'class-validator';
+import { getFromContainer, MetadataStorage } from 'class-validator';
+import * as swaggerUI from 'swagger-ui-express';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
 import CONFIG from './config';
@@ -135,8 +125,14 @@ export default class Server {
 
 		this.spec = routingControllersToSpec(storage, routingControllerOptions, {
 			components: { schemas },
-			info: { title: 'Hello World', version: '0.0.1' }
+			info: { title: 'Hello World', version: '0.0.1' },
+			security: [
+				{
+					bearerAuth: []
+				}
+			]
 		});
-		console.log(this.spec);
+		this.app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(this.spec));
+		// console.log(this.spec);
 	}
 }

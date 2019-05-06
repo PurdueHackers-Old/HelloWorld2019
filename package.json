@@ -60,6 +60,7 @@
 		"redux-thunk": "^2.3.0",
 		"routing-controllers": "^0.7.7",
 		"routing-controllers-openapi": "^1.7.0",
+		"swagger-ui-express": "^4.0.2",
 		"typedi": "^0.8.0",
 		"winston": "3.1.0",
 		"yes-https": "^0.0.4"
@@ -95,6 +96,7 @@
 		"@types/redux-logger": "^3.0.6",
 		"@types/redux-thunk": "^2.1.0",
 		"@types/supertest": "^2.0.7",
+		"@types/swagger-ui-express": "^3.0.0",
 		"@zeit/next-css": "^1.0.1",
 		"@zeit/next-less": "^1.0.1",
 		"@zeit/next-typescript": "^1.1.1",
