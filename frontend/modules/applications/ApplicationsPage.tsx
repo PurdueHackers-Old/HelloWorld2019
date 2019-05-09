@@ -46,6 +46,18 @@ export class ApplicationsPage extends Component<Props> {
 			clear();
 			this.setState({ loading: true });
 			const response = await getApplications(null, params);
+			console.log(response);
+
+			// // Set the resume field of every application to be yes or no based on wether it's null
+			// response.applications.map(application => {
+			// 	console.log('Application: ', application);
+			// 	if (application.hasOwnProperty('resume')  application.resume !== 'no') {
+			// 		application.resume = 'yes';
+			// 	} else {
+			// 		application.resume = 'no';
+			// 	}
+			// });
+
 			this.setState({ loading: false, ...response });
 		} catch (error) {
 			this.setState({ loading: false });
@@ -67,8 +79,9 @@ export class ApplicationsPage extends Component<Props> {
 		this.fetch(params);
 	};
 
-	onClick = (rowInfo: RowInfo) => () => {
-		if (rowInfo && rowInfo.original) Router.push(`/application?id=${rowInfo.original._id}`);
+	onClick = (rowInfo: RowInfo, column) => () => {
+		if (rowInfo && rowInfo.original && column.Header !== 'Status')
+			Router.push(`/application?id=${rowInfo.original._id}`);
 	};
 
 	onFilter = filtered => (this.filtered = filtered);
