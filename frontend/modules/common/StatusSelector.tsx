@@ -13,9 +13,9 @@ import { Status } from '../../../shared/app.enums';
 
 type Props = {
 	application: IApplication;
-	flashError: (msg: string, ctx?: IContext) => void;
-	flashSuccess: (msg: string, ctx?: IContext) => void;
-	clear: (ctx?: IContext) => void;
+	flashError?: (msg: string, ctx?: IContext) => void;
+	flashSuccess?: (msg: string, ctx?: IContext) => void;
+	clear?: (ctx?: IContext) => void;
 };
 
 @((connect as any)(null, {
