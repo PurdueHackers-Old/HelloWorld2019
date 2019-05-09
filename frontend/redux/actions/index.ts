@@ -8,7 +8,8 @@ import {
 	IContext,
 	IApplication,
 	IUser,
-	IGlobals
+	IGlobals,
+	IStatsResponse
 } from '../../@types';
 import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
@@ -222,7 +223,8 @@ export const getStats = async (ctx?: IContext) => {
 		} = await api.get(`/applications/stats`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		return response;
+		const stats: IStatsResponse = response;
+		return stats;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
