@@ -9,7 +9,7 @@ type Props = {
 	pagination: { pageSize: number; page: number; pages: number };
 	loading: boolean;
 	filtered: any[];
-	onClick: (rowInfo: RowInfo) => () => void;
+	onClick: (rowInfo: RowInfo, column: any) => () => void;
 	onFetchData: (state: any, instance: any) => void;
 	onFilter: (filtered: any) => void;
 };
