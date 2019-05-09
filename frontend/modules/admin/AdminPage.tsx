@@ -40,7 +40,7 @@ const Admin = ({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const globals = await fetchGlobals(null);
+				const globals = await fetchGlobals();
 				setStatus(globals.applicationsStatus);
 				setPub(`${globals.applicationsPublic}`);
 			} catch (error) {
@@ -85,7 +85,6 @@ const Admin = ({
 		}
 	};
 
-	if (loading) return <span>Loading...</span>;
 	const onSendMassEmails = async () => {
 		try {
 			const shouldSendEmails = confirm('Are you sure you want to send mass emails?');
@@ -97,6 +96,8 @@ const Admin = ({
 			flashError(err(error));
 		}
 	};
+	
+	if (loading) return <span>Loading...</span>;
 
 	return (
 		<div>
