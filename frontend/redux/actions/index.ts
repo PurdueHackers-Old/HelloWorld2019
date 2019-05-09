@@ -7,7 +7,8 @@ import {
 	ILoginResponse,
 	IContext,
 	IApplication,
-	IUser
+	IUser,
+	IGlobals
 } from '../../@types';
 import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
@@ -330,7 +331,8 @@ export const fetchGlobals = async (ctx?: IContext, params?) => {
 			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		return response;
+		const globals: IGlobals = response;
+		return globals;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
