@@ -24,17 +24,14 @@ type Props = {
 	clear: clearFlashMessages
 }))
 export class StatusSelector extends Component<Props> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			loading: true,
-			status: this.props.application.statusInternal
-		};
-	}
+	state = {
+		loading: true,
+		status: this.props.application.statusInternal
+	};
 
 	onSelect = async (e: ChangeEvent<HTMLSelectElement>) => {
 		const { application } = this.props;
-		const status = e.target.value;
+		const status = e.target.value as Status;
 
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
