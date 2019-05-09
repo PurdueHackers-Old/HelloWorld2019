@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getConfig from 'next/config';
+import { IContext } from '../@types';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
 export const api = axios.create({
@@ -30,3 +31,5 @@ export const formatDate = (date: string | number | Date) => {
 	const str = dateToString(date);
 	return str !== 'Invalid Date' ? str : 'N/A';
 };
+
+export const endResponse = (ctx: IContext) => ctx && ctx.res && ctx.res.end();
