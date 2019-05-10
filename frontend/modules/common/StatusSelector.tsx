@@ -13,9 +13,9 @@ import { Status } from '../../../shared/app.enums';
 
 type Props = {
 	application: IApplication;
-	flashError: (msg: string, ctx?: IContext) => void;
-	flashSuccess: (msg: string, ctx?: IContext) => void;
-	clear: (ctx?: IContext) => void;
+	flashError?: (msg: string, ctx?: IContext) => void;
+	flashSuccess?: (msg: string, ctx?: IContext) => void;
+	clear?: (ctx?: IContext) => void;
 };
 
 @((connect as any)(null, {
@@ -24,17 +24,14 @@ type Props = {
 	clear: clearFlashMessages
 }))
 export class StatusSelector extends Component<Props> {
-	constructor(props) {
-		super(props);
-		this.state = {
-			loading: true,
-			status: this.props.application.statusInternal
-		};
-	}
+	state = {
+		loading: true,
+		status: this.props.application.statusInternal
+	};
 
 	onSelect = async (e: ChangeEvent<HTMLSelectElement>) => {
 		const { application } = this.props;
-		const status = e.target.value;
+		const status = e.target.value as Status;
 
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
