@@ -26,9 +26,10 @@
 			"name": "Attach to Docker",
 			// "preLaunchTask": "tsc-watch",
 			"port": 9229,
-			"protocol": "inspector",
-			// "restart": true,
+			"restart": true,
+			"address": "0.0.0.0",
 			"localRoot": "${workspaceFolder}",
+			// "localRoot": "${workspaceFolder}",
 			"remoteRoot": "/usr/app",
 			"skipFiles": [
 				"<node_internals>/**/*.js",
