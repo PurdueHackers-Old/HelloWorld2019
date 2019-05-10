@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent } from 'react';
+import React, { Component, FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import {
@@ -18,45 +18,42 @@ type Props = {
 	clear: (ctx?: IContext) => void;
 };
 
-@((connect as any)(null, {
-	signup: signUp,
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-export class SignupPage extends Component<Props> {
-	state = {
-		name: '',
-		email: '',
-		password: '',
-		passwordConfirm: ''
-	};
+const Signup = ({ signup, flashError, flashSuccess, clear }: Props) => {
+	const [state, setState] = useState({ name: '', email: '', password: '', passwordConfirm: '' });
 
-	onChange = (e: ChangeEvent<HTMLInputElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+	const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+		setState({ ...state, [e.target.name]: e.target.value });
 
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			this.props.clear();
-			this.props.flashSuccess('Signing up...');
-			const { user } = await this.props.signup(this.state);
+			clear();
+			flashSuccess('Signing up...');
+			const { user } = await signup(state);
 			Router.push('/');
-			this.props.clear();
-			this.props.flashSuccess(`Welcome ${user.name}!`);
+			clear();
+			flashSuccess(`Welcome ${user.name}!`);
 		} catch (error) {
-			this.props.clear();
-			this.props.flashError(err(error));
+			clear();
+			flashError(err(error));
 		}
 	};
 
-	render() {
-		return (
-			<div>
-				<h3>Signup Page</h3>
-				<br />
-				<SignupForm onSubmit={this.onSubmit} onChange={this.onChange} {...this.state} />
-			</div>
-		);
+	return (
+		<div>
+			<h3>Signup Page</h3>
+			<br />
+			<SignupForm onSubmit={onSubmit} onChange={onChange} {...state} />
+		</div>
+	);
+};
+
+export const SignupPage = connect(
+	null,
+	{
+		signup: signUp,
+		flashError: sendErrorMessage,
+		flashSuccess: sendSuccessMessage,
+		clear: clearFlashMessages
 	}
-}
+)(Signup);
