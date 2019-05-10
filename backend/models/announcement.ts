@@ -23,11 +23,6 @@ export class AnnouncementDto {
 	@IsNotEmpty({ message: 'Please provide a type for the announcement' })
 	@IsEnum(AnnouncementType, { message: 'Please provide a valid announcement type' })
 	type: AnnouncementType;
-
-	@Type(() => Date)
-	@IsNotEmpty({ message: 'Please provide a valid release date' })
-	@IsDate({ message: 'Please provide a date object.' })
-	releaseAt: Date;
 }
 
 export interface IAnnouncementModel extends AnnouncementDto, Document {
@@ -52,7 +47,6 @@ const schema = new Schema(
 			select: false
 		},
 		released: Boolean,
-		releaseAt: Date
 	},
 	{ timestamps: true }
 );

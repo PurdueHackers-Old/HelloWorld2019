@@ -74,6 +74,7 @@ data/
 .next/
 
 .DS_Store
+.idea
 
 # Google Calendar
 credentials.json
