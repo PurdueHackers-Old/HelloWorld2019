@@ -5,6 +5,7 @@
 	"main": "dist/backend/index.js",
 	"scripts": {
 		"dev": "nodemon backend/index.ts",
+		"dev:debug": "nodemon --inspect=0.0.0.0:9229 backend/index.ts",
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
