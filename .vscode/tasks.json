@@ -18,12 +18,17 @@
 		},
 		{
 			"label": "build",
-			"group": {
-				"kind": "build",
-				"isDefault": true
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
 			},
-			"dependsOn": ["build:server", "build:client"],
-			"problemMatcher": []
+			"problemMatcher": ["$tsc"]
 		},
 		{
 			"label": "build:server",
@@ -57,7 +62,6 @@
 			"label": "docker-compose:up",
 			"type": "shell",
 			"command": "docker-compose up",
-			"group": "test",
 			"presentation": {
 				"reveal": "always",
 				"panel": "shared",
@@ -69,7 +73,6 @@
 			"label": "docker-compose:down",
 			"type": "shell",
 			"command": "docker-compose down",
-			"group": "test",
 			"presentation": {
 				"reveal": "always",
 				"panel": "shared",
@@ -81,7 +84,6 @@
 			"label": "docker-compose:restart",
 			"type": "shell",
 			"command": "docker-compose restart",
-			"group": "test",
 			"presentation": {
 				"reveal": "always",
 				"panel": "shared",
@@ -93,7 +95,6 @@
 			"label": "docker-compose:build",
 			"type": "shell",
 			"command": "docker-compose build",
-			"group": "test",
 			"presentation": {
 				"reveal": "always",
 				"panel": "shared",
@@ -105,7 +106,6 @@
 			"label": "docker-compose:clean",
 			"type": "shell",
 			"command": "docker system prune -f && docker-compose down --rmi all",
-			"group": "test",
 			"presentation": {
 				"reveal": "always",
 				"panel": "shared",

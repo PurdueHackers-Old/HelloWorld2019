@@ -1,5 +1,5 @@
 import React from 'react';
-import Table, { RowInfo } from 'react-table';
+import Table, { RowInfo, Column, Filter } from 'react-table';
 import { IApplication } from '../../@types';
 import { columns } from './columns';
 import 'react-table/react-table.css';
@@ -8,8 +8,8 @@ type Props = {
 	applications: IApplication[];
 	pagination: { pageSize: number; page: number; pages: number };
 	loading: boolean;
-	filtered: any[];
-	onClick: (rowInfo: RowInfo) => () => void;
+	filtered: Filter[];
+	onClick: (rowInfo: RowInfo, column: Column<IApplication>) => () => void;
 	onFetchData: (state: any, instance: any) => void;
 	onFilter: (filtered: any) => void;
 };
@@ -35,9 +35,9 @@ export const ApplicationsTable = ({
 			onFilteredChange={onFilter}
 			filterable
 			onFetchData={onFetchData}
-			getTdProps={(state, rowInfo) => {
+			getTdProps={(state, rowInfo, column) => {
 				return {
-					onClick: onClick(rowInfo),
+					onClick: onClick(rowInfo, column),
 					style: {
 						display: 'flex',
 						flexDirection: 'column',

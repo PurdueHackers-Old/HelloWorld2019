@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { IContext } from '../../@types';
 import { connect } from 'react-redux';
 import {
@@ -18,44 +18,36 @@ type Props = {
 	clear: (ctx?: IContext) => void;
 } & WithRouterProps;
 
-@((connect as any)(null, {
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-@(withRouter as any)
-export class ResetPasswordPage extends Component<Props> {
-	state = { password: '', passwordConfirm: '' };
+const ResetPassword = ({ token, flashError, flashSuccess, clear }: Props) => {
+	const [state, setState] = useState({ password: '', passwordConfirm: '' });
 
-	onChange = (e: ChangeEvent<HTMLInputElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+	const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+		setState({ ...state, [e.target.name]: e.target.value });
 
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { password, passwordConfirm } = this.state;
-		const { flashSuccess, flashError, clear } = this.props;
 		try {
 			clear();
-			const token = this.props.router.query.token as string;
-			const response = await resetPassword(password, passwordConfirm, token);
+			flashSuccess('Resetting password...');
+			const response = await resetPassword(state.password, state.passwordConfirm, token);
 			Router.push('/login');
-			return flashSuccess(response);
+			clear();
+			flashSuccess(response);
 		} catch (error) {
-			console.error('EditProfile Page error:', error);
-			return flashError(err(error));
+			clear();
+			flashError(err(error));
 		}
 	};
 
-	render() {
-		return (
-			<div>
-				<h3>Reset Your Password</h3>
-				<ResetPasswordForm
-					{...this.state}
-					onChange={this.onChange}
-					onSubmit={this.onSubmit}
-				/>
-			</div>
-		);
-	}
-}
+	return (
+		<div>
+			<h3>Reset Your Password</h3>
+			<ResetPasswordForm {...state} onChange={onChange} onSubmit={onSubmit} />
+		</div>
+	);
+};
+
+export const ResetPasswordPage = connect(
+	null,
+	{ flashError: sendErrorMessage, flashSuccess: sendSuccessMessage, clear: clearFlashMessages }
+)(withRouter(ResetPassword));
