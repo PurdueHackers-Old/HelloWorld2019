@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import {
 	sendErrorMessage,
 	getApplication,
@@ -100,7 +100,8 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 };
 
 AppPage.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
+
 	try {
 		const application = await getApplication(ctx.query.id as string, ctx);
 		const user = extractUser(ctx);

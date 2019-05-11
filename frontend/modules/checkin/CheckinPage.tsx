@@ -9,7 +9,7 @@ import {
 	sendSuccessMessage,
 	clearFlashMessages
 } from '../../redux/actions';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 
@@ -75,7 +75,7 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 };
 
 Checkin.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const CheckinPage = connect(

@@ -5,6 +5,7 @@ import { redirectIfNotAuthenticated } from '../../utils/session';
 import { getOwnApplication } from '../../redux/actions';
 import { QRCode } from './QRCode';
 import { Status } from '../../../shared/app.enums';
+import { endResponse } from '../../utils';
 
 type Props = { email: string };
 
@@ -46,7 +47,8 @@ const Profile = (props: Props) => {
 };
 
 Profile.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' }))
+		return endResponse(ctx);
 };
 
 export const ProfilePage = connect((state: IStoreState) => ({

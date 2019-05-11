@@ -13,7 +13,7 @@ import {
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 
 type Props = {
@@ -96,7 +96,7 @@ const Admin = ({
 			flashError(err(error));
 		}
 	};
-	
+
 	if (loading) return <span>Loading...</span>;
 
 	return (
@@ -137,7 +137,7 @@ const Admin = ({
 };
 
 Admin.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 
 export const AdminPage = connect(
