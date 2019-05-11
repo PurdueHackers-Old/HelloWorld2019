@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { sendErrorMessage, getStats } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 
 type Props = { flashError: (msg: string, ctx?: IContext) => void };
@@ -69,7 +69,7 @@ export const Dashboard = ({ flashError }: Props) => {
 };
 
 Dashboard.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const DashboardPage = connect(

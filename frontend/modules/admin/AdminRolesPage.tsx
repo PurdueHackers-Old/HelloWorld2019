@@ -10,7 +10,7 @@ import {
 	updateRole,
 	getUsers
 } from '../../redux/actions';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 
 type Props = {
 	flashError: (msg: string, ctx?: IContext) => void;
@@ -79,7 +79,7 @@ const AdminRoles = ({ flashError, flashSuccess, clear }: Props) => {
 };
 
 AdminRoles.getInitialProps = (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 
 export const AdminRolesPage = connect(

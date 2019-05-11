@@ -18,7 +18,7 @@ import {
 	Referral,
 	ShirtSize
 } from '../../../shared/app.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
@@ -52,19 +52,24 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 
 	// Populate application fields on initial load
 	useEffect(() => {
-		Promise.all([getOwnApplication(), fetchGlobals()]).then(([application, globals]) => {
-			const closed =
-				user.role === Role.ADMIN
-					? false
-					: globals.applicationsStatus === ApplicationsStatus.CLOSED;
+		Promise.all([getOwnApplication(), fetchGlobals()])
+			.then(([application, globals]) => {
+				const closed =
+					user.role === Role.ADMIN
+						? false
+						: globals.applicationsStatus === ApplicationsStatus.CLOSED;
 
-			setState(prev => ({
-				...prev,
-				...application,
-				closed,
-				loading: false
-			}));
-		});
+				setState(prev => ({
+					...prev,
+					...application,
+					closed,
+					loading: false
+				}));
+			})
+			.catch(error => {
+				clear();
+				flashError(err(error));
+			});
 	}, []);
 
 	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -128,7 +133,9 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' }))
+		return endResponse(ctx);
+
 	const { user } = ctx.store.getState().sessionState;
 	return { user };
 };

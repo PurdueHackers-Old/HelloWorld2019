@@ -8,7 +8,7 @@ import {
 } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsTable } from './ApplicationsTable';
 import { RowInfo, Column, Filter } from 'react-table';
@@ -77,7 +77,7 @@ const AppsPage = ({ flashError, clear }: Props) => {
 };
 
 AppsPage.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const ApplicationsPage = connect(

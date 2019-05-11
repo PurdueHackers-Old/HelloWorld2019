@@ -14,7 +14,9 @@
 				"focus": false,
 				"panel": "shared"
 			},
-			"problemMatcher": ["$tsc-watch"]
+			"problemMatcher": [
+				"$tsc-watch"
+			]
 		},
 		{
 			"label": "build",
@@ -28,7 +30,9 @@
 				"focus": false,
 				"panel": "shared"
 			},
-			"problemMatcher": ["$tsc"]
+			"problemMatcher": [
+				"$tsc"
+			]
 		},
 		{
 			"label": "build:server",
@@ -42,7 +46,9 @@
 				"focus": false,
 				"panel": "shared"
 			},
-			"problemMatcher": ["$tsc-watch"]
+			"problemMatcher": [
+				"$tsc-watch"
+			]
 		},
 		{
 			"label": "build:client",
@@ -56,7 +62,10 @@
 				"focus": false,
 				"panel": "shared"
 			},
-			"problemMatcher": ["$eslint-compact", "$eslint-stylish"]
+			"problemMatcher": [
+				"$eslint-compact",
+				"$eslint-stylish"
+			]
 		},
 		{
 			"label": "docker-compose:up",
@@ -67,7 +76,10 @@
 				"panel": "shared",
 				"focus": false,
 				"echo": true
-			}
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
 		},
 		{
 			"label": "docker-compose:down",
