@@ -4,7 +4,6 @@ import 'express-async-errors';
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
 import * as mongoose from 'mongoose';
-import * as passport from 'passport';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import * as yes from 'yes-https';
@@ -18,7 +17,6 @@ import * as swaggerUI from 'swagger-ui-express';
 import { Container } from 'typedi';
 import { Logger } from 'winston';
 import CONFIG from './config';
-import passportMiddleWare, { extractUser } from './middleware/passport';
 import { globalError } from './middleware/globalError';
 import { SuccessInterceptor } from './interceptors/success.interceptor';
 import { currentUserChecker, authorizationChecker } from './middleware/authentication';
@@ -94,9 +92,7 @@ export default class Server {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(cookieParser());
-		this.app.use(passportMiddleWare(passport).initialize());
 		this.app.use(cors());
-		this.app.use(extractUser());
 		this.app.use(multer.any());
 	}
 
