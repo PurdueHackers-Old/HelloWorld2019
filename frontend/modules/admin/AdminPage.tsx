@@ -13,7 +13,7 @@ import {
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 
 type Props = {
@@ -40,7 +40,7 @@ const Admin = ({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const globals = await fetchGlobals(null);
+				const globals = await fetchGlobals();
 				setStatus(globals.applicationsStatus);
 				setPub(`${globals.applicationsPublic}`);
 			} catch (error) {
@@ -85,7 +85,6 @@ const Admin = ({
 		}
 	};
 
-	if (loading) return <span>Loading...</span>;
 	const onSendMassEmails = async () => {
 		try {
 			const shouldSendEmails = confirm('Are you sure you want to send mass emails?');
@@ -97,6 +96,8 @@ const Admin = ({
 			flashError(err(error));
 		}
 	};
+
+	if (loading) return <span>Loading...</span>;
 
 	return (
 		<div>
@@ -136,7 +137,7 @@ const Admin = ({
 };
 
 Admin.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 
 export const AdminPage = connect(

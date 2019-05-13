@@ -59,6 +59,17 @@ describe('Suite: /api/auth -- Integration', () => {
 			expect(error).toEqual('Please provide a valid email address');
 		});
 
+		it('Fails because not @purdue.edu email', async () => {
+			const newUser = generateUser();
+			newUser.email = 'me@example.com';
+			const {
+				body: { error },
+				status
+			} = await request.post('/api/auth/signup').send(newUser);
+			expect(status).toEqual(400);
+			expect(error).toEqual('You must register with a @purdue.edu email');
+		});
+
 		it('Fails because password is too short', async () => {
 			const newUser = generateUser();
 			newUser.password = '123';

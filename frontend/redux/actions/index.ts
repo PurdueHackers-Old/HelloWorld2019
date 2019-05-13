@@ -7,7 +7,9 @@ import {
 	ILoginResponse,
 	IContext,
 	IApplication,
-	IUser
+	IUser,
+	IGlobals,
+	IStatsResponse
 } from '../../@types';
 import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
@@ -221,7 +223,8 @@ export const getStats = async (ctx?: IContext) => {
 		} = await api.get(`/applications/stats`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		return response;
+		const stats: IStatsResponse = response;
+		return stats;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
@@ -330,7 +333,8 @@ export const fetchGlobals = async (ctx?: IContext, params?) => {
 			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		return response;
+		const globals: IGlobals = response;
+		return globals;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
