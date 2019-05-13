@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent } from 'react';
+import React, { Component, FormEvent, ChangeEvent, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
@@ -18,44 +18,20 @@ import {
 	Referral,
 	ShirtSize
 } from '../../../shared/app.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
 
 type Props = {
 	user: IUser;
-	application: IApplication | null;
-	closed: boolean;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 };
 
-@((connect as any)((state: IStoreState) => ({ user: state.sessionState.user }), {
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-export class ApplyPage extends Component<Props> {
-	static getInitialProps = async (ctx: IContext) => {
-		if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
-		let application: IApplication;
-		let globals: IGlobals;
-		try {
-			application = await getOwnApplication(ctx);
-			globals = await fetchGlobals(ctx);
-			// tslint:disable-next-line: no-empty
-		} catch {}
-		const { user } = ctx.store.getState().sessionState;
-		const closed =
-			user.role === Role.ADMIN
-				? false
-				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
-		return { application, closed };
-	};
-
-	state = {
+const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
+	const [state, setState] = useState({
 		gender: Gender.MALE,
 		ethnicity: ethnicities[0],
 		classYear: ClassYear.FRESHMAN,
@@ -70,63 +46,101 @@ export class ApplyPage extends Component<Props> {
 		answer2: '',
 		updatedAt: null,
 		statusPublic: null,
-		...this.props.application
-	};
+		closed: false,
+		loading: true
+	});
 
-	onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+	// Populate application fields on initial load
+	useEffect(() => {
+		Promise.all([getOwnApplication(), fetchGlobals()])
+			.then(([application, globals]) => {
+				const closed =
+					user.role === Role.ADMIN
+						? false
+						: globals.applicationsStatus === ApplicationsStatus.CLOSED;
 
-	onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+				setState(prev => ({
+					...prev,
+					...application,
+					closed,
+					loading: false
+				}));
+			})
+			.catch(error => {
+				clear();
+				flashError(err(error));
+			});
+	}, []);
 
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+		setState({ ...state, [e.target.name]: e.target.value });
+
+	const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
+		setState({ ...state, [e.target.name]: e.target.value });
+
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
-			await sendApplication(this.state);
+			flashSuccess('Submitting application...');
+			await sendApplication(state as any);
+			clear();
 			flashSuccess('Application successful!');
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};
 
-	render() {
-		return (
-			<div>
-				<h3>Apply Page</h3>
-				<br />
-				{this.state.updatedAt && (
-					<>
+	if (state.loading) return <span>Loading...</span>;
+
+	return (
+		<div>
+			<h3>Apply Page</h3>
+			<br />
+			{state.updatedAt && (
+				<>
+					<br />
+					<div>
+						Last Updated:
 						<br />
-						<div>
-							Last Updated:
-							<br />
-							{formatDate(this.state.updatedAt)}
-						</div>
+						{formatDate(state.updatedAt)}
+					</div>
+					<br />
+				</>
+			)}
+			{state.statusPublic && (
+				<>
+					<div>
+						Status:
 						<br />
-					</>
-				)}
-				{this.state.statusPublic && (
-					<>
-						<div>
-							Status:
-							<br />
-							{this.state.statusPublic}
-						</div>
-						<br />
-					</>
-				)}
-				{this.props.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
-				<ApplicationForm
-					{...this.state}
-					disabled={this.props.closed}
-					user={this.props.user}
-					onChange={this.onChange}
-					onSelect={this.onSelect}
-					onSubmit={this.onSubmit}
-				/>
-			</div>
-		);
-	}
-}
+						{state.statusPublic}
+					</div>
+					<br />
+				</>
+			)}
+			{state.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
+			<ApplicationForm
+				{...state as any}
+				disabled={closed}
+				user={user}
+				onChange={onChange}
+				onSelect={onSelect}
+				onSubmit={onSubmit}
+			/>
+		</div>
+	);
+};
+
+Apply.getInitialProps = async (ctx: IContext) => {
+	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' }))
+		return endResponse(ctx);
+
+	const { user } = ctx.store.getState().sessionState;
+	return { user };
+};
+
+export const ApplyPage = connect(
+	(state: IStoreState) => ({ user: state.sessionState.user }),
+	{ flashError: sendErrorMessage, flashSuccess: sendSuccessMessage, clear: clearFlashMessages }
+)(Apply);

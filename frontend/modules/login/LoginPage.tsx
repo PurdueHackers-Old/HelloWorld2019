@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent } from 'react';
+import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import {
@@ -19,45 +19,47 @@ type Props = {
 	clear: (ctx?: IContext) => void;
 };
 
-@((connect as any)(null, {
-	signin: signIn,
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-export class LoginPage extends Component<Props> {
-	state = {
-		email: '',
-		password: ''
-	};
+const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
+	const [state, setState] = useState({ email: '', password: '' });
 
-	onChange = (e: ChangeEvent<HTMLInputElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+	const onChange = (e: ChangeEvent<HTMLInputElement>) =>
+		setState({ ...state, [e.target.name]: e.target.value });
 
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			this.props.clear();
-			const { user } = await this.props.signin(this.state);
+			clear();
+			flashSuccess('Signing in...');
+			const { user } = await signin(state);
 			Router.push('/');
-			this.props.flashSuccess(`Welcome ${user.name}!`);
+			clear();
+			flashSuccess(`Welcome ${user.name}!`);
 		} catch (error) {
-			this.props.flashError(err(error));
+			clear();
+			flashError(err(error));
 		}
 	};
 
-	render() {
-		return (
-			<div>
-				<h3>Login Page</h3>
-				<br />
-				<LoginForm onSubmit={this.onSubmit} onChange={this.onChange} {...this.state} />
-				<br />
-				Forgot your password?{' '}
-				<Link href="/forgot">
-					<a>Click Here</a>
-				</Link>
-			</div>
-		);
+	return (
+		<div>
+			<h3>Login Page</h3>
+			<br />
+			<LoginForm onSubmit={onSubmit} onChange={onChange} {...state} />
+			<br />
+			Forgot your password?{' '}
+			<Link href="/forgot">
+				<a>Click Here</a>
+			</Link>
+		</div>
+	);
+};
+
+export const LoginPage = connect(
+	null,
+	{
+		signin: signIn,
+		flashError: sendErrorMessage,
+		flashSuccess: sendSuccessMessage,
+		clear: clearFlashMessages
 	}
-}
+)(Login);

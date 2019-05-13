@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent } from 'react';
+import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
@@ -16,21 +16,13 @@ type Props = {
 	clear: (ctx?: IContext) => void;
 };
 
-@((connect as any)(null, {
-	flashError: sendErrorMessage,
-	flashSuccess: sendSuccessMessage,
-	clear: clearFlashMessages
-}))
-export class ForgotPasswordPage extends Component<Props> {
-	state = { email: '' };
+const ForgotPassword = ({ flashError, flashSuccess, clear }: Props) => {
+	const [email, setEmail] = useState('');
 
-	onChange = (e: ChangeEvent<HTMLInputElement>) =>
-		this.setState({ [e.target.name]: e.target.value });
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
 
-	onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { email } = this.state;
-		const { flashSuccess, flashError, clear } = this.props;
 		try {
 			clear();
 			flashSuccess('Please wait...');
@@ -41,17 +33,16 @@ export class ForgotPasswordPage extends Component<Props> {
 			return flashError(err(error));
 		}
 	};
-	render() {
-		return (
-			<div>
-				<h3>Forgot Password</h3>
-				<br />
-				<ForgotPasswordForm
-					{...this.state}
-					onChange={this.onChange}
-					onSubmit={this.onSubmit}
-				/>
-			</div>
-		);
-	}
-}
+	return (
+		<div>
+			<h3>Forgot Password</h3>
+			<br />
+			<ForgotPasswordForm email={email} onChange={onChange} onSubmit={onSubmit} />
+		</div>
+	);
+};
+
+export const ForgotPasswordPage = connect(
+	null,
+	{ flashError: sendErrorMessage, flashSuccess: sendSuccessMessage, clear: clearFlashMessages }
+)(ForgotPassword);

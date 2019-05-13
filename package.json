@@ -5,6 +5,7 @@
 	"main": "dist/backend/index.js",
 	"scripts": {
 		"dev": "nodemon backend/index.ts",
+		"dev:debug": "nodemon --inspect=0.0.0.0:9229 backend/index.ts",
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
@@ -13,7 +14,8 @@
 		"test": "NODE_ENV=test jest -i --detectOpenHandles",
 		"start": "NODE_ENV=production node dist/backend/index.js",
 		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts",
-		"start-client": "cd frontend && next start"
+		"start-client": "cd frontend && next start",
+		"migrate": "yarn ts-node -T -P ./tsconfig.server.json backend/utils/migration.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -31,6 +33,8 @@
 		"axios": "^0.18.0",
 		"bcrypt": "^3.0.3",
 		"chalk": "^2.4.2",
+		"class-validator": "0.8.5",
+		"class-validator-jsonschema": "^1.2.0",
 		"cookie-parser": "^1.4.3",
 		"cors": "^2.8.5",
 		"dotenv": "^6.2.0",
@@ -43,9 +47,8 @@
 		"mongoose": "^5.4.8",
 		"morgan": "^1.9.1",
 		"multer": "^1.4.1",
-		"next": "^8.0.1",
+		"next": "8.0.3",
 		"next-redux-wrapper": "^3.0.0-alpha.1",
-		"passport": "^0.4.0",
 		"passport-jwt": "^4.0.0",
 		"qrcode.react": "^0.9.3",
 		"react": "^16.8.1",
@@ -58,6 +61,8 @@
 		"redux-persist": "^5.10.0",
 		"redux-thunk": "^2.3.0",
 		"routing-controllers": "^0.7.7",
+		"routing-controllers-openapi": "^1.7.0",
+		"swagger-ui-express": "^4.0.2",
 		"typedi": "^0.8.0",
 		"winston": "3.1.0",
 		"yes-https": "^0.0.4"
@@ -82,7 +87,6 @@
 		"@types/next": "^7.0.8",
 		"@types/next-redux-wrapper": "^2.0.2",
 		"@types/node": "^10.12.21",
-		"@types/passport": "^1.0.0",
 		"@types/passport-jwt": "^3.0.1",
 		"@types/qrcode.react": "^0.8.2",
 		"@types/react": "^16.8.1",
@@ -93,6 +97,7 @@
 		"@types/redux-logger": "^3.0.6",
 		"@types/redux-thunk": "^2.1.0",
 		"@types/supertest": "^2.0.7",
+		"@types/swagger-ui-express": "^3.0.0",
 		"@zeit/next-css": "^1.0.1",
 		"@zeit/next-less": "^1.0.1",
 		"@zeit/next-typescript": "^1.1.1",

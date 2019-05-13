@@ -9,7 +9,7 @@ import {
 	sendSuccessMessage,
 	clearFlashMessages
 } from '../../redux/actions';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 
@@ -33,11 +33,14 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 		e.preventDefault();
 		try {
 			clear();
+			flashSuccess('Checking in...');
 			const user = await checkinUser(email);
 			setUsers(users.filter(u => u._id !== user._id));
 			setEmail('');
+			clear();
 			flashSuccess(`Successfully checked in: ${user.name}`);
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};
@@ -72,7 +75,7 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 };
 
 Checkin.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const CheckinPage = connect(

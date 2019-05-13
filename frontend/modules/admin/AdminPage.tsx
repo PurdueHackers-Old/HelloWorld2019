@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
@@ -13,7 +13,7 @@ import {
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 
 type Props = {
@@ -35,12 +35,35 @@ const Admin = ({
 }: Props) => {
 	const [status, setStatus] = useState(applicationsStatus);
 	const [pub, setPub] = useState(`${applicationsPublic}`);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const globals = await fetchGlobals();
+				setStatus(globals.applicationsStatus);
+				setPub(`${globals.applicationsPublic}`);
+			} catch (error) {
+				clear();
+				flashError('Couldnt load globals');
+				setStatus(ApplicationsStatus.CLOSED);
+				setPub(`false`);
+			}
+
+			setLoading(false);
+		};
+
+		fetchData();
+	}, []);
 
 	const onUpdateStatus = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			clear();
+			flashSuccess('Updating applications status');
 			await updateApplicationsStatus(status);
+			clear();
+
 			flashSuccess('Successfully updated applications status');
 		} catch (error) {
 			flashError(err(error));
@@ -51,9 +74,13 @@ const Admin = ({
 		e.preventDefault();
 		try {
 			clear();
+			flashSuccess('Updating application public status');
 			await makePublicApplications(pub === 'true');
+			clear();
+
 			flashSuccess('Successfully updated applications public status');
 		} catch (error) {
+			clear();
 			flashError(err(error));
 		}
 	};
@@ -69,6 +96,8 @@ const Admin = ({
 			flashError(err(error));
 		}
 	};
+
+	if (loading) return <span>Loading...</span>;
 
 	return (
 		<div>
@@ -108,18 +137,7 @@ const Admin = ({
 };
 
 Admin.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) return {};
-	try {
-		const globals = await fetchGlobals(ctx);
-		return globals;
-	} catch (error) {
-		ctx.store.dispatch(sendErrorMessage(err(error), ctx) as any);
-		return {
-			applicationsPublic: false,
-			applicationsStatus: ApplicationsStatus.OPEN,
-			emailsSent: null
-		};
-	}
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 
 export const AdminPage = connect(
