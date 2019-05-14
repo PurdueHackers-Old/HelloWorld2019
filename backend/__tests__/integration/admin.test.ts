@@ -1,6 +1,6 @@
 import 'jest';
 import * as supertest from 'supertest';
-import { generateUsers } from '../helper';
+import { generateUsers, generateUser } from '../helper';
 import Server from '../../server';
 import { Role } from '../../../shared/user.enums';
 import { IUserModel, User } from '../../models/user';
@@ -29,6 +29,48 @@ describe('Suite: /api/admin -- Integration', () => {
 	});
 
 	afterEach(() => server.mongoose.disconnect());
+
+	describe('Get Users', () => {
+		it('Fails to get users because only USER role', async () => {
+			const {
+				body: { error },
+				status
+			} = await request.get(`/api/admin/users`).auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('Insufficient permissions');
+		});
+
+		it('Successfully gets all users', async () => {
+			await server.mongoose.connection.dropDatabase();
+
+			user = await request
+				.post('/api/auth/signup')
+				.send(generateUser())
+				.then(res => res.body.response);
+
+			user.user = await User.findByIdAndUpdate(
+				user.user._id,
+				{ $set: { role: Role.ADMIN } },
+				{ new: true }
+			);
+
+			const {
+				body: { response },
+				status
+			} = await request.get(`/api/admin/users`).auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						name: user.user.name,
+						email: user.user.email
+					})
+				])
+			);
+		});
+	});
 
 	describe('Update roles', () => {
 		it('Fails to update role because unauthorized', async () => {
