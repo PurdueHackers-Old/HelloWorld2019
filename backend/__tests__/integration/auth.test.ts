@@ -417,9 +417,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because no password', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 
@@ -435,9 +433,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because password is too short', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 			const newPassword = 'a';
@@ -453,9 +449,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because no password confirm', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 			const newPassword = 'test123';
@@ -471,9 +465,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because passwords do not match', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 			const newPassword = 'test123';
@@ -491,9 +483,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because no token', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 			const newPassword = 'test123';
@@ -539,9 +529,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because invalid token payload', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 
@@ -564,9 +552,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because empty token payload', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 
@@ -591,9 +577,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because token corresponds to an invalid user', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 
@@ -618,9 +602,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because using token for non existant user', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 
@@ -645,9 +627,7 @@ describe('Suite: /api/auth -- Integration', () => {
 		it('Fails because reset tokens do not match', async () => {
 			const generatedUser = generateUser();
 			generatedUser.email = 'gokhale0@purdue.edu';
-			const {
-				body: { response: user }
-			} = await request.post('/api/auth/signup').send(generatedUser);
+			await request.post('/api/auth/signup').send(generatedUser);
 
 			await request.post('/api/auth/forgot').send({ email: generatedUser.email });
 

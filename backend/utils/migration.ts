@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Server from '../server';
 import CONFIG from '../config';
 import { User, UserDto } from '../models/user';
@@ -44,8 +45,6 @@ const start = async () => {
 		);
 		await userApp.update({ statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED });
 
-
-		
 		const users = await Promise.all(
 			generateUsers(NUM_USERS).map(u =>
 				authController.signup(u.password, u.password, u as any)

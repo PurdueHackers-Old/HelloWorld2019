@@ -2,12 +2,10 @@ import 'jest';
 import * as supertest from 'supertest';
 import { generateUsers, generateUser, generateApplication } from '../helper';
 import Server from '../../server';
-import CONFIG from '../../config';
 import { Role } from '../../../shared/user.enums';
 import { IUserModel, User } from '../../models/user';
 import { UserController } from '../../controllers/user.controller';
 import { GlobalsController } from '../../controllers/globals.controller';
-import { ApplicationController } from '../../controllers/application.controller';
 import { Status } from '../../../shared/app.enums';
 import { Application } from '../../models/application';
 

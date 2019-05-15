@@ -4,7 +4,6 @@ const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
 const lessToJS = require('less-vars-to-js');
-const webpack = require('webpack');
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
@@ -41,8 +40,9 @@ module.exports = withPlugins(
 	{
 		publicRuntimeConfig,
 		serverRuntimeConfig,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		webpack: (config, options) => {
-			const { dev, isServer } = options;
+			// const { dev, isServer } = options;
 			// if (isServer && dev) {
 			// 	const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
