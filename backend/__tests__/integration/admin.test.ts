@@ -238,6 +238,14 @@ describe('Suite: /api/admin -- Integration', () => {
 	});
 
 	describe('Sends mass emails', () => {
+		beforeEach(() => {
+			jest.mock('../../services/email.service.ts');
+		});
+
+		afterEach(() => {
+			jest.unmock('../../services/email.service.ts');
+		});
+
 		it('Fails to update role because unauthorized', async () => {
 			const {
 				body: { error },
