@@ -5,7 +5,6 @@
 	},
 	"restartable": "rs",
 	"ignore": [".git", "node_modules", "src/__generated__", "dist", "frontend/.next", "data"],
-	"verbose": true,
 	"env": {
 		"TS_NODE_PROJECT": "./tsconfig.server.json",
 		"TS_NODE_TRANSPILE_ONLY": true

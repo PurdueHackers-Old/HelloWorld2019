@@ -7,11 +7,16 @@ const customConsoleFormat = format.printf(({ level, timestamp, context, message,
 	let result = `[${level}] [${timestamp}]`;
 	if (context) result += ` ${chalk.yellow(`[${context}]`)} --`;
 	result += ` ${message}`;
-
 	if (meta && Array.isArray(meta))
-		result += `${(util as any).formatWithOptions({ colors: true, compact: false }, ...meta)}`;
+		result += `${(util as any).formatWithOptions(
+			{ colors: true, compact: false, depth: 4 },
+			...meta
+		)}`;
 	else if (meta)
-		result += ` ${(util as any).formatWithOptions({ colors: true, compact: false }, meta)}`;
+		result += ` ${(util as any).formatWithOptions(
+			{ colors: true, compact: false, depth: 4 },
+			meta
+		)}`;
 
 	return result;
 });

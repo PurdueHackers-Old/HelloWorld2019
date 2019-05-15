@@ -10,7 +10,7 @@ import {
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { User, UserDto } from '../models/user';
-import { escapeRegEx, getUsersWithStatus } from '../utils';
+import { escapeRegEx, getUsersWithApplicationStatus } from '../utils';
 import { Inject } from 'typedi';
 import { EmailService } from '../services/email.service';
 import { Status } from '../../shared/app.enums';
@@ -21,7 +21,6 @@ import { ResponseSchema } from 'routing-controllers-openapi';
 export class AdminController extends BaseController {
 	@Inject() private emailService: EmailService;
 
-	// TODO: Add tests
 	@Get('/users')
 	@Authorized([Role.ADMIN])
 	@ResponseSchema(UserDto, {
@@ -53,14 +52,13 @@ export class AdminController extends BaseController {
 		return user;
 	}
 
-	// TODO: Add tests
 	@Post('/emails')
 	@Authorized([Role.ADMIN])
 	async sendMassEmails() {
 		const [accepted, rejected, waitlisted] = await Promise.all([
-			getUsersWithStatus(Status.ACCEPTED),
-			getUsersWithStatus(Status.REJECTED),
-			getUsersWithStatus(Status.WAITLIST)
+			getUsersWithApplicationStatus(Status.ACCEPTED),
+			getUsersWithApplicationStatus(Status.REJECTED),
+			getUsersWithApplicationStatus(Status.WAITLIST)
 		]);
 
 		await Promise.all([

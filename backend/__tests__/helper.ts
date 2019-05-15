@@ -38,6 +38,7 @@ export const generateApplication = () => {
 	const website = faker.internet.url();
 	const answer1 = faker.lorem.paragraph(1).substring(0, 240);
 	const answer2 = faker.lorem.paragraph(1).substring(0, 240);
+	const resume = faker.internet.url();
 
 	return {
 		gender,
@@ -51,7 +52,8 @@ export const generateApplication = () => {
 		dietaryRestrictions,
 		website,
 		answer1,
-		answer2
+		answer2,
+		resume
 	};
 };
 

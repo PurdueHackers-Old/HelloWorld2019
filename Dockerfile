@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:lts-slim
 ENV APP_PATH /usr/app
 
 WORKDIR ${APP_PATH}
