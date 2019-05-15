@@ -18,6 +18,7 @@ let user: { user: IUserModel; token: string };
 
 describe('Suite: /api/admin -- Integration', () => {
 	beforeEach(async () => {
+		jest.mock('../../services/email.service.ts');
 		server = await Server.createInstance();
 		request = supertest(server.app);
 		await server.mongoose.connection.dropDatabase();
@@ -34,7 +35,10 @@ describe('Suite: /api/admin -- Integration', () => {
 		user = users[0];
 	});
 
-	afterEach(() => server.mongoose.disconnect());
+	afterEach(() => {
+		jest.unmock('../../services/email.service.ts');
+		return server.mongoose.disconnect();
+	});
 
 	describe('Get Users', () => {
 		it('Fails to get users because only USER role', async () => {
@@ -238,14 +242,6 @@ describe('Suite: /api/admin -- Integration', () => {
 	});
 
 	describe('Sends mass emails', () => {
-		beforeEach(() => {
-			jest.mock('../../services/email.service.ts');
-		});
-
-		afterEach(() => {
-			jest.unmock('../../services/email.service.ts');
-		});
-
 		it('Fails to update role because unauthorized', async () => {
 			const {
 				body: { error },
