@@ -11,7 +11,7 @@ export class UserDto {
 	@Matches(/([a-zA-Z']+ )+[a-zA-Z']+$/, { message: 'Please provide your first and last name' })
 	@Expose()
 	name: string;
-	
+
 	@IsNotEmpty({ message: 'Please provide a valid email address' })
 	@IsEmail({}, { message: 'Please provide a valid email address' })
 	@Expose()

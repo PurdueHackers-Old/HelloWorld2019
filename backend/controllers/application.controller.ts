@@ -40,11 +40,11 @@ export class ApplicationController extends BaseController {
 			{
 				$lookup: {
 					from: 'users',
-					let: { user_id: '$user' },
+					let: { userId: '$user' },
 					as: 'user',
 					pipeline: [
 						{
-							$match: { $expr: { $eq: ['$_id', '$$user_id'] } }
+							$match: { $expr: { $eq: ['$_id', '$$userId'] } }
 						},
 						{
 							$project: {
