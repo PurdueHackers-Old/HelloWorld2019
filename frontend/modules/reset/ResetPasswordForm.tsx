@@ -1,11 +1,11 @@
 import React from 'react';
 
-type Props = {
+interface Props {
 	password: string;
 	passwordConfirm: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-};
+}
 
 export const ResetPasswordForm = ({ password, passwordConfirm, onChange, onSubmit }: Props) => {
 	return (

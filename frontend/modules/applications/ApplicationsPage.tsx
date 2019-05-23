@@ -14,10 +14,10 @@ import { ApplicationsTable } from './ApplicationsTable';
 import { RowInfo, Column, Filter } from 'react-table';
 import { connect } from 'react-redux';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AppsPage = ({ flashError, clear }: Props) => {
 	const [state, setState] = useState({

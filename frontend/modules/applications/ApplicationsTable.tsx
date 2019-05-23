@@ -4,7 +4,7 @@ import { IApplication } from '../../@types';
 import { columns } from './columns';
 import 'react-table/react-table.css';
 
-type Props = {
+interface Props {
 	applications: IApplication[];
 	pagination: { pageSize: number; page: number; pages: number };
 	loading: boolean;
@@ -12,7 +12,7 @@ type Props = {
 	onClick: (rowInfo: RowInfo, column: Column<IApplication>) => () => void;
 	onFetchData: (state: any, instance: any) => void;
 	onFilter: (filtered: any) => void;
-};
+}
 
 export const ApplicationsTable = ({
 	applications,

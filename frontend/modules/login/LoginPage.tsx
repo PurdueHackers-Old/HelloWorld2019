@@ -12,12 +12,12 @@ import { ILoginUser, ILoginResponse, IContext } from '../../@types';
 import { err } from '../../utils';
 import Link from 'next/link';
 
-type Props = {
+interface Props {
 	signin: (body: ILoginUser) => Promise<ILoginResponse>;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({ email: '', password: '' });

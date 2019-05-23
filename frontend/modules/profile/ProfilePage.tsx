@@ -7,12 +7,12 @@ import { QRCode } from './QRCode';
 import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
 
-type Props = { email: string };
+interface Props {
+	email: string;
+}
 
-const Profile = (props: Props) => {
-	const { email } = props;
-
-	const [application, setApplication] = useState(null);
+const Profile = ({ email }: Props) => {
+	const [application, setApplication] = useState<IApplication>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {

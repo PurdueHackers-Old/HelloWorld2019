@@ -11,12 +11,12 @@ import { err } from '../../utils';
 import Router, { withRouter, WithRouterProps } from 'next/router';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
-type Props = {
+interface Props extends WithRouterProps {
 	token: string;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-} & WithRouterProps;
+}
 
 const ResetPassword = ({ token, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({ password: '', passwordConfirm: '' });

@@ -7,7 +7,9 @@ import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 
-type Props = { flashError: (msg: string, ctx?: IContext) => void };
+interface Props {
+	flashError: (msg: string, ctx?: IContext) => void;
+}
 
 export const Dashboard = ({ flashError }: Props) => {
 	const [state, setState] = useState({

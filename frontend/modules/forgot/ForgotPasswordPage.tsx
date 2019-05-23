@@ -10,11 +10,11 @@ import { IContext } from '../../@types';
 import { err } from '../../utils';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const ForgotPassword = ({ flashError, flashSuccess, clear }: Props) => {
 	const [email, setEmail] = useState('');

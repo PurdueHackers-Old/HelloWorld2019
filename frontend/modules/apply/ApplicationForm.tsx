@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
 	Gender,
 	ethnicities,
@@ -10,13 +10,13 @@ import {
 } from '../../../shared/app.enums';
 import { IApplication, IUser } from '../../@types';
 
-type Props = {
+interface Props extends IApplication {
 	user: IUser;
 	disabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	onSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-} & IApplication;
+}
 
 export const ApplicationForm = (props: Props) => {
 	return (
@@ -52,7 +52,7 @@ export const ApplicationForm = (props: Props) => {
 					onChange={props.onSelect}
 					value={props.ethnicity}
 				>
-					{ethnicities.map((ethnicity, i) => (
+					{ethnicities.map(ethnicity => (
 						<option value={ethnicity} key={ethnicity}>
 							{ethnicity}
 						</option>
@@ -86,7 +86,7 @@ export const ApplicationForm = (props: Props) => {
 					onChange={props.onSelect}
 					value={props.graduationYear}
 				>
-					{gradYears.map((graduationYear, i) => (
+					{gradYears.map(graduationYear => (
 						<option value={graduationYear} key={graduationYear}>
 							{graduationYear}
 						</option>

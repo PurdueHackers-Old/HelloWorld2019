@@ -13,11 +13,11 @@ import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 	const [users, setUsers] = useState<IUser[]>([]);

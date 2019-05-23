@@ -20,13 +20,13 @@ import { ApplicationForm } from '../apply/ApplicationForm';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
 
-type Props = {
+interface Props {
 	application: IApplication;
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({

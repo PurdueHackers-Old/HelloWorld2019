@@ -1,10 +1,10 @@
 import React from 'react';
 
-type Props = {
+interface Props {
 	email: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-};
+}
 
 export const ForgotPasswordForm = ({ email, onChange, onSubmit }: Props) => {
 	return (
