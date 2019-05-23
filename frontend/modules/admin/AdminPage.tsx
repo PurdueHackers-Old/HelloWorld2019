@@ -136,7 +136,7 @@ const Admin = ({
 	);
 };
 
-Admin.getInitialProps = async (ctx: IContext) => {
+Admin.getInitialProps = (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 

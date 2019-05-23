@@ -70,7 +70,7 @@ export const Dashboard = ({ flashError }: Props) => {
 	);
 };
 
-Dashboard.getInitialProps = async (ctx: IContext) => {
+Dashboard.getInitialProps = (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 

@@ -46,8 +46,8 @@ const Profile = ({ email }: Props) => {
 	);
 };
 
-Profile.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' }))
+Profile.getInitialProps = (ctx: IContext) => {
+	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must be logged in!' }))
 		return endResponse(ctx);
 };
 

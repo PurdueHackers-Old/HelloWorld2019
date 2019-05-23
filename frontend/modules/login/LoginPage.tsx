@@ -20,7 +20,7 @@ interface Props {
 }
 
 const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
-	const [state, setState] = useState({ email: '', password: '', rememberMe: false });
+	const [state, setState] = useState<ILoginUser>({ email: '', password: '', rememberMe: false });
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) =>
 		setState({ ...state, [e.target.name]: e.target.value });

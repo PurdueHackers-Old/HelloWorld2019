@@ -1,9 +1,7 @@
 import React from 'react';
+import { ILoginUser } from '../../@types';
 
-interface Props {
-	email: string;
-	password: string;
-	rememberMe: boolean;
+interface Props extends ILoginUser {
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onChecked: (e: React.ChangeEvent<HTMLInputElement>) => void;
