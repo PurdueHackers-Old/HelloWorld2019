@@ -20,10 +20,13 @@ interface Props {
 }
 
 const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
-	const [state, setState] = useState({ email: '', password: '' });
+	const [state, setState] = useState({ email: '', password: '', rememberMe: false });
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) =>
 		setState({ ...state, [e.target.name]: e.target.value });
+
+	const onChecked = (e: ChangeEvent<HTMLInputElement>) =>
+		setState({ ...state, [e.target.name]: e.target.checked });
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -44,7 +47,7 @@ const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 		<div>
 			<h3>Login Page</h3>
 			<br />
-			<LoginForm onSubmit={onSubmit} onChange={onChange} {...state} />
+			<LoginForm onSubmit={onSubmit} onChange={onChange} onChecked={onChecked} {...state} />
 			<br />
 			Forgot your password?{' '}
 			<Link href="/forgot">

@@ -1,13 +1,22 @@
 import React from 'react';
 
 interface Props {
-	email?: string;
-	password?: string;
+	email: string;
+	password: string;
+	rememberMe: boolean;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onChecked: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const LoginForm = ({ email, password, onSubmit, onChange }: Props) => {
+export const LoginForm = ({
+	email,
+	password,
+	rememberMe,
+	onSubmit,
+	onChange,
+	onChecked
+}: Props) => {
 	return (
 		<form onSubmit={onSubmit}>
 			<label>
@@ -23,6 +32,16 @@ export const LoginForm = ({ email, password, onSubmit, onChange }: Props) => {
 					name="password"
 					value={password}
 					onChange={onChange}
+				/>
+			</label>
+			<br />
+			<label>
+				Remember Me:
+				<input
+					type="checkbox"
+					name="rememberMe"
+					checked={rememberMe}
+					onChange={onChecked}
 				/>
 			</label>
 			<br />

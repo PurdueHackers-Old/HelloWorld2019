@@ -124,16 +124,6 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 };
 
 // User Actions
-export const getOwnApplication = async (ctx?: IContext) => {
-	try {
-		const token = getToken(ctx);
-		const id = (jwt.decode(token) as any)._id;
-		return getUserApplication(id, ctx);
-	} catch (error) {
-		throw error.response ? error.response.data : error;
-	}
-};
-
 export const getUserApplication = async (id: string, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
@@ -144,6 +134,16 @@ export const getUserApplication = async (id: string, ctx?: IContext) => {
 		});
 		const app: IApplication = response;
 		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const getOwnApplication = async (ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const id = (jwt.decode(token) as any)._id;
+		return getUserApplication(id, ctx);
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
