@@ -12,11 +12,11 @@ import {
 } from '../../redux/actions';
 import { err, endResponse } from '../../utils';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AdminRoles = ({ flashError, flashSuccess, clear }: Props) => {
 	const [users, setUsers] = useState([]);

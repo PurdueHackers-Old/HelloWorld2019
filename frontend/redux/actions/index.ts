@@ -43,7 +43,11 @@ export const signIn = (body: ILoginUser) => async (dispatch: Dispatch) => {
 		} = await api.post('/auth/login', body);
 		dispatch(setToken(response.token));
 		dispatch(setUser(response.user));
-		setCookie('token', response.token);
+		const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+		const nextYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+		setCookie('token', response.token, null, {
+			expires: !body.rememberMe ? tomorrow : nextYear
+		});
 		ReactGA.set({ userId: response.user._id });
 		const resp: ILoginResponse = response;
 		return resp;
@@ -90,7 +94,8 @@ export const resetPassword = async (password: string, passwordConfirm: string, t
 };
 
 // Should only be called in the "server-side" context in _app.tsx
-export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: Dispatch) => {
+// Takes token from cookie and populates redux store w/ token and user object
+export const refreshSession = (ctx?: IContext) => async (dispatch: Dispatch) => {
 	try {
 		if (ctx && ctx.res && ctx.res.headersSent) return;
 		const token = getToken(ctx);
@@ -104,7 +109,6 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 		const {
 			data: { response }
 		} = await api.get('/auth/refresh', {
-			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
 
@@ -124,16 +128,6 @@ export const refreshToken = (ctx?: IContext, params?: any) => async (dispatch: D
 };
 
 // User Actions
-export const getOwnApplication = async (ctx?: IContext) => {
-	try {
-		const token = getToken(ctx);
-		const id = (jwt.decode(token) as any)._id;
-		return getUserApplication(id, ctx);
-	} catch (error) {
-		throw error.response ? error.response.data : error;
-	}
-};
-
 export const getUserApplication = async (id: string, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
@@ -144,6 +138,16 @@ export const getUserApplication = async (id: string, ctx?: IContext) => {
 		});
 		const app: IApplication = response;
 		return app;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const getOwnApplication = async (ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const id = (jwt.decode(token) as any)._id;
+		return getUserApplication(id, ctx);
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}

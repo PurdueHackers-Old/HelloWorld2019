@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent, useState, useEffect } from 'react';
+import React, { FormEvent, ChangeEvent, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
@@ -8,7 +8,7 @@ import {
 	clearFlashMessages,
 	fetchGlobals
 } from '../../redux/actions';
-import { IContext, IApplication, IStoreState, IUser, IGlobals } from '../../@types';
+import { IContext, IStoreState, IUser } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
 	Gender,
@@ -23,12 +23,12 @@ import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
 
-type Props = {
+interface Props {
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({

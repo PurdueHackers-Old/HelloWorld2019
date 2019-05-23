@@ -16,14 +16,14 @@ import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 
-type Props = {
+interface Props {
 	applicationsPublic: boolean;
 	emailsSent: Date | null;
 	applicationsStatus: ApplicationsStatus;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Admin = ({
 	applicationsPublic,
@@ -136,7 +136,7 @@ const Admin = ({
 	);
 };
 
-Admin.getInitialProps = async (ctx: IContext) => {
+Admin.getInitialProps = (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 
