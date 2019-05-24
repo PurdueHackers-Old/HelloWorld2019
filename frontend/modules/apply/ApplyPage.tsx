@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent, useState, useEffect } from 'react';
+import React, { FormEvent, ChangeEvent, useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IStoreState, IUser } from '../../@types';
@@ -25,6 +25,7 @@ interface Props {
 }
 
 const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
+	const formRef = useRef<HTMLFormElement>();
 	const [state, setState] = useState({
 		gender: Gender.MALE,
 		ethnicity: ethnicities[0],
@@ -40,6 +41,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 		answer2: '',
 		updatedAt: null,
 		statusPublic: null,
+		resume: null,
 		closed: false,
 		loading: true
 	});
@@ -66,8 +68,12 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			});
 	}, []);
 
-	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-		setState({ ...state, [e.target.name]: e.target.value });
+	const onChange = (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
+		const { name, value, files } = e.target;
+		name === 'resume'
+			? setState({ ...state, [name]: files[0] })
+			: setState({ ...state, [name]: value });
+	};
 
 	const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
 		setState({ ...state, [e.target.name]: e.target.value });
@@ -77,7 +83,8 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 		try {
 			clear();
 			flashSuccess('Submitting application...');
-			await sendApplication(state as any);
+			const formData = new FormData(formRef.current);
+			await sendApplication(formData as any);
 			clear();
 			flashSuccess('Application successful!');
 		} catch (error) {
@@ -116,6 +123,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			{state.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
 			<ApplicationForm
 				{...state as any}
+				formRef={formRef}
 				disabled={closed}
 				user={user}
 				onChange={onChange}

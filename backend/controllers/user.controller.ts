@@ -11,7 +11,8 @@ import {
 	UnauthorizedError,
 	Post,
 	Authorized,
-	Params
+	Params,
+	Req
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { User, UserDto, IUserModel } from '../models/user';
@@ -21,10 +22,13 @@ import { Role } from '../../shared/user.enums';
 import { Inject } from 'typedi';
 import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { StorageService } from '../services/storage.service';
+import { Request } from 'express';
 
 @JsonController('/api/users')
 export class UserController extends BaseController {
 	@Inject() globalController: GlobalsController;
+	@Inject() storageService: StorageService;
 
 	@Get('/')
 	@Authorized([Role.EXEC])
@@ -112,6 +116,7 @@ export class UserController extends BaseController {
 	@Post('/:id/apply')
 	@Authorized()
 	async apply(
+		@Req() req: Request,
 		@Param('id') id: string,
 		@Body() applicationDto: ApplicationDto,
 		@CurrentUser({ required: true }) currentUser: IUserModel
@@ -129,6 +134,22 @@ export class UserController extends BaseController {
 				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
 
 		if (closed) throw new UnauthorizedError('Sorry, applications are closed!');
+
+		const files: Express.Multer.File[] = req.files ? (req.files as Express.Multer.File[]) : [];
+
+		const resume = files.find(file => file.fieldname === 'resume');
+		if (resume) {
+			try {
+				applicationDto.resume = await this.storageService.uploadToStorage(
+					resume,
+					'resumes',
+					currentUser
+				);
+			} catch (error) {
+				this.logger.emerg('Error uploading resume:', error);
+				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
+			}
+		}
 
 		const appQuery = Application.findOneAndUpdate(
 			{ user },

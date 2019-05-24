@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import {
 	Gender,
 	ethnicities,
@@ -11,6 +11,7 @@ import {
 import { IApplication, IUser } from '../../@types';
 
 interface Props extends IApplication {
+	formRef: MutableRefObject<HTMLFormElement>;
 	user: IUser;
 	disabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -20,7 +21,7 @@ interface Props extends IApplication {
 
 export const ApplicationForm = (props: Props) => {
 	return (
-		<form onSubmit={props.onSubmit}>
+		<form onSubmit={props.onSubmit} ref={props.formRef}>
 			<label>Name: {props.user.name}</label>
 			<br />
 			<label>Email: {props.user.email}</label>
@@ -202,6 +203,17 @@ export const ApplicationForm = (props: Props) => {
 					onChange={props.onChange}
 				/>
 			</label>
+			<br />
+			<label htmlFor="resume">
+				Resume:{' '}
+				<input
+					type="file"
+					name="resume"
+					accept="application/pdf"
+					onChange={props.onChange}
+				/>
+			</label>
+			<br />
 			<br />
 			<input type="submit" value="Submit" />
 		</form>
