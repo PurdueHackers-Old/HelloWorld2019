@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { api } from '../utils';
 import { getToken } from '../utils/session';
-import { IContext, IGlobals, IUser, IApplication, IStatsResponse } from '../@types';
+import { IContext, IGlobals, IUser, IApplication, IStatsResponse, IAnnouncement } from '../@types';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Role } from '../../shared/user.enums';
 import { Status } from '../../shared/app.enums';
@@ -286,6 +286,21 @@ export const makePublicApplications = async (status: boolean, ctx?: IContext, pa
 			}
 		);
 		return response;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const getAllAnnouncements = async (ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/announcements`, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const announcements: IAnnouncement[] = response;
+		return announcements;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}

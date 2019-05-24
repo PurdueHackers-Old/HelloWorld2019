@@ -1,15 +1,8 @@
 import { Document, Schema, model } from 'mongoose';
-import {
-	IsNotEmpty,
-	IsEnum,
-	IsDate
-} from 'class-validator';
+import { IsNotEmpty, IsEnum } from 'class-validator';
 import { IUserModel } from './user';
 import { Type } from 'class-transformer';
-import {
-	Type as AnnouncementType
-} from '../../shared/announcement.enums';
-import { isNotEmpty } from '../utils';
+import { Type as AnnouncementType } from '../../shared/announcement.enums';
 
 export class AnnouncementDto {
 	@Type(() => String)
@@ -28,7 +21,7 @@ export class AnnouncementDto {
 export interface IAnnouncementModel extends AnnouncementDto, Document {
 	user: IUserModel;
 	createdAt: Date;
-	released: Boolean;
+	released: boolean;
 }
 
 const schema = new Schema(
@@ -46,7 +39,7 @@ const schema = new Schema(
 			enum: Object.values(AnnouncementType),
 			select: false
 		},
-		released: Boolean,
+		released: Boolean
 	},
 	{ timestamps: true }
 );

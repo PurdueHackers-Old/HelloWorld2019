@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import { Role } from '../../shared/user.enums';
 import { ClassYear, Gender, Major, Referral, ShirtSize, Status } from '../../shared/app.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { Type as AnnouncementType } from '../../shared/announcement.enums';
 
 export interface IStoreState {
 	flashState: IFlashState;
@@ -49,6 +50,14 @@ export interface IApplication {
 	statusInternal: Status;
 	statusPublic: Status;
 	user: IUser;
+}
+
+export interface IAnnouncement {
+	title: string;
+	content: string;
+	type: AnnouncementType;
+	createdAt: Date;
+	released: boolean;
 }
 
 export interface IGlobals {
