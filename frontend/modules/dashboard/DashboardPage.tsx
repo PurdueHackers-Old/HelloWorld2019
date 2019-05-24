@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { sendErrorMessage, getStats } from '../../redux/actions';
+import { sendErrorMessage } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
+import { getStats } from '../../api';
 
-type Props = { flashError: (msg: string, ctx?: IContext) => void };
+interface Props {
+	flashError: (msg: string, ctx?: IContext) => void;
+}
 
 export const Dashboard = ({ flashError }: Props) => {
 	const [state, setState] = useState({
@@ -68,8 +71,8 @@ export const Dashboard = ({ flashError }: Props) => {
 	);
 };
 
-Dashboard.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+Dashboard.getInitialProps = (ctx: IContext) => {
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const DashboardPage = connect(

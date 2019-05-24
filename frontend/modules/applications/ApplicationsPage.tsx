@@ -1,23 +1,19 @@
 import React, { useState, useRef } from 'react';
 import Router from 'next/router';
-import {
-	sendErrorMessage,
-	getApplications,
-	sendSuccessMessage,
-	clearFlashMessages
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { err } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsTable } from './ApplicationsTable';
 import { RowInfo, Column, Filter } from 'react-table';
 import { connect } from 'react-redux';
+import { getApplications } from '../../api';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AppsPage = ({ flashError, clear }: Props) => {
 	const [state, setState] = useState({
@@ -77,7 +73,7 @@ const AppsPage = ({ flashError, clear }: Props) => {
 };
 
 AppsPage.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 
 export const ApplicationsPage = connect(

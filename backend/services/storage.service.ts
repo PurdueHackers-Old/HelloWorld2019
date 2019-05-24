@@ -6,8 +6,8 @@ import { UserDto } from '../models/user';
 const storage = new Storage({
 	projectId: CONFIG.GC_PROJECT_ID,
 	credentials: {
-		private_key: CONFIG.GC_PRIVATE_KEY,
-		client_email: CONFIG.GC_CLIENT_EMAIL
+		private_key: CONFIG.GC_PRIVATE_KEY, // eslint-disable-line
+		client_email: CONFIG.GC_CLIENT_EMAIL // eslint-disable-line
 	}
 });
 

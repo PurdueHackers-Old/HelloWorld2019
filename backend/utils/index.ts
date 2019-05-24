@@ -83,7 +83,7 @@ export const signToken = (user: IUserModel, expiresIn = CONFIG.EXPIRES_IN) =>
 		expiresIn
 	});
 
-export const getUsersWithStatus = (status: Status): IUserModel[] =>
+export const getUsersWithApplicationStatus = (status: Status): IUserModel[] =>
 	Application.aggregate([
 		{ $match: { statusPublic: status } },
 		{

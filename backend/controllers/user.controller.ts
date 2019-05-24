@@ -21,7 +21,6 @@ import { Role } from '../../shared/user.enums';
 import { Inject } from 'typedi';
 import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
-import { Status } from '../../shared/app.enums';
 
 @JsonController('/api/users')
 export class UserController extends BaseController {

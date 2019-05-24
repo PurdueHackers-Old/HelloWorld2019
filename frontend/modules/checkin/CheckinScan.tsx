@@ -1,25 +1,21 @@
-import React, { FormEvent, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import {
-	sendErrorMessage,
-	checkinUser,
-	sendSuccessMessage,
-	clearFlashMessages
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err } from '../../utils';
 import dynamic from 'next/dynamic';
+import { checkinUser } from '../../api';
 
 // @ts-ignore
 const QrReader = dynamic(() => import('react-qr-reader'), { ssr: false });
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Scan = ({ flashError, flashSuccess, clear }: Props) => {
 	const onError = e => {

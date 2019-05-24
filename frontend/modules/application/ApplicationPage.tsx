@@ -1,12 +1,5 @@
-import React, { Component, ChangeEvent, FormEvent, useState } from 'react';
-import {
-	sendErrorMessage,
-	getApplication,
-	sendSuccessMessage,
-	clearFlashMessages,
-	sendApplication,
-	updateApplicationStatus
-} from '../../redux/actions';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication, IUser } from '../../@types';
 import {
 	redirectIfNotAuthenticated,
@@ -19,14 +12,15 @@ import { Role } from '../../../shared/user.enums';
 import { ApplicationForm } from '../apply/ApplicationForm';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
+import { updateApplicationStatus, sendApplication, getApplication } from '../../api';
 
-type Props = {
+interface Props {
 	application: IApplication;
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({
@@ -100,7 +94,8 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 };
 
 AppPage.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
+
 	try {
 		const application = await getApplication(ctx.query.id as string, ctx);
 		const user = extractUser(ctx);

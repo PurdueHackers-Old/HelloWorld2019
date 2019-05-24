@@ -1,14 +1,7 @@
-import React, { Component, FormEvent, ChangeEvent, useState, useEffect } from 'react';
+import React, { FormEvent, ChangeEvent, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	getOwnApplication,
-	sendApplication,
-	clearFlashMessages,
-	fetchGlobals
-} from '../../redux/actions';
-import { IContext, IApplication, IStoreState, IUser, IGlobals } from '../../@types';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
+import { IContext, IStoreState, IUser } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
 	Gender,
@@ -18,17 +11,18 @@ import {
 	Referral,
 	ShirtSize
 } from '../../../shared/app.enums';
-import { err, formatDate } from '../../utils';
+import { err, formatDate, endResponse } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
+import { fetchGlobals, getOwnApplication, sendApplication } from '../../api';
 
-type Props = {
+interface Props {
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({
@@ -52,19 +46,24 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 
 	// Populate application fields on initial load
 	useEffect(() => {
-		Promise.all([getOwnApplication(), fetchGlobals()]).then(([application, globals]) => {
-			const closed =
-				user.role === Role.ADMIN
-					? false
-					: globals.applicationsStatus === ApplicationsStatus.CLOSED;
+		Promise.all([getOwnApplication(), fetchGlobals()])
+			.then(([application, globals]) => {
+				const closed =
+					user.role === Role.ADMIN
+						? false
+						: globals.applicationsStatus === ApplicationsStatus.CLOSED;
 
-			setState(prev => ({
-				...prev,
-				...application,
-				closed,
-				loading: false
-			}));
-		});
+				setState(prev => ({
+					...prev,
+					...application,
+					closed,
+					loading: false
+				}));
+			})
+			.catch(error => {
+				clear();
+				flashError(err(error));
+			});
 	}, []);
 
 	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -128,7 +127,9 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' })) return {};
+	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' }))
+		return endResponse(ctx);
+
 	const { user } = ctx.store.getState().sessionState;
 	return { user };
 };

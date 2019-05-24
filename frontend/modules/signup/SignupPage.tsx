@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ChangeEvent, useState } from 'react';
+import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import {
@@ -11,12 +11,12 @@ import { ILoginResponse, ICreateUser, IContext } from '../../@types';
 import { SignupForm } from './SignupForm';
 import { err } from '../../utils';
 
-type Props = {
+interface Props {
 	signup: (body: ICreateUser) => Promise<ILoginResponse>;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Signup = ({ signup, flashError, flashSuccess, clear }: Props) => {
 	const [state, setState] = useState({ name: '', email: '', password: '', passwordConfirm: '' });

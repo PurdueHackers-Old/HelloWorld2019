@@ -1,3 +1,4 @@
+import React from 'react';
 import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import Router from 'next/router';
@@ -8,7 +9,7 @@ import {
 	clearFlashMessages,
 	sendErrorMessage,
 	sendSuccessMessage,
-	refreshToken
+	refreshSession
 } from '../redux/actions';
 import Layout from '../modules/common/Layout';
 import { initGA, logPageView } from '../utils/analytics';
@@ -16,13 +17,15 @@ import * as flash from '../utils/flash';
 import '../assets/theme.less';
 import { IStoreState } from '../@types';
 
-type Props = { store: Store<IStoreState> };
+interface Props {
+	store: Store<IStoreState>;
+}
 
 @((withRedux as any)(makeStore))
 export default class MyApp extends App<Props> {
 	static async getInitialProps({ Component, ctx }) {
 		if (ctx.req) {
-			await ctx.store.dispatch(refreshToken(ctx));
+			await ctx.store.dispatch(refreshSession(ctx));
 			if (!ctx.res.headersSent) {
 				const messages = flash.get(ctx);
 				if (messages.red) ctx.store.dispatch(sendErrorMessage(messages.red, ctx));

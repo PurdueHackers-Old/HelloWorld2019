@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
 	sendSuccessMessage,
-	clearFlashMessages,
-	forgotPassword
+	clearFlashMessages
 } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { err } from '../../utils';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
+import { forgotPassword } from '../../api';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const ForgotPassword = ({ flashError, flashSuccess, clear }: Props) => {
 	const [email, setEmail] = useState('');

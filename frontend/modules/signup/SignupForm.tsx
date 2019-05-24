@@ -1,22 +1,22 @@
 import React from 'react';
 
-type Props = {
+interface Props {
 	name?: string;
 	email?: string;
 	password?: string;
 	passwordConfirm?: string;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
+}
 
-export const SignupForm: React.FC<Props> = ({
+export const SignupForm = ({
 	name,
 	email,
 	password,
 	passwordConfirm,
 	onSubmit,
 	onChange
-}) => {
+}: Props) => {
 	return (
 		<form onSubmit={onSubmit}>
 			<label>

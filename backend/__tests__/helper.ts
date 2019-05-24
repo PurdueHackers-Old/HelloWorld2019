@@ -10,6 +10,14 @@ import {
 	ShirtSize
 } from '../../shared/app.enums';
 
+export const getError = (errors: ValidationError[]) => Object.values(errors[0].constraints).pop();
+
+export const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
+
+const getRandomEnumVal = <T>(E: T) => E[faker.random.arrayElement(Object.getOwnPropertyNames(E))];
+
+const getRandomVal = <T>(A: T[]) => faker.random.arrayElement(A);
+
 export const generateUser = () => {
 	const first = faker.name.firstName();
 	const last = faker.name.lastName();
@@ -38,6 +46,7 @@ export const generateApplication = () => {
 	const website = faker.internet.url();
 	const answer1 = faker.lorem.paragraph(1).substring(0, 240);
 	const answer2 = faker.lorem.paragraph(1).substring(0, 240);
+	const resume = faker.internet.url();
 
 	return {
 		gender,
@@ -51,7 +60,8 @@ export const generateApplication = () => {
 		dietaryRestrictions,
 		website,
 		answer1,
-		answer2
+		answer2,
+		resume
 	};
 };
 
@@ -59,11 +69,3 @@ export const generateUsers = (num: number) => Array.from({ length: num }, genera
 
 export const generateApplications = (num: number) =>
 	Array.from({ length: num }, generateApplication);
-
-export const getError = (errors: ValidationError[]) => Object.values(errors[0].constraints).pop();
-
-export const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
-
-const getRandomEnumVal = <T>(E: T) => E[faker.random.arrayElement(Object.getOwnPropertyNames(E))];
-
-const getRandomVal = <T>(A: T[]) => faker.random.arrayElement(A);

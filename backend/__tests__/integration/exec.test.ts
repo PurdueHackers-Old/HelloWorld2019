@@ -1,11 +1,9 @@
 import 'jest';
 import * as supertest from 'supertest';
-import { generateUser, generateApplication, generateUsers } from '../helper';
+import { generateUsers } from '../helper';
 import Server from '../../server';
 import { Role } from '../../../shared/user.enums';
 import { IUserModel, User } from '../../models/user';
-import { IApplicationModel } from '../../models/application';
-import { ObjectId } from 'bson';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;

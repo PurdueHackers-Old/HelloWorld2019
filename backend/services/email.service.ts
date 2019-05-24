@@ -85,21 +85,22 @@ export class EmailService {
 	}
 
 	private sendMassEmail(templateId: string, users: UserDto[]) {
-		return sendGrid.send({
-			templateId,
-			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
-			personalizations: users.map(user => ({
-				to: user.email,
-				dynamic_template_data: {
-					name: user.name
+		if (users.length)
+			return sendGrid.send({
+				templateId,
+				from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
+				personalizations: users.map(user => ({
+					to: user.email,
+					dynamic_template_data: { // eslint-disable-line
+						name: user.name
+					}
+				})),
+				isMultiple: true,
+				mailSettings: {
+					sandboxMode: {
+						enable: CONFIG.NODE_ENV === 'test'
+					}
 				}
-			})),
-			isMultiple: true,
-			mailSettings: {
-				sandboxMode: {
-					enable: CONFIG.NODE_ENV === 'test'
-				}
-			}
-		});
+			});
 	}
 }

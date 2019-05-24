@@ -71,7 +71,8 @@ export class AuthController extends BaseController {
 		delete u.password;
 
 		// If user is found and password is correct, create a token
-		const token = signToken(u);
+		// const token = signToken(u);
+		const token = signToken(u, '1ms');
 		return {
 			user: u,
 			token
