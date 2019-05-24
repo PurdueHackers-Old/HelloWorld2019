@@ -1,10 +1,6 @@
 import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	clearFlashMessages
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { err } from '../../utils';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
