@@ -1,15 +1,11 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { IContext } from '../../@types';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	clearFlashMessages,
-	resetPassword
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err } from '../../utils';
 import Router, { withRouter, WithRouterProps } from 'next/router';
 import { ResetPasswordForm } from './ResetPasswordForm';
+import { resetPassword } from '../../api';
 
 interface Props extends WithRouterProps {
 	token: string;

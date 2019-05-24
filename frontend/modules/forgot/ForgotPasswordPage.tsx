@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import {
 	sendErrorMessage,
 	sendSuccessMessage,
-	clearFlashMessages,
-	forgotPassword
+	clearFlashMessages
 } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { err } from '../../utils';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
+import { forgotPassword } from '../../api';
 
 interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;

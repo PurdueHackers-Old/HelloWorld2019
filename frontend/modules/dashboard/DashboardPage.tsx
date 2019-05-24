@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { sendErrorMessage, getStats } from '../../redux/actions';
+import { sendErrorMessage } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
+import { getStats } from '../../api';
 
 interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
