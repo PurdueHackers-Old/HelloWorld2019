@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IContext, IStoreState, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { getOwnApplication } from '../../redux/actions';
 import { QRCode } from './QRCode';
 import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
+import { getOwnApplication } from '../../api';
 
 interface Props {
 	email: string;

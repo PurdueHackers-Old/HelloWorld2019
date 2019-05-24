@@ -1,13 +1,6 @@
 import React, { FormEvent, ChangeEvent, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	getOwnApplication,
-	sendApplication,
-	clearFlashMessages,
-	fetchGlobals
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IStoreState, IUser } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
@@ -22,6 +15,7 @@ import { err, formatDate, endResponse } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
+import { fetchGlobals, getOwnApplication, sendApplication } from '../../api';
 
 interface Props {
 	user: IUser;

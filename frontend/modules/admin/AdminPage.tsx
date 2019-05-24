@@ -1,20 +1,18 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import {
-	fetchGlobals,
-	sendErrorMessage,
-	updateApplicationsStatus,
-	sendSuccessMessage,
-	clearFlashMessages,
-	makePublicApplications,
-	sendMassEmails
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
+import {
+	fetchGlobals,
+	updateApplicationsStatus,
+	makePublicApplications,
+	sendMassEmails
+} from '../../api';
 
 interface Props {
 	applicationsPublic: boolean;

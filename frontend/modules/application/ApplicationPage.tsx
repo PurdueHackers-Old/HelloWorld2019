@@ -1,12 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import {
-	sendErrorMessage,
-	getApplication,
-	sendSuccessMessage,
-	clearFlashMessages,
-	sendApplication,
-	updateApplicationStatus
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication, IUser } from '../../@types';
 import {
 	redirectIfNotAuthenticated,
@@ -19,6 +12,7 @@ import { Role } from '../../../shared/user.enums';
 import { ApplicationForm } from '../apply/ApplicationForm';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
+import { updateApplicationStatus, sendApplication, getApplication } from '../../api';
 
 interface Props {
 	application: IApplication;

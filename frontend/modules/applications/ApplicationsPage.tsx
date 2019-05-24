@@ -1,11 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Router from 'next/router';
-import {
-	sendErrorMessage,
-	getApplications,
-	sendSuccessMessage,
-	clearFlashMessages
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err, endResponse } from '../../utils';
@@ -13,6 +8,7 @@ import { Role } from '../../../shared/user.enums';
 import { ApplicationsTable } from './ApplicationsTable';
 import { RowInfo, Column, Filter } from 'react-table';
 import { connect } from 'react-redux';
+import { getApplications } from '../../api';
 
 interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
