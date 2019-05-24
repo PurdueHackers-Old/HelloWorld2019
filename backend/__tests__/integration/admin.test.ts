@@ -8,6 +8,7 @@ import { UserController } from '../../controllers/user.controller';
 import { GlobalsController } from '../../controllers/globals.controller';
 import { Status } from '../../../shared/app.enums';
 import { Application } from '../../models/application';
+import { Request } from 'express';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;
@@ -290,7 +291,7 @@ describe('Suite: /api/admin -- Integration', () => {
 				users.map((u, i) => {
 					if (i <= users.length - 5)
 						return userController
-							.apply(u.user._id, generateApplication(), u.user)
+							.apply({} as any, u.user._id, generateApplication(), u.user)
 							.then(app =>
 								Application.findByIdAndUpdate(app._id, {
 									statusPublic: Status.ACCEPTED
@@ -298,7 +299,7 @@ describe('Suite: /api/admin -- Integration', () => {
 							);
 					else if (i <= users.length - 3)
 						return userController
-							.apply(u.user._id, generateApplication(), u.user)
+							.apply({} as any, u.user._id, generateApplication(), u.user)
 							.then(app =>
 								Application.findByIdAndUpdate(app._id, {
 									statusPublic: Status.REJECTED
@@ -306,7 +307,7 @@ describe('Suite: /api/admin -- Integration', () => {
 							);
 					else if (i <= users.length - 1)
 						return userController
-							.apply(u.user._id, generateApplication(), u.user)
+							.apply({} as any, u.user._id, generateApplication(), u.user)
 							.then(app =>
 								Application.findByIdAndUpdate(app._id, {
 									statusPublic: Status.WAITLIST
