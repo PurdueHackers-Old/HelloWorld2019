@@ -10,6 +10,7 @@ import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Globals, IGlobalsModel } from '../models/globals';
+import { Application } from '../models/application';
 
 @JsonController('/api/globals')
 export class GlobalsController extends BaseController {
@@ -52,6 +53,12 @@ export class GlobalsController extends BaseController {
 		)
 			.lean()
 			.exec();
+
+		await Application.aggregate([
+			{ $addFields: { statusPublic: '$statusInternal' } },
+			{ $out: 'applications' }
+		]);
+
 		return globals;
 	}
 }

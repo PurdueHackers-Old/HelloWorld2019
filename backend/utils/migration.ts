@@ -27,6 +27,7 @@ const start = async () => {
 		} as any);
 		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.ADMIN });
 		let userApp = await userController.apply(
+			{} as any,
 			user.user._id,
 			generateApplication() as any,
 			user.user
@@ -39,6 +40,7 @@ const start = async () => {
 		} as any);
 		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
 		userApp = await userController.apply(
+			{} as any,
 			user.user._id,
 			generateApplication() as any,
 			user.user
@@ -60,20 +62,19 @@ const start = async () => {
 		} as any);
 
 		const applications = await Promise.all(
-			users.map(u => userController.apply(u.user._id, generateApplication() as any, u.user))
+			users.map(u =>
+				userController.apply({} as any, u.user._id, generateApplication() as any, u.user)
+			)
 		);
 
 		await Promise.all(
 			applications.map(app => {
 				let update;
 				const i = Math.floor(Math.random() * 12) + 0;
-				if (i < 6)
-					update = { statusPublic: Status.PENDING, statusInternal: Status.PENDING };
-				else if (i < 8)
-					update = { statusPublic: Status.ACCEPTED, statusInternal: Status.ACCEPTED };
-				else if (i < 10)
-					update = { statusPublic: Status.REJECTED, statusInternal: Status.REJECTED };
-				else update = { statusPublic: Status.WAITLIST, statusInternal: Status.WAITLIST };
+				if (i < 6) update = { statusInternal: Status.PENDING };
+				else if (i < 8) update = { statusInternal: Status.ACCEPTED };
+				else if (i < 10) update = { statusInternal: Status.REJECTED };
+				else update = { statusInternal: Status.WAITLIST };
 
 				return Application.findByIdAndUpdate(app._id, update).exec();
 			})
