@@ -4,15 +4,21 @@ import {
 	Authorized,
 	Post,
 	BodyParam,
-	BadRequestError
+	BadRequestError, Body
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Globals, IGlobalsModel } from '../models/globals';
+import { NotificationService } from '../services/notification.service';
+import { PushSubscription } from 'web-push';
 
 @JsonController('/api/globals')
 export class GlobalsController extends BaseController {
+	constructor(private notificationService?: NotificationService) {
+		super();
+	}
+	
 	@Get('/')
 	async getGlobals() {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
@@ -54,4 +60,9 @@ export class GlobalsController extends BaseController {
 			.exec();
 		return globals;
 	}
+	@Post('/subscription')
+	async subscribe(@Body() subscription: PushSubscription) {
+		this.notificationService.registerNotification(subscription)
+	}
+
 }
