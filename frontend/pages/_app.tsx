@@ -16,9 +16,10 @@ import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import '../assets/theme.less';
 import { IStoreState } from '../@types';
-import { api, urlBase64ToUint8Array } from '../utils';
+import { urlBase64ToUint8Array } from '../utils';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
+import { subscribeNotifications } from '../api'
 
 interface Props {
 	store: Store<IStoreState>;
@@ -77,10 +78,7 @@ export default class MyApp extends App<Props> {
 				}
 		        return subscription
 			})
-				.then((pushSubscription) => {
-					console.log('Service Worker Subscribed', pushSubscription)
-					return api.post('/globals/subscription', pushSubscription)
-				})
+				.then((pushSubscription) => subscribeNotifications(pushSubscription))
 		} else {
 			console.log('Service worker not supported');
 		}

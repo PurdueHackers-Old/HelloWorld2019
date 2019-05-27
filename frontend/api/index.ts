@@ -5,6 +5,7 @@ import { IContext, IGlobals, IUser, IApplication, IStatsResponse, IAnnouncement 
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Role } from '../../shared/user.enums';
 import { Status } from '../../shared/app.enums';
+import { PushSubscription } from 'web-push';
 
 export const forgotPassword = async (email: string) => {
 	try {
@@ -305,3 +306,10 @@ export const getAllAnnouncements = async (ctx?: IContext) => {
 		throw error.response ? error.response.data : error;
 	}
 };
+
+export const subscribeNotifications = (pushSubscription: PushSubscription) => {
+	return api.post('/globals/subscription', pushSubscription)
+		.catch((error) => {
+			throw error.response ? error.response.data : error;
+		})
+}

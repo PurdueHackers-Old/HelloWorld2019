@@ -20,14 +20,14 @@ const serverRuntimeConfig = {
 	REDIS_URL: env.REDIS_URL || 'redis://0.0.0.0:6379',
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
-	VAPID_PRIVATE: 'hzLrDY7ABruTR2-jUTFFib-k1ZaWuheeEgEDQjklE9Y',
+	VAPID_PRIVATE: 'my vapid private key',
 	...sharedConfig
 };
 
 const publicRuntimeConfig = {
 	API_URL: env.API_URL ? env.API_URL : `http://localhost:${sharedConfig.PORT}/api`,
 	NODE_ENV: env.NODE_ENV || 'development',
-	VAPID_PUBLIC: 'BAuP2nG0WU0fWfrZ-9-eqtFiMLTqUdiKEVdR1Cp_mKTAZ0qr9Yi9Nz-iz0j0sZVFtSpgvnIeOuKGf9gm5I_HUJI',
+	VAPID_PUBLIC: 'my vapid public key',
 	...sharedConfig
 };
 

@@ -43,6 +43,7 @@ export class AnnouncementController extends BaseController {
 		return Announcement.findByIdAndUpdate(id, { released: true })
 			.then((announcement) => {
 				this.notificationService.sendNotification(announcement.title)
+				return announcement
 			})
 	}
 }
