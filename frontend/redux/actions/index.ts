@@ -7,7 +7,6 @@ import * as flash from '../../utils/flash';
 import { setToken, setUser, setGreenFlash, setRedFlash } from '../creators';
 
 // Auth Actions
-// TODO: Signing up should not log user in
 export const signUp = (body: ICreateUser) => async (dispatch: Dispatch) => {
 	try {
 		const {

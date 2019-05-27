@@ -1,4 +1,3 @@
-import * as express from 'express';
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import { isEmail } from 'validator';
@@ -19,8 +18,6 @@ import {
 import { BaseController } from './base.controller';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
-
-export const router = express.Router();
 
 @JsonController('/api/auth')
 export class AuthController extends BaseController {
@@ -71,8 +68,7 @@ export class AuthController extends BaseController {
 		delete u.password;
 
 		// If user is found and password is correct, create a token
-		// const token = signToken(u);
-		const token = signToken(u, '1ms');
+		const token = signToken(u);
 		return {
 			user: u,
 			token
