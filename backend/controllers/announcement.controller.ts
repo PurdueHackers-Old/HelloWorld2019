@@ -1,6 +1,7 @@
 import { JsonController, Get, QueryParam, Post, Body, Param } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { Announcement, AnnouncementDto } from '../models/announcement';
+import { NotificationService } from '../services/notification.service';
 
 interface QueryCondition {
 	released: boolean;
@@ -10,6 +11,10 @@ interface QueryCondition {
 // TODO: Add tests
 @JsonController('/api/announcements')
 export class AnnouncementController extends BaseController {
+	constructor(private notificationService?: NotificationService) {
+		super();
+	}
+	
 	@Get('/')
 	async getAll(@QueryParam('type') type?: string) {
 		const conditions: QueryCondition = {
@@ -24,9 +29,8 @@ export class AnnouncementController extends BaseController {
 	}
 
 	@Post('/')
-	async updateStatus(@Body() status: AnnouncementDto) {
-		const application = await Announcement.create(status);
-		return application;
+	createAnnouncement(@Body() status: AnnouncementDto) {
+		return Announcement.create(status);
 	}
 
 	@Get('/:id')
@@ -36,8 +40,9 @@ export class AnnouncementController extends BaseController {
 
 	@Post('/:id/release')
 	async releaseAnnouncement(@Param('id') id: string) {
-		return Announcement.findById(id).update({
-			released: true
-		});
+		return Announcement.findByIdAndUpdate(id, { released: true })
+			.then((announcement) => {
+				this.notificationService.sendNotification(announcement.title)
+			})
 	}
 }

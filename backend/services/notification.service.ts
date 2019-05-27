@@ -12,11 +12,11 @@ setVapidDetails(
 @Service('notificationService')
 export class NotificationService {
 	registerNotification(subscription: PushSubscription, user?: IUserModel) {
-		console.log(subscription)
+		// TODO: only send welcome notification when it's a new subscription (no exisitng subscription in the db)
 		return sendNotification(subscription, 'Successfully Subscribed!')
 	}
 	sendNotification(content: string) {
-		
+		// TODO: Send notification to all subscribers.
 	}
 	
 	sendNotificationToUser(user: IUserModel, content: string) {
