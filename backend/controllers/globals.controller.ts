@@ -7,12 +7,13 @@ import {
 	BadRequestError,
 	Body
 } from 'routing-controllers';
+import { PushSubscription } from 'web-push';
+import CONFIG from '../config';
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Globals, IGlobalsModel } from '../models/globals';
 import { NotificationService } from '../services/notification.service';
-import { PushSubscription } from 'web-push';
 import { Application } from '../models/application';
 
 @JsonController('/api/globals')
@@ -68,8 +69,14 @@ export class GlobalsController extends BaseController {
 
 		return globals;
 	}
+
+	@Get('/vapid-public-key')
+	getVapidPublicKey() {
+		return CONFIG.VAPID_PUBLIC;
+	}
+
 	@Post('/subscription')
 	async subscribe(@Body() subscription: PushSubscription) {
-		this.notificationService.registerNotification(subscription);
+		return this.notificationService.registerNotification(subscription);
 	}
 }

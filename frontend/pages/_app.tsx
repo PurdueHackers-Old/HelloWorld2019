@@ -16,10 +16,8 @@ import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import '../assets/theme.less';
 import { IStoreState } from '../@types';
-import { urlBase64ToUint8Array } from '../utils';
 import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-import { subscribeNotifications } from '../api'
+import { registerServiceWorker } from '../utils/service-worker';
 
 interface Props {
 	store: Store<IStoreState>;
@@ -61,27 +59,7 @@ export default class MyApp extends App<Props> {
 			const { flashState } = store.getState();
 			if (flashState.green || flashState.red) store.dispatch(clearFlashMessages() as any);
 		};
-		if ('serviceWorker' in navigator) {
-			console.log('has service worker')
-			navigator.serviceWorker.register('/sw.js')
-				.catch(err => console.error('Service worker registration failed', err));
-			navigator.serviceWorker.ready.then( async (registration) => {
-				console.log('service worker ready')
-				let subscription = await registration.pushManager.getSubscription()
-				console.log(subscription)
-				if (!subscription) {
-					subscription = await registration.pushManager.subscribe({
-						userVisibleOnly: true,
-						applicationServerKey: urlBase64ToUint8Array(publicRuntimeConfig.VAPID_PUBLIC),
-					})
-					console.log('subscribed', subscription)
-				}
-		        return subscription
-			})
-				.then((pushSubscription) => subscribeNotifications(pushSubscription))
-		} else {
-			console.log('Service worker not supported');
-		}
+		registerServiceWorker();
 	}
 
 	render() {

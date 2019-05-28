@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useRef } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication, IUser } from '../../@types';
 import {
@@ -23,6 +23,8 @@ interface Props {
 }
 
 const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) => {
+	const formRef = useRef<HTMLFormElement>();
+
 	const [state, setState] = useState({
 		...application,
 		status: application.statusInternal
@@ -84,6 +86,7 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 			<br />
 			<ApplicationForm
 				{...state}
+				formRef={formRef}
 				disabled={disabled}
 				onChange={onChange}
 				onSelect={onSelect}

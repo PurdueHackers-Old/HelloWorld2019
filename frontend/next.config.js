@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const withTypescript = require('@zeit/next-typescript');
 const withCss = require('@zeit/next-css');
 const withLess = require('@zeit/next-less');
@@ -53,11 +54,11 @@ module.exports = withPlugins(
 			// 		})
 			// 	);
 			// }
-			// config.plugins.push(
-			// 	new webpack.DefinePlugin({
-			// 		'process.env.NODE_ENV': process.env.NODE_ENV
-			// 	})
-			// );
+			config.plugins.push(
+				new webpack.DefinePlugin({
+					'process.env.NODE_ENV': process.env.NODE_ENV
+				})
+			);
 
 			return config;
 		}
