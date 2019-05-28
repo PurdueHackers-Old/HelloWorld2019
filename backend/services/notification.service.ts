@@ -10,8 +10,8 @@ setVapidDetails('https://purduehackers.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_P
 export class NotificationService {
 	async registerNotification(subscription: PushSubscription, user?: IUserModel) {
 		const result = await Subscription.updateOne(
-			{ content: subscription },
-			{ user, content: subscription },
+			{ endpoint: subscription.endpoint },
+			{ user, ...subscription },
 			{ upsert: true }
 		);
 
@@ -19,10 +19,10 @@ export class NotificationService {
 			return await sendNotification(subscription, 'Successfully Subscribed!');
 		}
 	}
-	async sendNotification(content: string, user?: IUserModel) {
+	async sendNotification(body: string, user?: IUserModel) {
 		const subscriptions = await Subscription.find(user ? { user } : {});
 		for (const subscription of subscriptions) {
-			await sendNotification(subscription.content, content);
+			await sendNotification(subscription, body);
 		}
 	}
 }

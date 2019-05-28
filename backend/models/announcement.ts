@@ -10,8 +10,8 @@ export class AnnouncementDto {
 	title: string;
 
 	@Type(() => String)
-	@IsNotEmpty({ message: 'The content of the announcement is required' })
-	content: string;
+	@IsNotEmpty({ message: 'The body of the announcement is required' })
+	body: string;
 
 	@IsNotEmpty({ message: 'Please provide a type for the announcement' })
 	@IsEnum(AnnouncementType, { message: 'Please provide a valid announcement type' })
@@ -32,7 +32,7 @@ const schema = new Schema(
 			required: true
 		},*/
 		title: String,
-		content: String,
+		body: String,
 		type: {
 			type: String,
 			default: AnnouncementType.MISC,

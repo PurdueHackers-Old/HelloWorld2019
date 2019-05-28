@@ -1,4 +1,4 @@
-// <reference types="../node_modules/types-serviceworker" />
+//// <reference types="../node_modules/types-serviceworker" />
 
 const urlB64ToUint8Array = base64String => {
 	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -35,9 +35,7 @@ const saveSubscription = async subscription => {
 	try {
 		const response = await fetch('/api/globals/subscription', {
 			method: 'post',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(subscription)
 		});
 		return response.json();
@@ -46,21 +44,32 @@ const saveSubscription = async subscription => {
 	}
 };
 
+// This will be called only once when the service worker is installed for first time.
 self.addEventListener('install', async () => {
-	// This will be called only once when the service worker is installed for first time.
-	console.log('Installing service worker');
+	console.log('[Service Worker]: Installing service worker');
 	try {
 		const subscription = await createSubscription();
 		await saveSubscription(subscription);
 	} catch (err) {
-		console.error('Error creating subscription:', err);
-		await self.skipWaiting();
+		console.error('[Service Worker]: Error creating subscription:', err.message);
 	}
-	console.log('Successfully installed service worker');
+	console.log('[Service Worker]: Successfully installed service worker');
 });
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', event => {
 	if (event && event.data) {
-		event.waitUntil(self.registration.showNotification(event.data.text()));
+		const title = event.data.text();
+		event.waitUntil(
+			self.registration
+				.showNotification(title)
+				.catch(error =>
+					console.error('[Service Worker]: Error showing notification:', error)
+				)
+		);
 	}
+});
+
+self.addEventListener('notificationclick', event => {
+	event.notification.close();
+	event.waitUntil(self.clients.openWindow('/announcements'));
 });

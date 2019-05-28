@@ -3,3 +3,5 @@ declare namespace NodeJS {
 		browser: boolean;
 	}
 }
+
+declare var self: ServiceWorkerGlobalScope;
