@@ -14,8 +14,6 @@ interface Props extends IApplication {
 	formRef: MutableRefObject<HTMLFormElement>;
 	user: IUser;
 	disabled?: boolean;
-	onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-	onSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
@@ -33,8 +31,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="gender"
-					onChange={props.onSelect}
-					value={props.gender}
+					defaultValue={props.gender}
 				>
 					{Object.values(Gender).map(gender => (
 						<option value={gender} key={gender}>
@@ -50,8 +47,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="ethnicity"
-					onChange={props.onSelect}
-					value={props.ethnicity}
+					defaultValue={props.ethnicity}
 				>
 					{ethnicities.map(ethnicity => (
 						<option value={ethnicity} key={ethnicity}>
@@ -67,8 +63,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="classYear"
-					onChange={props.onSelect}
-					value={props.classYear}
+					defaultValue={props.classYear}
 				>
 					{Object.values(ClassYear).map(classYear => (
 						<option value={classYear} key={classYear}>
@@ -84,8 +79,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="graduationYear"
-					onChange={props.onSelect}
-					value={props.graduationYear}
+					defaultValue={`${props.graduationYear}`}
 				>
 					{gradYears.map(graduationYear => (
 						<option value={graduationYear} key={graduationYear}>
@@ -97,13 +91,7 @@ export const ApplicationForm = (props: Props) => {
 			<br />
 			<label htmlFor="major">
 				Major{' '}
-				<select
-					disabled={props.disabled}
-					required
-					name="major"
-					onChange={props.onSelect}
-					value={props.major}
-				>
+				<select disabled={props.disabled} required name="major" defaultValue={props.major}>
 					{Object.values(Major).map(major => (
 						<option value={major} key={major}>
 							{major}
@@ -118,8 +106,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="referral"
-					onChange={props.onSelect}
-					value={props.referral}
+					defaultValue={props.referral}
 				>
 					{Object.values(Referral).map(referral => (
 						<option value={referral} key={referral}>
@@ -137,8 +124,7 @@ export const ApplicationForm = (props: Props) => {
 					min="0"
 					name="hackathons"
 					type="number"
-					onChange={props.onChange}
-					value={props.hackathons}
+					defaultValue={`${props.hackathons}`}
 				/>
 			</label>
 			<br />
@@ -148,8 +134,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="shirtSize"
-					onChange={props.onSelect}
-					value={props.shirtSize}
+					defaultValue={props.shirtSize}
 				>
 					{Object.values(ShirtSize).map(shirtSize => (
 						<option value={shirtSize} key={shirtSize}>
@@ -164,8 +149,7 @@ export const ApplicationForm = (props: Props) => {
 				<input
 					disabled={props.disabled}
 					name="dietaryRestrictions"
-					onChange={props.onChange}
-					value={props.dietaryRestrictions}
+					defaultValue={props.dietaryRestrictions}
 				/>
 			</label>
 			<br />
@@ -175,8 +159,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					name="website"
 					type="url"
-					onChange={props.onChange}
-					value={props.website}
+					defaultValue={props.website}
 				/>
 			</label>
 			<br />
@@ -187,8 +170,7 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="answer1"
-					value={props.answer1}
-					onChange={props.onChange}
+					defaultValue={props.answer1}
 				/>
 			</label>
 			<br />
@@ -199,19 +181,14 @@ export const ApplicationForm = (props: Props) => {
 					disabled={props.disabled}
 					required
 					name="answer2"
-					value={props.answer2}
-					onChange={props.onChange}
+					defaultValue={props.answer2}
 				/>
 			</label>
 			<br />
+
 			<label htmlFor="resume">
-				Resume:{' '}
-				<input
-					type="file"
-					name="resume"
-					accept="application/pdf"
-					onChange={props.onChange}
-				/>
+				{props.resume && <>&#9989;</>} Resume:{' '}
+				<input type="file" name="resume" accept="application/pdf" />
 			</label>
 			<br />
 			<br />
