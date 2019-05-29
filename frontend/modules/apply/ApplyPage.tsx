@@ -68,16 +68,6 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			});
 	}, []);
 
-	const onChange = (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
-		const { name, value, files } = e.target;
-		name === 'resume'
-			? setState({ ...state, [name]: files[0] })
-			: setState({ ...state, [name]: value });
-	};
-
-	const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
-		setState({ ...state, [e.target.name]: e.target.value });
-
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
@@ -126,8 +116,6 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 				formRef={formRef}
 				disabled={closed}
 				user={user}
-				onChange={onChange}
-				onSelect={onSelect}
 				onSubmit={onSubmit}
 			/>
 		</div>
