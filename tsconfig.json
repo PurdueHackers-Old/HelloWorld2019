@@ -15,7 +15,7 @@
 		"skipLibCheck": true,
 		"outDir": "dist",
 		"typeRoots": ["./node_modules/@types", "./frontend/@types"],
-		"lib": ["dom", "esnext", "webworker"]
+		"lib": ["dom", "es2017"]
 	},
 	"exclude": ["./node_modules"],
 	"include": ["backend", "frontend"]

@@ -1,8 +1,8 @@
 const isSWSupported = () => 'serviceWorker' in navigator && 'PushManager' in window;
 
-export const register = async () => navigator.serviceWorker.register('/sw.js');
+export const register = () => navigator.serviceWorker.register('/sw.js', { scope: '/' });
 
-const requestNotificationPermission = async () => window.Notification.requestPermission();
+const requestNotificationPermission = () => window.Notification.requestPermission();
 
 export const registerServiceWorker = async () => {
 	if (!isSWSupported()) return console.error('Service worker not supported');

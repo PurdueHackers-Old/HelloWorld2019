@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
@@ -12,24 +12,32 @@ interface Props {
 	clear: (ctx?: IContext) => void;
 }
 
-export class Announcements extends Component<Props> {
-	static getInitialProps = async (ctx: IContext) => {
-		try {
-			const announcements = await getAllAnnouncements(ctx);
-			return announcements;
-		} catch (error) {
-			return [];
-		}
-	};
+export const Announcements = (props: Props) => {
+	useEffect(() => {
+		const handleMessage = event => {
+			console.log('Client Received Message: ', event.data);
+		};
+		navigator.serviceWorker.addEventListener('message', handleMessage);
+		return () => {
+			navigator.serviceWorker.removeEventListener('message', handleMessage);
+		};
+	}, []);
 
-	render() {
-		return (
-			<div>
-				<h3>Announcements Page</h3>
-			</div>
-		);
+	return (
+		<div>
+			<h3>Announcements Page</h3>
+		</div>
+	);
+};
+
+Announcements.getInitialProps = async ctx => {
+	try {
+		const announcements = await getAllAnnouncements(ctx);
+		return announcements;
+	} catch (error) {
+		return [];
 	}
-}
+};
 
 export const AnnouncementsPage = connect(
 	null,

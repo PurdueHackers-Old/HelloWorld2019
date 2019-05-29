@@ -16,7 +16,6 @@ import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import '../assets/theme.less';
 import { IStoreState } from '../@types';
-import getConfig from 'next/config';
 import { registerServiceWorker } from '../utils/service-worker';
 
 interface Props {

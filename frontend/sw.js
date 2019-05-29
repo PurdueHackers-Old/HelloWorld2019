@@ -1,5 +1,21 @@
 //// <reference types="../node_modules/types-serviceworker" />
 
+const sendMessageToClient = (client, msg) => {
+	return new Promise((resolve, reject) => {
+		const channel = new MessageChannel();
+
+		channel.port1.onmessage = function(event) {
+			if (event.data.error) {
+				reject(event.data.error);
+			} else {
+				resolve(event.data);
+			}
+		};
+
+		client.postMessage({ msg }, [channel.port2]);
+	});
+};
+
 const urlB64ToUint8Array = base64String => {
 	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
 	const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -52,6 +68,7 @@ self.addEventListener('install', async () => {
 		await saveSubscription(subscription);
 	} catch (err) {
 		console.error('[Service Worker]: Error creating subscription:', err.message);
+		await self.skipWaiting();
 	}
 	console.log('[Service Worker]: Successfully installed service worker');
 });
@@ -65,6 +82,14 @@ self.addEventListener('push', event => {
 				.catch(error =>
 					console.error('[Service Worker]: Error showing notification:', error)
 				)
+		);
+		event.waitUntil(
+			self.clients.matchAll().then(clients =>
+				clients.map(client => {
+					console.log('Got client:', client);
+					return sendMessageToClient(client, event.data.text());
+				})
+			)
 		);
 	}
 });
