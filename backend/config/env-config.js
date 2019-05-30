@@ -20,6 +20,7 @@ const serverRuntimeConfig = {
 	REDIS_URL: env.REDIS_URL || 'redis://0.0.0.0:6379',
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
+	HEADLESS: !!env.HEADLESS || false,
 	...sharedConfig
 };
 
