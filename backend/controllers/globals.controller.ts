@@ -7,6 +7,7 @@ import {
 	BadRequestError,
 	Body
 } from 'routing-controllers';
+import CONFIG from '../config';
 import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
@@ -68,8 +69,14 @@ export class GlobalsController extends BaseController {
 
 		return globals;
 	}
+
 	@Post('/subscription')
 	async subscribe(@Body() subscription: PushSubscription) {
 		this.notificationService.registerNotification(subscription);
+	}
+
+	@Get('/vapid-public-key')
+	getVapidPublicKey() {
+		return CONFIG.VAPID_PUBLIC;
 	}
 }
