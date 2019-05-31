@@ -1,19 +1,17 @@
 language: node_js
 node_js:
-    - 'lts/*'
+- 'lts/*'
 dist: trusty
-sudo: false  
+sudo: false
 addons:
   chrome: stable
 before_install:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-cache:
-  yarn: true
-  directories:
-    - node_modules
-install:
-  - yarn install
-script:
-  - yarn test
+- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+  &
+cache: yarn
+
 env:
+  global:
+  - secure: WGo3+MB0KbFZYa2QKjmT04pkpnuL6IY+v4P3KYn2fs5mh+rJqP/2nS5FUFDQVfUf05HDSJotLPfv4CXZXmb6E10aLqzWaSUcVZdKV+OYYriA6J2CDbCuYJze6VLmuC8N0RUNieXs82nexnb0XWWmUC5yGnhdK4hNnKrbxATo3bewLjV8UUT8XziCneY8ohC2DDs8jCjavH39xp9H5rMk5whisr2ysK9ZZJkuYJAPytBAtT90MU+4F2XmwsyhwPqxeEq936JvFhervPTwlC50xrok1nfPerB/PNkke8Q9/LEtuFoWh/uNaeUPNGgIIjPa8yvO2AfdtqRpKGR01nMVyVWGbSEUIndPkRmuy7G6VrheoSEAMhnYDkEUTCSiltsA/due8HrzT39u7vCmgWWkRcjwe1G0dcuB10l2NhExKSL0NSnVaFUGaTyI22JLs0G5hAjnRRubsyQhjysamFXEVIv6T32XgOacWjbxxZI8lXePVmaCmwUFhnJZ5M+h8B6qOrttF7HNYHKo3O9wcMiwVCVSaDjSDkJBnPYNWquCj/YjbTXUOLnvCfYwxcInCS4Mp00mwOKNfmHOp/7RPzLtkayb91ZbePy7w/dKXdjKvqIguGosEuQYDwh4TTeqTvKirKV8gH9VHOmDvdge/orjR0LFIvawIBA5yO0nzrN30IE=
+  - secure: m9duoXSfQ0n/u72nDmVF64FsVoBy52Zr4pw0iYKl6FamqPbQ0dTb2IpkMeUbdM41hH7vHC3X9fKB08Q8lbXvkL48KvIgIw4edzanB+2i7DiiP0cg4qipqfu7l/1Z4EhEAPojgibxI1Y/OsLIFsPw43juTeYYbryLBM03dEwwnro4yIEE/S4VbNsacCveOaI0oIexJTAb+rEyikc+tx+qSkEjzRFUQVL4YZzJxteUUrXwi42v5QsqLO5Mz/3rCvi/cMC3kzqtwpNBI8P0Jg37JqKWiLGAfV/uIZWFgvnzibDz4a79FhAkBBZzrI9xWxJPhwpz6tqPCgXto0PHggFThW1baUvqO+aa2hRKEQcnsihNdi5pzYft5lT1X+7ei1xd4qxM/U6iMMo6kImYWgK1/fxM70D+KAPnvV7u18cJ/QkdNLb9mUWuz24+ddzkUbxqiB+1pTwTVPVZfIgY7JAAc8ZaQzDMPmL8hA+tcYANOk0iKuTchz6tByCQUF9gprSKsD1NYyJ8Ke0SuYCdV8iem/8YA4TUdeZfDpvWdFMeiqGWFpSr9R5Vpyo5s5XZppNQPDvuFpuvOaXyeJZyD+ZXT0x9jp8NeHfEzD97qLXbWATOnCEwROUlqS3DU59GcjPDxrcR6SssT1eB8ioYdbi8hnKQYykPAgSL4qhZC2Os6+Q=
   - HEADLESS=true

@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import * as express from 'express';
 import { Server as HTTPServer } from 'http';
-
 import 'express-async-errors';
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
@@ -67,6 +66,7 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
+			this.app.use('/sw.js', express.static('frontend/sw.js'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});

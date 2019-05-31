@@ -16,6 +16,11 @@ import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import '../assets/theme.less';
 import { IStoreState } from '../@types';
+import { urlBase64ToUint8Array } from '../utils';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+import { subscribeNotifications } from '../api';
+import { registerServiceWorker } from '../utils/service-worker';
 
 interface Props {
 	store: Store<IStoreState>;
@@ -57,6 +62,7 @@ export default class MyApp extends App<Props> {
 			const { flashState } = store.getState();
 			if (flashState.green || flashState.red) store.dispatch(clearFlashMessages() as any);
 		};
+		registerServiceWorker();
 	}
 
 	render() {

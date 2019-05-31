@@ -4,7 +4,8 @@ const env = process.env;
 
 const sharedConfig = {
 	PORT: env.PORT || 5000,
-	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2'
+	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2',
+	VAPID_PUBLIC: env.VAPID_PUBLIC || 'my vapid public key'
 };
 
 const serverRuntimeConfig = {
@@ -20,6 +21,7 @@ const serverRuntimeConfig = {
 	REDIS_URL: env.REDIS_URL || 'redis://0.0.0.0:6379',
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
+	VAPID_PRIVATE: env.VAPID_PRIVATE || 'my vapid private key',
 	HEADLESS: !!env.HEADLESS || false,
 	...sharedConfig
 };
