@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import * as express from 'express';
+import { Server as HTTPServer } from 'http';
 import 'express-async-errors';
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
@@ -43,7 +44,9 @@ export default class Server {
 		await server.setupMongo();
 		return server;
 	}
+
 	public app: express.Application;
+	public httpServer: HTTPServer;
 	public nextApp: next.Server;
 	public mongoose: typeof mongoose;
 	public logger: Logger;
@@ -54,7 +57,7 @@ export default class Server {
 		this.logger = createLogger(this);
 		this.setup();
 		this.nextApp = next({
-			dev: NODE_ENV !== 'production',
+			dev: NODE_ENV === 'development',
 			dir: join(__dirname + '/../frontend')
 		});
 	}
@@ -63,7 +66,7 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
-			this.app.use('/sw.js', express.static('frontend/sw.js'))
+			this.app.use('/sw.js', express.static('frontend/sw.js'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});
@@ -130,6 +133,36 @@ export default class Server {
 			]
 		});
 		this.app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(this.spec));
-		// console.log(this.spec);
+	}
+
+	public async start() {
+		await this.initFrontend();
+
+		this.httpServer = this.app.listen(CONFIG.PORT, () => {
+			this.logger.info('CONFIG:', CONFIG);
+			this.logger.info(`Listening on port: ${CONFIG.PORT}`);
+		});
+
+		// Graceful shutdown
+		process.on('SIGTERM', async () => {
+			await this.mongoose.disconnect();
+			this.httpServer.close();
+			process.exit(0);
+		});
+
+		return this;
+	}
+
+	public async stop() {
+		if (this.mongoose) await this.mongoose.disconnect();
+		if (this.httpServer) {
+			await new Promise((resolve, reject) => {
+				this.httpServer.close(err => {
+					if (err) reject(err);
+					else resolve();
+				});
+			});
+		}
+		return this;
 	}
 }

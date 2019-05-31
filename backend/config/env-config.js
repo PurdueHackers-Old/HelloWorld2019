@@ -22,6 +22,7 @@ const serverRuntimeConfig = {
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
 	VAPID_PRIVATE: env.VAPID_PRIVATE || 'my vapid private key',
+	HEADLESS: !!env.HEADLESS || false,
 	...sharedConfig
 };
 
