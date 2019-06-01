@@ -154,7 +154,12 @@ export default class Server {
 	}
 
 	public async stop() {
-		if (this.mongoose) await this.mongoose.disconnect();
+		if (this.mongoose) {
+			await Promise.all(
+				this.mongoose.modelNames().map(model => this.mongoose.model(model).ensureIndexes())
+			);
+			await this.mongoose.disconnect();
+		}
 		if (this.httpServer) {
 			await new Promise((resolve, reject) => {
 				this.httpServer.close(err => {
