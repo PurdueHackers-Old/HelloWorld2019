@@ -14,7 +14,7 @@ export class AnnouncementController extends BaseController {
 	constructor(private notificationService?: NotificationService) {
 		super();
 	}
-	
+
 	@Get('/')
 	async getAll(@QueryParam('type') type?: string) {
 		const conditions: QueryCondition = {
@@ -40,10 +40,8 @@ export class AnnouncementController extends BaseController {
 
 	@Post('/:id/release')
 	async releaseAnnouncement(@Param('id') id: string) {
-		return Announcement.findByIdAndUpdate(id, { released: true })
-			.then((announcement) => {
-				this.notificationService.sendNotification(announcement.title)
-				return announcement
-			})
+		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
+		this.notificationService.sendNotification(announcement.title);
+		return announcement;
 	}
 }

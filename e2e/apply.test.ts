@@ -4,7 +4,6 @@ import Server from '../dist/backend/server';
 import * as puppeteer from 'puppeteer';
 import { generateUser, generateApplication } from '../backend/__tests__/helper';
 import { Application } from '../dist/backend/models/application';
-// import { Application } from '../dist/backend/models/application';
 
 jest.setTimeout(100000);
 

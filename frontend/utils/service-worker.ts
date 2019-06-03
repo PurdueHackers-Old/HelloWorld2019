@@ -5,15 +5,12 @@ const register = async () => navigator.serviceWorker.register('/sw.js');
 const requestNotificationPermission = async () => (window as any).Notification.requestPermission();
 
 export const registerServiceWorker = async () => {
-	if (!isSWSupported()) return console.error('Service worker not supported');
+	if (!isSWSupported()) throw new Error('Service worker not supported');
 
-	try {
-		await register();
-		console.log('Service Worker registered');
-	} catch (error) {
-		return console.error('Service worker registration failed:', error);
-	}
+	const registration = await register();
+	console.log('Service Worker registered');
 
 	const permission = await requestNotificationPermission();
-	if (permission !== 'granted') return console.error('Permission not granted for notifications');
+	if (permission !== 'granted') throw new Error('Permission not granted for notifications');
+	return registration;
 };
