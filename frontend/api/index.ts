@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import { PushSubscription } from 'web-push';
 import { api } from '../utils';
 import { getToken } from '../utils/session';
 import { IContext, IGlobals, IUser, IApplication, IStatsResponse, IAnnouncement } from '../@types';
@@ -280,9 +281,16 @@ export const getAllAnnouncements = async (ctx?: IContext) => {
 	}
 };
 
-export const subscribeNotifications = async (pushSubscription: PushSubscription) => {
+export const createAnnouncement = async (pushSubscription: PushSubscription, ctx?: IContext) => {
 	try {
-		return api.post('/globals/subscription', pushSubscription);
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.post('/announcements', pushSubscription, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const announcement: IAnnouncement = response;
+		return announcement;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
 	}
