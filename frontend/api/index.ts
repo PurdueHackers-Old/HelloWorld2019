@@ -156,7 +156,7 @@ export const getCheckin = async (ctx?: IContext, params?) => {
 	}
 };
 
-export const checkinUser = async (email: string, ctx?: IContext, params?) => {
+export const checkinUser = async (email: string, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
@@ -164,10 +164,7 @@ export const checkinUser = async (email: string, ctx?: IContext, params?) => {
 		} = await api.post(
 			`/exec/checkin/${email}`,
 			{},
-			{
-				params,
-				headers: { Authorization: `Bearer ${token}` }
-			}
+			{ headers: { Authorization: `Bearer ${token}` } }
 		);
 		const user: IUser = response;
 		return user;
@@ -193,7 +190,7 @@ export const getUsers = async (ctx?: IContext, params?) => {
 	}
 };
 
-export const updateRole = async (email: string, role: Role, ctx?: IContext, params?) => {
+export const updateRole = async (email: string, role: Role, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
@@ -201,10 +198,7 @@ export const updateRole = async (email: string, role: Role, ctx?: IContext, para
 		} = await api.post(
 			`/admin/role/`,
 			{ email, role },
-			{
-				params,
-				headers: { Authorization: `Bearer ${token}` }
-			}
+			{ headers: { Authorization: `Bearer ${token}` } }
 		);
 		const user: IUser = response;
 		return user;
@@ -213,19 +207,12 @@ export const updateRole = async (email: string, role: Role, ctx?: IContext, para
 	}
 };
 
-export const sendMassEmails = async (ctx?: IContext, params?) => {
+export const sendMassEmails = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
 			data: { response }
-		} = await api.post(
-			`/admin/emails/`,
-			{},
-			{
-				params,
-				headers: { Authorization: `Bearer ${token}` }
-			}
-		);
+		} = await api.post(`/admin/emails/`, {}, { headers: { Authorization: `Bearer ${token}` } });
 		return response;
 	} catch (error) {
 		throw error.response ? error.response.data : error;
@@ -233,15 +220,12 @@ export const sendMassEmails = async (ctx?: IContext, params?) => {
 };
 
 // Globals Actions
-export const fetchGlobals = async (ctx?: IContext, params?) => {
+export const fetchGlobals = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
 			data: { response }
-		} = await api.get(`/globals/`, {
-			params,
-			headers: { Authorization: `Bearer ${token}` }
-		});
+		} = await api.get(`/globals/`, { headers: { Authorization: `Bearer ${token}` } });
 		const globals: IGlobals = response;
 		return globals;
 	} catch (error) {
@@ -249,11 +233,7 @@ export const fetchGlobals = async (ctx?: IContext, params?) => {
 	}
 };
 
-export const updateApplicationsStatus = async (
-	status: ApplicationsStatus,
-	ctx?: IContext,
-	params?
-) => {
+export const updateApplicationsStatus = async (status: ApplicationsStatus, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
@@ -261,10 +241,7 @@ export const updateApplicationsStatus = async (
 		} = await api.post(
 			`/globals/status/`,
 			{ status },
-			{
-				params,
-				headers: { Authorization: `Bearer ${token}` }
-			}
+			{ headers: { Authorization: `Bearer ${token}` } }
 		);
 		return response;
 	} catch (error) {
@@ -272,7 +249,7 @@ export const updateApplicationsStatus = async (
 	}
 };
 
-export const makePublicApplications = async (status: boolean, ctx?: IContext, params?) => {
+export const makePublicApplications = async (status: boolean, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
 		const {
@@ -280,10 +257,7 @@ export const makePublicApplications = async (status: boolean, ctx?: IContext, pa
 		} = await api.post(
 			`/globals/public/`,
 			{ status },
-			{
-				params,
-				headers: { Authorization: `Bearer ${token}` }
-			}
+			{ headers: { Authorization: `Bearer ${token}` } }
 		);
 		return response;
 	} catch (error) {
@@ -306,8 +280,10 @@ export const getAllAnnouncements = async (ctx?: IContext) => {
 	}
 };
 
-export const subscribeNotifications = (pushSubscription: PushSubscription) => {
-	return api.post('/globals/subscription', pushSubscription).catch(error => {
+export const subscribeNotifications = async (pushSubscription: PushSubscription) => {
+	try {
+		return api.post('/globals/subscription', pushSubscription);
+	} catch (error) {
 		throw error.response ? error.response.data : error;
-	});
+	}
 };
