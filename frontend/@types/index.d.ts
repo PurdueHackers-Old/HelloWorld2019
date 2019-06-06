@@ -54,7 +54,7 @@ export interface IApplication {
 
 export interface IAnnouncement {
 	title: string;
-	content: string;
+	body: string;
 	type: AnnouncementType;
 	createdAt: Date;
 	released: boolean;
@@ -63,6 +63,9 @@ export interface IAnnouncement {
 export interface IGlobals {
 	applicationsPublic: boolean;
 	applicationsStatus: ApplicationsStatus;
+	hackingTimeStart: string;
+	hackingTimeEnd: string;
+	emailsSent: Date;
 }
 
 export type flashColor = 'red' | 'green';

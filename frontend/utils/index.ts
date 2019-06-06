@@ -32,13 +32,22 @@ export const formatDate = (date: string | number | Date) => {
 	return str !== 'Invalid Date' ? str : 'N/A';
 };
 
+export const formatDateAsTimeLocal = (d: Date) => {
+	const year = d.getFullYear();
+	const month = `${d.getMonth() + 1}`.padStart(2, '0');
+	const day = `${d.getDate()}`.padStart(2, '0');
+	const hours = `${d.getHours()}`.padStart(2, '0');
+	const minutes = `${d.getMinutes()}`.padStart(2, '0');
+
+	console.log('Day:', day);
+	return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 export const endResponse = (ctx: IContext) => ctx && ctx.res && ctx.res.end();
 
 export function urlBase64ToUint8Array(base64String) {
-	const padding = '='.repeat((4 - base64String.length % 4) % 4);
-	const base64 = (base64String + padding)
-		.replace(/-/g, '+')
-		.replace(/_/g, '/');
+	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+	const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
 	const rawData = window.atob(base64);
 	const outputArray = new Uint8Array(rawData.length);
