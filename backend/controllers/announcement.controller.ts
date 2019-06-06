@@ -28,9 +28,10 @@ export class AnnouncementController extends BaseController {
 		return results;
 	}
 
+	// TODO: Create cron job to dispatch sending of announcement notifications
 	@Post('/')
-	createAnnouncement(@Body() status: AnnouncementDto) {
-		return Announcement.create(status);
+	createAnnouncement(@Body() announcement: AnnouncementDto) {
+		return Announcement.create(announcement);
 	}
 
 	@Get('/:id')

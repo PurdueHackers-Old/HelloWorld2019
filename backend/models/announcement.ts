@@ -1,8 +1,8 @@
 import { Document, Schema, model } from 'mongoose';
 import { IsNotEmpty, IsEnum } from 'class-validator';
-import { IUserModel } from './user';
 import { Type } from 'class-transformer';
-import { Type as AnnouncementType } from '../../shared/announcement.enums';
+import { AnnouncementLabel } from '../../shared/announcement.enums';
+import { IsDate } from '../validators/date';
 
 export class AnnouncementDto {
 	@Type(() => String)
@@ -10,35 +10,29 @@ export class AnnouncementDto {
 	title: string;
 
 	@Type(() => String)
-	@IsNotEmpty({ message: 'The content of the announcement is required' })
-	content: string;
+	@IsNotEmpty({ message: 'The body of the announcement is required' })
+	body: string;
 
-	@IsNotEmpty({ message: 'Please provide a type for the announcement' })
-	@IsEnum(AnnouncementType, { message: 'Please provide a valid announcement type' })
-	type: AnnouncementType;
+	@IsNotEmpty({ message: 'Please provide a label for the announcement' })
+	@IsEnum(AnnouncementLabel, { message: 'Please provide a valid announcement label', each: true })
+	labels: AnnouncementLabel[];
+
+	@IsNotEmpty({ message: 'Please provide a broadcast time for the announcement' })
+	@IsDate({ message: 'Invalid broadcast time' })
+	broadcastTime: Date;
 }
 
 export interface IAnnouncementModel extends AnnouncementDto, Document {
-	user: IUserModel;
 	createdAt: Date;
 	released: boolean;
 }
 
 const schema = new Schema(
 	{
-		/*user: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
-			required: true
-		},*/
 		title: String,
-		content: String,
-		type: {
-			type: String,
-			default: AnnouncementType.MISC,
-			enum: Object.values(AnnouncementType),
-			select: false
-		},
+		body: String,
+		labels: [String],
+		broadcastTime: Date,
 		released: Boolean
 	},
 	{ timestamps: true }

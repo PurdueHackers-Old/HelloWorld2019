@@ -15,6 +15,10 @@ const Header = ({ token, role }: Props) => {
 				<a>Home</a>
 			</Link>{' '}
 			|{' '}
+			<Link href="/announcements">
+				<a>Announcements</a>
+			</Link>{' '}
+			|{' '}
 			{role && roleMatches(role, Role.EXEC) && (
 				<>
 					<Link href="/dashboard">

@@ -46,7 +46,6 @@ export class StatusSelector extends Component<Props> {
 						</option>
 					))}
 				</select>
-				            
 			</div>
 		);
 	}

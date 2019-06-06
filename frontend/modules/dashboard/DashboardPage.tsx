@@ -56,7 +56,7 @@ export const Dashboard = ({ flashError }: Props) => {
 				<a>Applications</a>
 			</Link>
 			<br />
-			<Link href="/announcement">
+			<Link href="/announcements/new">
 				<a>Post Announcement</a>
 			</Link>
 			<br />
