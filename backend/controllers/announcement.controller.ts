@@ -1,7 +1,16 @@
-import { JsonController, Get, QueryParam, Post, Body, Param } from 'routing-controllers';
+import {
+	JsonController,
+	Get,
+	QueryParam,
+	Post,
+	Body,
+	Param,
+	Authorized
+} from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { Announcement, AnnouncementDto } from '../models/announcement';
 import { NotificationService } from '../services/notification.service';
+import { Role } from '../../shared/user.enums';
 
 interface QueryCondition {
 	released: boolean;
@@ -28,8 +37,23 @@ export class AnnouncementController extends BaseController {
 		return results;
 	}
 
+	@Get('/drafts')
+	@Authorized([Role.EXEC])
+	async getAllDrafts(@QueryParam('type') type?: string) {
+		const conditions: QueryCondition = {
+			released: false
+		};
+		if (type) {
+			conditions.type = type;
+		}
+		const resultsQuery = Announcement.find(conditions);
+		const results = await resultsQuery.exec();
+		return results;
+	}
+
 	// TODO: Create cron job to dispatch sending of announcement notifications
 	@Post('/')
+	@Authorized([Role.EXEC])
 	createAnnouncement(@Body() announcement: AnnouncementDto) {
 		return Announcement.create(announcement);
 	}
@@ -40,6 +64,7 @@ export class AnnouncementController extends BaseController {
 	}
 
 	@Post('/:id/release')
+	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
 		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
 		this.notificationService.sendNotification(announcement.title);

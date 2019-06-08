@@ -1,6 +1,6 @@
 import React, { Component, useRef, Fragment } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
-import { err, endResponse, formatDateAsTimeLocal } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import { IContext, IAnnouncement, IGlobals } from '../../@types';
 import { getAllAnnouncements, createAnnouncement, fetchGlobals } from '../../api';
@@ -17,14 +17,12 @@ interface Props {
 
 export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Props) => {
 	const formRef = useRef<HTMLFormElement>();
-	const now = useRef(formatDateAsTimeLocal(new Date()));
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			clear();
 			const data = new FormData(formRef.current);
-			data.set('broadcastTime', new Date(data.get('broadcastTime').toString()).toUTCString());
 			const announcement = await createAnnouncement(data as any);
 			flashSuccess('Successfully created announcement');
 			console.log('Created annnouncement:', announcement);
@@ -51,15 +49,6 @@ export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Pr
 					</Fragment>
 				))}
 				<br />
-				Broadcast Time:
-				<br />
-				<input
-					type="datetime-local"
-					name="broadcastTime"
-					min={formatDateAsTimeLocal(new Date(Date.parse(globals.hackingTimeStart)))}
-					max={formatDateAsTimeLocal(new Date(Date.parse(globals.hackingTimeEnd)))}
-					defaultValue={now.current}
-				/>
 				Body:
 				<br />
 				<textarea name="body" />
