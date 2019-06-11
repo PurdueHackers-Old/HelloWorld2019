@@ -66,7 +66,7 @@ export class EmailService {
 			},
 			mailSettings: {
 				sandboxMode: {
-					enable: CONFIG.NODE_ENV === 'test'
+					enable: CONFIG.NODE_ENV !== 'production'
 				}
 			}
 		} as any);
@@ -91,7 +91,8 @@ export class EmailService {
 				from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
 				personalizations: users.map(user => ({
 					to: user.email,
-					dynamic_template_data: { // eslint-disable-line
+					// eslint-disable-next-line
+					dynamic_template_data: {
 						name: user.name
 					}
 				})),

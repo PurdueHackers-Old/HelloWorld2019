@@ -46,8 +46,7 @@ export class AnnouncementController extends BaseController {
 		if (type) {
 			conditions.type = type;
 		}
-		const resultsQuery = Announcement.find(conditions);
-		const results = await resultsQuery.exec();
+		const results = await Announcement.find({ released: false }).exec();
 		return results;
 	}
 
@@ -58,16 +57,11 @@ export class AnnouncementController extends BaseController {
 		return Announcement.create(announcement);
 	}
 
-	@Get('/:id')
-	async getAnnouncement(@Param('id') id: string) {
-		return Announcement.findById(id);
-	}
-
 	@Post('/:id/release')
 	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
 		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
-		this.notificationService.sendNotification(announcement.title);
+		await this.notificationService.sendNotification(announcement.title);
 		return announcement;
 	}
 }

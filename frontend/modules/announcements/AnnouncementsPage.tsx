@@ -24,7 +24,6 @@ export class Announcements extends Component<Props> {
 	};
 
 	render() {
-		// console.log('Announcements:', this.props.announcements);
 		return (
 			<div>
 				<h3>Announcements Page</h3>

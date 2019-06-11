@@ -60,7 +60,7 @@ export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Pr
 };
 
 NewAnnouncement.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.MENTOR] })) return endResponse(ctx);
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 	const globals = await fetchGlobals(ctx);
 	return { globals };
 };

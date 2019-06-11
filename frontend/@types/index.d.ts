@@ -56,7 +56,7 @@ export interface IAnnouncement {
 	_id: string;
 	title: string;
 	body: string;
-	type: AnnouncementLabel;
+	labels: AnnouncementLabel[];
 	createdAt: Date;
 	released: boolean;
 }
