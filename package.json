@@ -16,7 +16,8 @@
 		"start": "NODE_ENV=production node dist/backend/index.js",
 		"start-ts": "NODE_ENV=production ts-node --compilerOptions '{\"module\":\"commonjs\"}' backend/index.ts",
 		"start-client": "cd frontend && next start",
-		"migrate": "yarn ts-node -T -P ./tsconfig.server.json backend/utils/migration.ts"
+		"migrate": "yarn ts-node -T -P ./tsconfig.server.json backend/utils/migration.ts",
+		"lint": "eslint ./**/*.{ts,tsx}"
 	},
 	"repository": {
 		"type": "git",

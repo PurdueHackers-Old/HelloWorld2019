@@ -1,6 +1,6 @@
 import React, { Component, useRef, Fragment } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
-import { err, endResponse, formatDateAsTimeLocal } from '../../utils';
+import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import { IContext, IAnnouncement, IGlobals } from '../../@types';
 import { getAllAnnouncements, createAnnouncement, fetchGlobals } from '../../api';
@@ -9,25 +9,23 @@ import { Role } from '../../../shared/user.enums';
 import { AnnouncementLabel } from '../../../shared/announcement.enums';
 
 interface Props {
-	globals: IGlobals;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 }
 
-export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Props) => {
+export const NewAnnouncement = ({ flashSuccess, flashError, clear }: Props) => {
 	const formRef = useRef<HTMLFormElement>();
-	const now = useRef(formatDateAsTimeLocal(new Date()));
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			clear();
 			const data = new FormData(formRef.current);
-			data.set('broadcastTime', new Date(data.get('broadcastTime').toString()).toUTCString());
 			const announcement = await createAnnouncement(data as any);
 			flashSuccess('Successfully created announcement');
 			console.log('Created annnouncement:', announcement);
+			formRef.current.reset();
 		} catch (error) {
 			flashError(err(error));
 		}
@@ -51,15 +49,6 @@ export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Pr
 					</Fragment>
 				))}
 				<br />
-				Broadcast Time:
-				<br />
-				<input
-					type="datetime-local"
-					name="broadcastTime"
-					min={formatDateAsTimeLocal(new Date(Date.parse(globals.hackingTimeStart)))}
-					max={formatDateAsTimeLocal(new Date(Date.parse(globals.hackingTimeEnd)))}
-					defaultValue={now.current}
-				/>
 				Body:
 				<br />
 				<textarea name="body" />
@@ -71,7 +60,7 @@ export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Pr
 };
 
 NewAnnouncement.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.MENTOR] })) return endResponse(ctx);
+	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 	const globals = await fetchGlobals(ctx);
 	return { globals };
 };

@@ -16,10 +16,6 @@ export class AnnouncementDto {
 	@IsNotEmpty({ message: 'Please provide a label for the announcement' })
 	@IsEnum(AnnouncementLabel, { message: 'Please provide a valid announcement label', each: true })
 	labels: AnnouncementLabel[];
-
-	@IsNotEmpty({ message: 'Please provide a broadcast time for the announcement' })
-	@IsDate({ message: 'Invalid broadcast time' })
-	broadcastTime: Date;
 }
 
 export interface IAnnouncementModel extends AnnouncementDto, Document {
@@ -29,11 +25,10 @@ export interface IAnnouncementModel extends AnnouncementDto, Document {
 
 const schema = new Schema(
 	{
-		title: String,
-		body: String,
-		labels: [String],
-		broadcastTime: Date,
-		released: Boolean
+		title: { type: String, required: true },
+		body: { type: String, required: true },
+		labels: { type: [String], required: true },
+		released: { type: Boolean, default: false }
 	},
 	{ timestamps: true }
 );

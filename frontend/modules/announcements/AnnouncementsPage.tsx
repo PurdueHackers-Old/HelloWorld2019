@@ -4,6 +4,7 @@ import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import { IContext, IAnnouncement } from '../../@types';
 import { getAllAnnouncements } from '../../api';
+import Announcement from './Announcement';
 
 interface Props {
 	announcements: IAnnouncement[];
@@ -15,8 +16,8 @@ interface Props {
 export class Announcements extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		try {
-			const announcements = await getAllAnnouncements(ctx);
-			return announcements;
+			const announcements = await getAllAnnouncements(ctx, { released: true });
+			return { announcements };
 		} catch (error) {
 			return [];
 		}
@@ -26,6 +27,9 @@ export class Announcements extends Component<Props> {
 		return (
 			<div>
 				<h3>Announcements Page</h3>
+				{this.props.announcements.map(announcement => (
+					<Announcement key={announcement._id} {...announcement} />
+				))}
 			</div>
 		);
 	}

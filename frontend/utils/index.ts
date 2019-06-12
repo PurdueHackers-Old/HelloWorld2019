@@ -32,17 +32,6 @@ export const formatDate = (date: string | number | Date) => {
 	return str !== 'Invalid Date' ? str : 'N/A';
 };
 
-export const formatDateAsTimeLocal = (d: Date) => {
-	const year = d.getFullYear();
-	const month = `${d.getMonth() + 1}`.padStart(2, '0');
-	const day = `${d.getDate()}`.padStart(2, '0');
-	const hours = `${d.getHours()}`.padStart(2, '0');
-	const minutes = `${d.getMinutes()}`.padStart(2, '0');
-
-	console.log('Day:', day);
-	return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
-
 export const endResponse = (ctx: IContext) => ctx && ctx.res && ctx.res.end();
 
 export function urlBase64ToUint8Array(base64String) {
