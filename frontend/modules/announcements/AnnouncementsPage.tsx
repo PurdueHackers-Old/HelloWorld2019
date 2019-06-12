@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import { IContext, IAnnouncement } from '../../@types';
 import { getAllAnnouncements } from '../../api';
 import Announcement from './Announcement';
+import { isSWSupported } from '../../utils/service-worker';
 
 interface Props {
 	announcements: IAnnouncement[];
@@ -13,27 +14,36 @@ interface Props {
 	clear: (ctx?: IContext) => void;
 }
 
-export class Announcements extends Component<Props> {
-	static getInitialProps = async (ctx: IContext) => {
-		try {
-			const announcements = await getAllAnnouncements(ctx, { released: true });
-			return { announcements };
-		} catch (error) {
-			return [];
-		}
-	};
+export const Announcements = ({ announcements: ancmnts }: Props) => {
+	const [announcements, setAnnouncements] = useState(ancmnts);
+	useEffect(() => {
+		const handleMessage = (e: MessageEvent) => {
+			setAnnouncements([...announcements, e.data.message]);
+		};
+		if (isSWSupported()) navigator.serviceWorker.addEventListener('message', handleMessage);
+		return () => {
+			if (isSWSupported())
+				navigator.serviceWorker.removeEventListener('message', handleMessage);
+		};
+	}, []);
+	return (
+		<div>
+			<h3>Announcements Page</h3>
+			{announcements.map(announcement => (
+				<Announcement key={announcement._id} {...announcement} />
+			))}
+		</div>
+	);
+};
 
-	render() {
-		return (
-			<div>
-				<h3>Announcements Page</h3>
-				{this.props.announcements.map(announcement => (
-					<Announcement key={announcement._id} {...announcement} />
-				))}
-			</div>
-		);
+Announcements.getInitialProps = async (ctx: IContext) => {
+	try {
+		const announcements = await getAllAnnouncements(ctx, { released: true });
+		return { announcements };
+	} catch (error) {
+		return [];
 	}
-}
+};
 
 export const AnnouncementsPage = connect(
 	null,

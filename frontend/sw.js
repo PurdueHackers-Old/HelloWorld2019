@@ -1,5 +1,19 @@
 //// <reference types="../node_modules/types-serviceworker" />
 
+/**
+ * HELPER FUNCTIONS
+ */
+
+const parseMessageData = eventData => {
+	let data;
+	try {
+		data = eventData.json();
+	} catch (error) {
+		data = eventData.text();
+	}
+	return data;
+};
+
 const sendMessageToClient = (client, message) => {
 	return new Promise((resolve, reject) => {
 		const channel = new MessageChannel();
@@ -60,6 +74,9 @@ const saveSubscription = async subscription => {
 	}
 };
 
+/**
+ * EVENT LISTENERS
+ */
 // This will be called only once when the service worker is installed for first time.
 self.addEventListener('install', async () => {
 	console.log('[Service Worker]: Installing service worker');
@@ -84,7 +101,9 @@ self.addEventListener('push', event => {
 
 	const sendMessagePromise = self.clients
 		.matchAll()
-		.then(clients => clients.map(client => sendMessageToClient(client, event.data.text())));
+		.then(clients =>
+			clients.map(client => sendMessageToClient(client, parseMessageData(event.data)))
+		);
 
 	event.waitUntil(Promise.all([showNotificationPromise, sendMessagePromise]));
 });

@@ -44,8 +44,10 @@ export class AnnouncementController extends BaseController {
 	@Post('/:id/release')
 	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
-		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
-		await this.notificationService.sendNotifications(announcement.title);
+		const announcement = await Announcement.findByIdAndUpdate(id, { released: true })
+			.lean()
+			.exec();
+		await this.notificationService.sendNotifications(JSON.stringify(announcement));
 		return announcement;
 	}
 
