@@ -16,7 +16,7 @@ interface Props {
 export class Announcements extends Component<Props> {
 	static getInitialProps = async (ctx: IContext) => {
 		try {
-			const announcements = await getAllAnnouncements(ctx);
+			const announcements = await getAllAnnouncements(ctx, { released: true });
 			return { announcements };
 		} catch (error) {
 			return [];

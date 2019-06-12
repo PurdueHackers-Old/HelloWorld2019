@@ -265,27 +265,13 @@ export const makePublicApplications = async (status: boolean, ctx?: IContext) =>
 	}
 };
 
-export const getAllAnnouncements = async (ctx?: IContext) => {
+export const getAllAnnouncements = async (ctx?: IContext, params?) => {
 	try {
 		const token = getToken(ctx);
 		const {
 			data: { response }
 		} = await api.get(`/announcements`, {
-			headers: { Authorization: `Bearer ${token}` }
-		});
-		const announcements: IAnnouncement[] = response;
-		return announcements;
-	} catch (error) {
-		throw error.response ? error.response.data : error;
-	}
-};
-
-export const getAllAnnouncementDrafts = async (ctx?: IContext) => {
-	try {
-		const token = getToken(ctx);
-		const {
-			data: { response }
-		} = await api.get(`/announcements/drafts`, {
+			params,
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		const announcements: IAnnouncement[] = response;
@@ -316,6 +302,21 @@ export const releaseAnnouncement = async (id: string, ctx?: IContext) => {
 		const {
 			data: { response }
 		} = await api.post(`/announcements/${id}/release`, null, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const announcement: IAnnouncement = response;
+		return announcement;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
+export const deleteAnnouncement = async (id: string, ctx?: IContext) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.delete(`/announcements/${id}`, {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		const announcement: IAnnouncement = response;

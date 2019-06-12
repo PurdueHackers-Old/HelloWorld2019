@@ -5,17 +5,13 @@ import {
 	Post,
 	Body,
 	Param,
-	Authorized
+	Authorized,
+	Delete
 } from 'routing-controllers';
 import { BaseController } from './base.controller';
 import { Announcement, AnnouncementDto } from '../models/announcement';
 import { NotificationService } from '../services/notification.service';
 import { Role } from '../../shared/user.enums';
-
-interface QueryCondition {
-	released: boolean;
-	type?: string;
-}
 
 // TODO: Add tests
 @JsonController('/api/announcements')
@@ -25,28 +21,16 @@ export class AnnouncementController extends BaseController {
 	}
 
 	@Get('/')
-	async getAll(@QueryParam('type') type?: string) {
-		const conditions: QueryCondition = {
-			released: true
-		};
-		if (type) {
-			conditions.type = type;
-		}
+	async getAll(@QueryParam('type') type?: string, @QueryParam('released') released?: boolean) {
+		const conditions: {
+			released?: boolean;
+			type?: string;
+		} = {};
+		if (released !== undefined && released !== null) conditions.released = released;
+		if (type) conditions.type = type;
+
 		const resultsQuery = Announcement.find(conditions);
 		const results = await resultsQuery.exec();
-		return results;
-	}
-
-	@Get('/drafts')
-	@Authorized([Role.EXEC])
-	async getAllDrafts(@QueryParam('type') type?: string) {
-		const conditions: QueryCondition = {
-			released: false
-		};
-		if (type) {
-			conditions.type = type;
-		}
-		const results = await Announcement.find({ released: false }).exec();
 		return results;
 	}
 
@@ -62,6 +46,13 @@ export class AnnouncementController extends BaseController {
 	async releaseAnnouncement(@Param('id') id: string) {
 		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
 		await this.notificationService.sendNotification(announcement.title);
+		return announcement;
+	}
+
+	@Delete('/:id')
+	@Authorized([Role.EXEC])
+	async deleteAnnouncement(@Param('id') id: string) {
+		const announcement = await Announcement.findByIdAndDelete(id).exec();
 		return announcement;
 	}
 }
