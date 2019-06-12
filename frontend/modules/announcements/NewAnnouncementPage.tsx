@@ -9,13 +9,12 @@ import { Role } from '../../../shared/user.enums';
 import { AnnouncementLabel } from '../../../shared/announcement.enums';
 
 interface Props {
-	globals: IGlobals;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
 }
 
-export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Props) => {
+export const NewAnnouncement = ({ flashSuccess, flashError, clear }: Props) => {
 	const formRef = useRef<HTMLFormElement>();
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,6 +25,7 @@ export const NewAnnouncement = ({ flashSuccess, flashError, clear, globals }: Pr
 			const announcement = await createAnnouncement(data as any);
 			flashSuccess('Successfully created announcement');
 			console.log('Created annnouncement:', announcement);
+			formRef.current.reset();
 		} catch (error) {
 			flashError(err(error));
 		}

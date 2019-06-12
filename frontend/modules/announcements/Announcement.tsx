@@ -1,5 +1,4 @@
 import React from 'react';
-import { AnnouncementLabel } from '../../../shared/announcement.enums';
 import { IAnnouncement } from '../../@types';
 
 interface Props extends IAnnouncement {
@@ -16,7 +15,7 @@ export default ({ _id, title, body, labels, released, onRelease }: Props) => {
 			Labels: {labels}
 			<br />
 			{!released && (
-				<button id={_id} onClick={e => onRelease(e.target.id)}>
+				<button id={_id} onClick={(e: any) => onRelease(e.target.id)}>
 					Release
 				</button>
 			)}

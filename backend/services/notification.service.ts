@@ -45,7 +45,8 @@ export class NotificationService {
 						.catch(err => this.logger.error('Error sending email:', err));
 				}
 				if (error.statusCode === 410 || error.statusCode === 404) {
-					Subscription.findOneAndDelete({ 'content.endpoint': error.endpoint });
+					await Subscription.findOneAndDelete({ 'content.endpoint': error.endpoint });
+					this.logger.info('Removed subscription endpoint:', error.endpoint);
 				}
 			}
 		}
