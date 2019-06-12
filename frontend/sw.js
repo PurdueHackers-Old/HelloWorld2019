@@ -92,20 +92,22 @@ self.addEventListener('install', async () => {
 
 self.addEventListener('push', event => {
 	if (!event || !event.data) return;
-
-	const title = event.data.text();
-
-	const showNotificationPromise = self.registration
-		.showNotification(title)
-		.catch(error => console.error('[Service Worker]: Error showing notification:', error));
+	const promises = [];
+	const eventData = parseMessageData(event.data);
+	console.log('[Service Worker]: Got event data:', eventData);
+	if (eventData.action === 'add') {
+		const showNotificationPromise = self.registration
+			.showNotification(eventData.announcement.title)
+			.catch(error => console.error('[Service Worker]: Error showing notification:', error));
+		promises.push(showNotificationPromise);
+	}
 
 	const sendMessagePromise = self.clients
 		.matchAll()
-		.then(clients =>
-			clients.map(client => sendMessageToClient(client, parseMessageData(event.data)))
-		);
+		.then(clients => clients.map(client => sendMessageToClient(client, eventData)));
 
-	event.waitUntil(Promise.all([showNotificationPromise, sendMessagePromise]));
+	promises.push(sendMessagePromise);
+	event.waitUntil(Promise.all(promises));
 });
 
 self.addEventListener('notificationclick', event => {
