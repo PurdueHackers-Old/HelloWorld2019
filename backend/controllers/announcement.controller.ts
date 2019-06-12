@@ -29,7 +29,7 @@ export class AnnouncementController extends BaseController {
 		if (released !== undefined && released !== null) conditions.released = released;
 		if (type) conditions.type = type;
 
-		const resultsQuery = Announcement.find(conditions);
+		const resultsQuery = Announcement.find(conditions).sort({ updatedAt: -1 });
 		const results = await resultsQuery.exec();
 		return results;
 	}
@@ -44,8 +44,12 @@ export class AnnouncementController extends BaseController {
 	@Post('/:id/release')
 	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
-		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
-		await this.notificationService.sendNotification(announcement.title);
+		const announcement = await Announcement.findByIdAndUpdate(id, { released: true })
+			.lean()
+			.exec();
+		await this.notificationService.sendNotifications(
+			JSON.stringify({ action: 'add', announcement })
+		);
 		return announcement;
 	}
 
@@ -53,6 +57,9 @@ export class AnnouncementController extends BaseController {
 	@Authorized([Role.EXEC])
 	async deleteAnnouncement(@Param('id') id: string) {
 		const announcement = await Announcement.findByIdAndDelete(id).exec();
+		await this.notificationService.sendNotifications(
+			JSON.stringify({ action: 'delete', announcement })
+		);
 		return announcement;
 	}
 }

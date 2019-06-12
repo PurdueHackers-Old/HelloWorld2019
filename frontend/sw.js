@@ -1,6 +1,20 @@
 //// <reference types="../node_modules/types-serviceworker" />
 
-const sendMessageToClient = (client, msg) => {
+/**
+ * HELPER FUNCTIONS
+ */
+
+const parseMessageData = eventData => {
+	let data;
+	try {
+		data = eventData.json();
+	} catch (error) {
+		data = eventData.text();
+	}
+	return data;
+};
+
+const sendMessageToClient = (client, message) => {
 	return new Promise((resolve, reject) => {
 		const channel = new MessageChannel();
 
@@ -12,7 +26,7 @@ const sendMessageToClient = (client, msg) => {
 			}
 		};
 
-		client.postMessage({ msg }, [channel.port2]);
+		client.postMessage({ message }, [channel.port2]);
 	});
 };
 
@@ -60,6 +74,9 @@ const saveSubscription = async subscription => {
 	}
 };
 
+/**
+ * EVENT LISTENERS
+ */
 // This will be called only once when the service worker is installed for first time.
 self.addEventListener('install', async () => {
 	console.log('[Service Worker]: Installing service worker');
@@ -74,26 +91,42 @@ self.addEventListener('install', async () => {
 });
 
 self.addEventListener('push', event => {
-	if (event && event.data) {
-		const title = event.data.text();
-		event.waitUntil(
-			self.registration
-				.showNotification(title)
-				.catch(error =>
-					console.error('[Service Worker]: Error showing notification:', error)
-				)
-		);
-		event.waitUntil(
-			self.clients.matchAll().then(clients =>
-				clients.map(client => {
-					return sendMessageToClient(client, event.data.text());
-				})
-			)
-		);
+	if (!event || !event.data) return;
+	const promises = [];
+	const eventData = parseMessageData(event.data);
+	console.log('[Service Worker]: Got event data:', eventData);
+	if (eventData.action === 'add') {
+		const showNotificationPromise = self.registration
+			.showNotification(eventData.announcement.title)
+			.catch(error => console.error('[Service Worker]: Error showing notification:', error));
+		promises.push(showNotificationPromise);
 	}
+
+	const sendMessagePromise = self.clients
+		.matchAll()
+		.then(clients => clients.map(client => sendMessageToClient(client, eventData)));
+
+	promises.push(sendMessagePromise);
+	event.waitUntil(Promise.all(promises));
 });
 
 self.addEventListener('notificationclick', event => {
 	event.notification.close();
-	event.waitUntil(self.clients.openWindow('/announcements'));
+
+	const urlToOpen = new URL('/announcements', self.location.origin).href;
+
+	const promiseChain = clients
+		.matchAll({
+			type: 'window',
+			includeUncontrolled: true
+		})
+		.then(windowClients => {
+			const matchingClient = windowClients.find(
+				windowClient => windowClient.url === urlToOpen
+			);
+
+			return matchingClient ? matchingClient.focus() : clients.openWindow(urlToOpen);
+		});
+
+	event.waitUntil(promiseChain);
 });
