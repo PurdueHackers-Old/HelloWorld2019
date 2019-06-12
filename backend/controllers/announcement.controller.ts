@@ -45,7 +45,7 @@ export class AnnouncementController extends BaseController {
 	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
 		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
-		await this.notificationService.sendNotification(announcement.title);
+		await this.notificationService.sendNotifications(announcement.title);
 		return announcement;
 	}
 

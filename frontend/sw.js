@@ -1,6 +1,6 @@
 //// <reference types="../node_modules/types-serviceworker" />
 
-const sendMessageToClient = (client, msg) => {
+const sendMessageToClient = (client, message) => {
 	return new Promise((resolve, reject) => {
 		const channel = new MessageChannel();
 
@@ -12,7 +12,7 @@ const sendMessageToClient = (client, msg) => {
 			}
 		};
 
-		client.postMessage({ msg }, [channel.port2]);
+		client.postMessage({ message }, [channel.port2]);
 	});
 };
 
@@ -74,26 +74,38 @@ self.addEventListener('install', async () => {
 });
 
 self.addEventListener('push', event => {
-	if (event && event.data) {
-		const title = event.data.text();
-		event.waitUntil(
-			self.registration
-				.showNotification(title)
-				.catch(error =>
-					console.error('[Service Worker]: Error showing notification:', error)
-				)
-		);
-		event.waitUntil(
-			self.clients.matchAll().then(clients =>
-				clients.map(client => {
-					return sendMessageToClient(client, event.data.text());
-				})
-			)
-		);
-	}
+	if (!event || !event.data) return;
+
+	const title = event.data.text();
+
+	const showNotificationPromise = self.registration
+		.showNotification(title)
+		.catch(error => console.error('[Service Worker]: Error showing notification:', error));
+
+	const sendMessagePromise = self.clients
+		.matchAll()
+		.then(clients => clients.map(client => sendMessageToClient(client, event.data.text())));
+
+	event.waitUntil(Promise.all([showNotificationPromise, sendMessagePromise]));
 });
 
 self.addEventListener('notificationclick', event => {
 	event.notification.close();
-	event.waitUntil(self.clients.openWindow('/announcements'));
+
+	const urlToOpen = new URL('/announcements', self.location.origin).href;
+
+	const promiseChain = clients
+		.matchAll({
+			type: 'window',
+			includeUncontrolled: true
+		})
+		.then(windowClients => {
+			const matchingClient = windowClients.find(
+				windowClient => windowClient.url === urlToOpen
+			);
+
+			return matchingClient ? matchingClient.focus() : clients.openWindow(urlToOpen);
+		});
+
+	event.waitUntil(promiseChain);
 });

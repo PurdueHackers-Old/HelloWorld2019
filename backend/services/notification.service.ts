@@ -31,7 +31,7 @@ export class NotificationService {
 		}
 	}
 
-	async sendNotification(content: string, user?: IUserModel) {
+	async sendNotifications(content: string, user?: IUserModel) {
 		const subscriptions = await Subscription.find(user ? { user } : {}).exec();
 		for (const subscription of subscriptions) {
 			try {
