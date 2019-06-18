@@ -78,16 +78,17 @@ const saveSubscription = async subscription => {
  * EVENT LISTENERS
  */
 // This will be called only once when the service worker is installed for first time.
-self.addEventListener('install', async () => {
+self.addEventListener('install', event => {
 	console.log('[Service Worker]: Installing service worker');
-	try {
-		const subscription = await createSubscription();
-		await saveSubscription(subscription);
-	} catch (err) {
-		console.error('[Service Worker]: Error creating subscription:', err.message);
-		await self.skipWaiting();
-	}
-	console.log('[Service Worker]: Successfully installed service worker');
+	const promiseChain = createSubscription()
+		.then(subscription => saveSubscription(subscription))
+		.then(() => console.log('[Service Worker]: Successfully installed service worker'))
+		.catch(err => {
+			console.error('[Service Worker]: Error creating subscription:', err.message);
+			return self.skipWaiting();
+		});
+
+	event.waitUntil(promiseChain);
 });
 
 self.addEventListener('push', event => {
@@ -105,8 +106,8 @@ self.addEventListener('push', event => {
 	const sendMessagePromise = self.clients
 		.matchAll()
 		.then(clients => clients.map(client => sendMessageToClient(client, eventData)));
-
 	promises.push(sendMessagePromise);
+
 	event.waitUntil(Promise.all(promises));
 });
 
