@@ -23,6 +23,8 @@ const serverRuntimeConfig = {
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
 	VAPID_PRIVATE: env.VAPID_PRIVATE || 'my vapid private key',
 	HEADLESS: !!env.HEADLESS || false,
+	SLACK_TOKEN: env.SLACK_TOKEN || 'myslacktoken',
+	SLACK_CHANNEL_ID: env.SLACK_CHANNEL_ID || 'announcements',
 	...sharedConfig
 };
 

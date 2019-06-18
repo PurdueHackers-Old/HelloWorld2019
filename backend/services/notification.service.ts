@@ -1,16 +1,12 @@
 import { setVapidDetails, sendNotification, PushSubscription, WebPushError } from 'web-push';
-import { publicRuntimeConfig, serverRuntimeConfig } from '../config/env-config';
+import CONFIG from '../config';
 import { IUserModel } from '../models/user';
 import { Service, Inject } from 'typedi';
 import { Subscription } from '../models/subscription';
 import { EmailService } from './email.service';
 import { createLogger } from '../utils/logger';
 
-setVapidDetails(
-	'https://purduehackers.com',
-	publicRuntimeConfig.VAPID_PUBLIC,
-	serverRuntimeConfig.VAPID_PRIVATE
-);
+setVapidDetails('https://purduehackers.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_PRIVATE);
 
 @Service('notificationService')
 export class NotificationService {

@@ -19,12 +19,13 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 	useEffect(() => {
 		const handleMessage = (e: MessageEvent) => {
 			const { message } = e.data;
-			console.log('Got message:', message);
 			if (message.action === 'add') setAnnouncements(prev => [...prev, message.announcement]);
 			else if (message.action === 'delete')
 				setAnnouncements(prev => prev.filter(a => a._id !== message.announcement._id));
 		};
+
 		if (isSWSupported()) navigator.serviceWorker.addEventListener('message', handleMessage);
+
 		return () => {
 			if (isSWSupported())
 				navigator.serviceWorker.removeEventListener('message', handleMessage);
