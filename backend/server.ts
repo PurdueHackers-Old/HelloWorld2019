@@ -146,7 +146,9 @@ export default class Server {
 		// Graceful shutdown
 		process.on('SIGTERM', async () => {
 			await this.mongoose.disconnect();
-			this.httpServer.close();
+			await new Promise((resolve, reject) =>
+				this.httpServer.close(err => (err ? reject(err) : resolve()))
+			);
 			process.exit(0);
 		});
 
@@ -161,12 +163,9 @@ export default class Server {
 			await this.mongoose.disconnect();
 		}
 		if (this.httpServer) {
-			await new Promise((resolve, reject) => {
-				this.httpServer.close(err => {
-					if (err) reject(err);
-					else resolve();
-				});
-			});
+			await new Promise((resolve, reject) =>
+				this.httpServer.close(err => (err ? reject(err) : resolve()))
+			);
 		}
 		return this;
 	}

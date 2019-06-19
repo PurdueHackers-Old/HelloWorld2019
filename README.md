@@ -23,11 +23,13 @@
 ### Usage without Docker
 
 1. `yarn`
-2. Edit .env
-3. Make sure MongoDB is running:
+2. `yarn web-push generate-vapid-keys`
+   - Copy the values to "VAPID_PUBLIC" and "VAPID_PRIVATE" in your .env
+3. Edit .env
+4. Make sure MongoDB is running:
     - `mongod`
-4. `yarn dev`
-5. Open http://localhost:5000
+5. `yarn dev`
+6. Open http://localhost:5000
 
 ## Technologies used:
 

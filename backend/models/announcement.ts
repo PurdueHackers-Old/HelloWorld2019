@@ -2,7 +2,6 @@ import { Document, Schema, model } from 'mongoose';
 import { IsNotEmpty, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AnnouncementLabel } from '../../shared/announcement.enums';
-import { IsDate } from '../validators/date';
 
 export class AnnouncementDto {
 	@Type(() => String)
@@ -19,8 +18,10 @@ export class AnnouncementDto {
 }
 
 export interface IAnnouncementModel extends AnnouncementDto, Document {
-	createdAt: Date;
 	released: boolean;
+	slackTS: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 const schema = new Schema(
@@ -28,7 +29,8 @@ const schema = new Schema(
 		title: { type: String, required: true },
 		body: { type: String, required: true },
 		labels: { type: [String], required: true },
-		released: { type: Boolean, default: false }
+		released: { type: Boolean, default: false },
+		slackTS: { type: String, default: '' }
 	},
 	{ timestamps: true }
 );
