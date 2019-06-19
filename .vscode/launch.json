@@ -14,11 +14,17 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Server",
-			"preLaunchTask": "build",
-			"program": "${workspaceFolder}/backend/index.ts",
-			"cwd": "${workspaceFolder}",
-			"protocol": "inspector",
-			"outFiles": ["${workspaceFolder}/dist/**/*.js"]
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "dev:debug"],
+			"outputCapture": "std",
+			"skipFiles": [
+				"<node_internals>/**/*.js",
+				"${workspaceFolder}/node_modules/**/*.js",
+				"${workspaceFolder}/node_modules/**/*.ts",
+				"${workspaceFolder}/dist/**/*"
+			],
+			"port": 9229,
+			"smartStep": true
 		},
 		{
 			"type": "node",
@@ -32,7 +38,8 @@
 			"skipFiles": [
 				"<node_internals>/**/*.js",
 				"${workspaceFolder}/node_modules/**/*.js",
-				"${workspaceFolder}/dist/**/*.js"
+				"${workspaceFolder}/node_modules/**/*.ts",
+				"${workspaceFolder}/dist/**/*"
 			],
 			"sourceMaps": true,
 			"sourceMapPathOverrides": {
@@ -49,7 +56,8 @@
 			"skipFiles": [
 				"<node_internals>/**/*.js",
 				"${workspaceFolder}/node_modules/**/*.js",
-				"${workspaceFolder}/dist/**/*.js"
+				"${workspaceFolder}/node_modules/**/*.ts",
+				"${workspaceFolder}/dist/**/*"
 			]
 		},
 		{

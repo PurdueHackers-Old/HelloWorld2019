@@ -4,8 +4,8 @@
 	"description": "Web page for Hello World 2019",
 	"main": "dist/backend/index.js",
 	"scripts": {
-		"dev": "nodemon backend/index.ts",
-		"dev:debug": "nodemon --inspect=0.0.0.0:9229 backend/index.ts",
+		"dev": "ts-node-dev -P tsconfig.server.json --transpile-only --no-notify --ignore-watch node_modules --ignore-watch frontend backend/index.ts",
+		"dev:debug": "ts-node-dev -P tsconfig.server.json --no-notify --ignore-watch node_modules --ignore-watch frontend --inspect -- backend/index.ts",
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
@@ -126,7 +126,6 @@
 		"mongodb-memory-server": "^3.0.0",
 		"next-compose-plugins": "^2.1.1",
 		"next-plugin-transpile-modules": "^2.0.0",
-		"nodemon": "^1.17.5",
 		"prettier": "^1.16.2",
 		"puppeteer": "^1.17.0",
 		"react-test-renderer": "^16.7.0",
@@ -135,7 +134,7 @@
 		"rimraf": "^2.6.3",
 		"supertest": "^3.4.2",
 		"ts-jest": "^24.0.2",
-		"ts-node": "^8.0.2",
+		"ts-node-dev": "^1.0.0-pre.40",
 		"types-serviceworker": "^0.0.1",
 		"typescript": "^3.3.1"
 	},
