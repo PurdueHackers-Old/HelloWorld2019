@@ -12,11 +12,15 @@ import { BaseController } from './base.controller';
 import { Announcement, AnnouncementDto } from '../models/announcement';
 import { NotificationService } from '../services/notification.service';
 import { Role } from '../../shared/user.enums';
+import { SlackService } from '../services/slack.service';
 
 // TODO: Add tests
 @JsonController('/api/announcements')
 export class AnnouncementController extends BaseController {
-	constructor(private notificationService?: NotificationService) {
+	constructor(
+		private notificationService?: NotificationService,
+		private slackService?: SlackService
+	) {
 		super();
 	}
 
@@ -44,12 +48,11 @@ export class AnnouncementController extends BaseController {
 	@Post('/:id/release')
 	@Authorized([Role.EXEC])
 	async releaseAnnouncement(@Param('id') id: string) {
-		const announcement = await Announcement.findByIdAndUpdate(id, { released: true })
-			.lean()
-			.exec();
+		const announcement = await Announcement.findByIdAndUpdate(id, { released: true }).exec();
 		await this.notificationService.sendNotifications(
 			JSON.stringify({ action: 'add', announcement })
 		);
+		await this.slackService.postMessage(announcement);
 		return announcement;
 	}
 
@@ -60,6 +63,7 @@ export class AnnouncementController extends BaseController {
 		await this.notificationService.sendNotifications(
 			JSON.stringify({ action: 'delete', announcement })
 		);
+		await this.slackService.removeMessage(announcement);
 		return announcement;
 	}
 }
