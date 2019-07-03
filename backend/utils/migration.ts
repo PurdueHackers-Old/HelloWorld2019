@@ -25,7 +25,7 @@ const start = async () => {
 			name: 'Test Testerson',
 			email: 'test@purdue.edu'
 		} as any);
-		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.ADMIN });
+		await User.findByIdAndUpdate(user.user._id, { role: Role.ADMIN });
 		let userApp = await userController.apply(
 			{} as any,
 			user.user._id,
@@ -38,7 +38,7 @@ const start = async () => {
 			name: 'Exec User',
 			email: 'exec@purdue.edu'
 		} as any);
-		await User.findByIdAndUpdate(user.user._id, { verified: true, role: Role.EXEC });
+		await User.findByIdAndUpdate(user.user._id, { role: Role.EXEC });
 		userApp = await userController.apply(
 			{} as any,
 			user.user._id,

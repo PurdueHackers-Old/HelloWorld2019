@@ -28,7 +28,6 @@ export class UserDto {
 export interface IUserModel extends UserDto, Document {
 	role: Role;
 	application: IApplicationModel;
-	verified: boolean;
 	checkedin: boolean;
 	createdAt: Date;
 	updatedAt: Date;
@@ -51,7 +50,6 @@ const schema = new Schema(
 			required: true
 		},
 		role: { type: String, enum: Object.keys(Role), default: Role.USER },
-		verified: { type: Boolean, default: false },
 		checkedin: { type: Boolean, default: false },
 		resetPasswordToken: { type: String, select: false },
 
