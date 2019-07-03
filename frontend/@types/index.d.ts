@@ -24,7 +24,6 @@ export interface IUser {
 	name: string;
 	email: string;
 	role: Role;
-	verified: boolean;
 	checkedin: boolean;
 	createdAt: string;
 	updatedAt: string;
