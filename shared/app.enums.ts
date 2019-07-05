@@ -63,3 +63,8 @@ export enum Major {
 	UNDECIDED = 'Undecided',
 	OTHER = 'Other'
 }
+
+export enum Resume {
+	YES = 'Yes',
+	NO = 'No'
+}

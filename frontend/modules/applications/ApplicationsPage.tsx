@@ -29,6 +29,10 @@ const AppsPage = ({ flashError, clear }: Props) => {
 			clear();
 			setState(prev => ({ ...prev, loading: true }));
 			const response = await getApplications(null, params);
+			// set the resume field for each application to be yes or no
+			response.applications = response.applications.map(value => {
+				return { ...value, resume: value.resume ? 'Yes' : 'No' };
+			});
 			setState(prev => ({ ...prev, loading: false, ...response }));
 		} catch (error) {
 			setState(prev => ({ ...prev, loading: false }));
