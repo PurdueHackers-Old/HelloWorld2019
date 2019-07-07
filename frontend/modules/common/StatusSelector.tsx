@@ -4,6 +4,7 @@ import { IContext, IApplication } from '../../@types';
 import { err } from '../../utils';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
+import { updateApplicationStatus } from '../../api';
 
 interface Props {
 	application: IApplication;
@@ -29,6 +30,7 @@ export class StatusSelector extends Component<Props> {
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
+			await updateApplicationStatus(this.props.application._id, status);
 			this.setState({ status });
 			return flashSuccess('Successfully updated application status!');
 		} catch (error) {
