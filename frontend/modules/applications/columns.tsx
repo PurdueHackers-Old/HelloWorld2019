@@ -44,7 +44,7 @@ export const columns: Column<IApplication>[] = [
 		Header: 'Status',
 		accessor: 'statusInternal',
 		Cell: props => {
-			return <StatusSelector application={props.original} />;
+			return <StatusSelector key={props.original._id} application={props.original} />;
 		},
 		Filter: filter(Object.values(Status).map(value => ({ text: value, value })))
 	}

@@ -4,8 +4,8 @@
 	"description": "Web page for Hello World 2019",
 	"main": "dist/backend/index.js",
 	"scripts": {
-		"dev": "ts-node-dev -P tsconfig.server.json --transpile-only --no-notify --ignore-watch node_modules --ignore-watch frontend backend/index.ts",
-		"dev:debug": "ts-node-dev -P tsconfig.server.json --no-notify --ignore-watch node_modules --ignore-watch frontend --inspect -- backend/index.ts",
+		"dev": "ts-node-dev -P tsconfig.server.json --transpile-only --respawn --no-notify --ignore-watch node_modules --ignore-watch frontend backend/index.ts",
+		"dev:debug": "ts-node-dev -P tsconfig.server.json --respawn --no-notify --ignore-watch node_modules --ignore-watch frontend --inspect -- backend/index.ts",
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
