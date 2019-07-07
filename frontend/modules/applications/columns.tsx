@@ -37,6 +37,7 @@ export const columns: Column<IApplication>[] = [
 	{
 		Header: 'Resume',
 		accessor: 'resume',
+		Cell: ({ value }) => <div>{value ? 'Yes' : 'No'}</div>,
 		Filter: filter(Object.values(Resume).map(value => ({ text: value, value })))
 	},
 	{

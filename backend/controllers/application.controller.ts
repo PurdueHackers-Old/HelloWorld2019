@@ -32,8 +32,15 @@ export class ApplicationController extends BaseController {
 			if (Array.isArray(value)) {
 				if (value.length) filter[key] = { $in: value };
 				else delete filter[key];
-			} else if (key === 'name' || key === 'email')
+			} else if (key === 'name' || key === 'email') {
 				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
+			} else if (key === 'resume') {
+				if (filter[key] === 'Yes') {
+					filter[key] = { $ne: null };
+				} else {
+					filter[key] = null;
+				}
+			}
 		});
 
 		const resultsQuery = Application.aggregate([
