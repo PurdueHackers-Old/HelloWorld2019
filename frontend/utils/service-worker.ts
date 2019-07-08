@@ -1,7 +1,7 @@
 export const isSWSupported = () =>
 	navigator && 'serviceWorker' in navigator && 'PushManager' in window;
 
-const register = async () => navigator.serviceWorker.register('/sw.js');
+const register = async () => navigator.serviceWorker.register('/service-worker.js');
 
 const requestNotificationPermission = async () => (window as any).Notification.requestPermission();
 

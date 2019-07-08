@@ -1,5 +1,3 @@
-//// <reference types="../node_modules/types-serviceworker" />
-
 /**
  * HELPER FUNCTIONS
  */
@@ -74,11 +72,14 @@ const saveSubscription = async subscription => {
 	}
 };
 
+/** @type {ServiceWorkerGlobalScope} */
+const _self = self;
+
 /**
  * EVENT LISTENERS
  */
 // This will be called only once when the service worker is installed for first time.
-self.addEventListener('install', event => {
+_self.addEventListener('install', event => {
 	console.log('[Service Worker]: Installing service worker');
 	const promiseChain = createSubscription()
 		.then(subscription => saveSubscription(subscription))
@@ -91,7 +92,7 @@ self.addEventListener('install', event => {
 	event.waitUntil(promiseChain);
 });
 
-self.addEventListener('push', event => {
+_self.addEventListener('push', event => {
 	if (!event || !event.data) return;
 	const promises = [];
 	const eventData = parseMessageData(event.data);
@@ -111,7 +112,7 @@ self.addEventListener('push', event => {
 	event.waitUntil(Promise.all(promises));
 });
 
-self.addEventListener('notificationclick', event => {
+_self.addEventListener('notificationclick', event => {
 	event.notification.close();
 
 	const urlToOpen = new URL('/announcements', self.location.origin).href;
@@ -131,3 +132,48 @@ self.addEventListener('notificationclick', event => {
 
 	event.waitUntil(promiseChain);
 });
+
+/**
+ * Workbox Caching
+ */
+
+/** @param _workbox {typeof import('workbox-sw')} */
+const initializeWorkboxCaching = _workbox => {
+	_self.__precacheManifest = [].concat(_self.__precacheManifest || []);
+	_workbox.precaching.precacheAndRoute(_self.__precacheManifest, {});
+
+	_workbox.routing.registerRoute(
+		/^https?.*/,
+		new _workbox.strategies.NetworkFirst({
+			cacheName: 'https-calls',
+			networkTimeoutSeconds: 15,
+			plugins: [
+				new _workbox.expiration.Plugin({
+					maxEntries: 150,
+					maxAgeSeconds: 2592000,
+					purgeOnQuotaError: false
+				}),
+				new _workbox.cacheableResponse.Plugin({ statuses: [0, 200] })
+			]
+		}),
+		'GET'
+	);
+
+	_workbox.routing.registerRoute(
+		/api/,
+		new _workbox.strategies.NetworkFirst({
+			plugins: [new _workbox.cacheableResponse.Plugin({ statuses: [0, 200] })]
+		}),
+		'GET'
+	);
+
+	_workbox.googleAnalytics.initialize();
+};
+
+try {
+	if (workbox) {
+		initializeWorkboxCaching(workbox);
+	}
+} catch (error) {
+	console.error('Error configuring workbox caching:', error);
+}

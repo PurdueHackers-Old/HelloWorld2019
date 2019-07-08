@@ -4,6 +4,7 @@ const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-plugin-transpile-modules');
 const lessToJS = require('less-vars-to-js');
+const withOffline = require('next-offline');
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
@@ -33,6 +34,19 @@ module.exports = withPlugins(
 				lessLoaderOptions: {
 					javascriptEnabled: true,
 					modifyVars: themeVariables // Change theme
+				}
+			}
+		],
+		[
+			withOffline,
+			{
+				scope: '/',
+				dontAutoRegisterSw: true,
+				generateSw: false,
+				devSwSrc: './service-worker.js',
+				workboxOpts: {
+					swSrc: './service-worker.js',
+					swDest: '../static/service-worker.js'
 				}
 			}
 		]

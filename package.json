@@ -9,8 +9,7 @@
 		"clean": "rimraf dist frontend/.next",
 		"build-client": "cd frontend && next build",
 		"build-server": "tsc --project tsconfig.server.json",
-		"build": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && cp -r frontend/assets dist/frontend && cp -r frontend/.next dist/frontend",
-		"rbuild": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && rimraf dist/frontend/* && cp -r frontend/assets frontend/next.config.js frontend/.next dist/frontend",
+		"build": "NODE_ENV=production npm run clean && npm run build-client && npm run build-server && rimraf dist/frontend/* && cp -r frontend/assets frontend/static frontend/next.config.js frontend/.next dist/frontend",
 		"test": "NODE_ENV=production npm run build && NODE_ENV=test jest -i --detectOpenHandles",
 		"test:dev": "NODE_ENV=test jest -i --detectOpenHandles",
 		"start": "NODE_ENV=production node dist/backend/index.js",
@@ -50,6 +49,7 @@
 		"morgan": "^1.9.1",
 		"multer": "^1.4.1",
 		"next": "8.0.3",
+		"next-offline": "^4.0.2",
 		"next-redux-wrapper": "^3.0.0-alpha.1",
 		"passport-jwt": "^4.0.0",
 		"qrcode.react": "^0.9.3",
@@ -105,6 +105,7 @@
 		"@types/supertest": "^2.0.7",
 		"@types/swagger-ui-express": "^3.0.0",
 		"@types/web-push": "^3.3.0",
+		"@types/workbox-sw": "^4.2.0",
 		"@typescript-eslint/eslint-plugin": "^1.9.0",
 		"@typescript-eslint/parser": "^1.9.0",
 		"@zeit/next-css": "^1.0.1",
@@ -136,7 +137,8 @@
 		"ts-jest": "^24.0.2",
 		"ts-node-dev": "^1.0.0-pre.40",
 		"types-serviceworker": "^0.0.1",
-		"typescript": "^3.3.1"
+		"typescript": "^3.3.1",
+		"workbox-sw": "^4.3.1"
 	},
 	"eslintIgnore": [
 		"dist/*",
