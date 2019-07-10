@@ -11,7 +11,6 @@ export default class MyDocument extends Document {
 					<meta name="theme-color" content="#c09ed0" />
 					<meta name="title" content="Hello World" />
 					<meta name="description" content="Purdue's beginner oriented hackathon" />
-					<title>Hello World</title>
 					<link rel="manifest" href="/static/manifest.json" />
 				</Head>
 				<body>
