@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import Router from 'next/router';
+import Head from 'next/head';
 import withRedux from 'next-redux-wrapper';
 import { Store } from 'redux';
 import makeStore from '../redux/store';
@@ -67,6 +68,9 @@ export default class MyApp extends App<Props> {
 		const { Component, pageProps, store } = this.props as any;
 		return (
 			<Container>
+				<Head>
+					<title>Hello World</title>
+				</Head>
 				<Provider store={store}>
 					<Layout>
 						<Component {...pageProps} />

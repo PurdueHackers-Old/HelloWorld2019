@@ -58,7 +58,7 @@ export default class Server {
 		this.setup();
 		this.nextApp = next({
 			dev: NODE_ENV === 'development',
-			dir: join(__dirname + '/../frontend')
+			dir: join(__dirname, '/../frontend')
 		});
 	}
 
@@ -66,7 +66,13 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
-			this.app.use('/sw.js', express.static('frontend/sw.js'));
+			if (CONFIG.NODE_ENV === 'production')
+				this.app.use(
+					'/service-worker.js',
+					express.static('frontend/.next/service-worker.js')
+				);
+			else this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
+			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});
