@@ -66,7 +66,12 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
-			this.app.use('/service-worker.js', express.static('frontend/.next/service-worker.js'));
+			if (CONFIG.NODE_ENV === 'production')
+				this.app.use(
+					'/service-worker.js',
+					express.static('frontend/.next/service-worker.js')
+				);
+			else this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
 			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);

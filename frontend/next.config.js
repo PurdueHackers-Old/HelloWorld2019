@@ -45,8 +45,8 @@ module.exports = withPlugins(
 				generateSw: false,
 				devSwSrc: './service-worker.js',
 				workboxOpts: {
-					swSrc: './service-worker.js'
-					// swDest: '../static/service-worker.js'
+					swSrc: './service-worker.js',
+					swDest: './service-worker.js'
 				}
 			}
 		]
