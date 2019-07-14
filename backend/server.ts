@@ -66,12 +66,14 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
-			if (CONFIG.NODE_ENV === 'production')
+			if (CONFIG.NODE_ENV === 'production') {
 				this.app.use(
 					'/service-worker.js',
 					express.static('frontend/.next/service-worker.js')
 				);
-			else this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
+			} else {
+				this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
+			}
 			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
@@ -96,7 +98,7 @@ export default class Server {
 		const devLogger = logger('dev', { skip: r => r.url.startsWith('/_next') });
 		const prodLogger = logger('tiny', { skip: r => r.url.startsWith('/_next') });
 		this.app.use(helmet());
-		// if (NODE_ENV === 'production') this.app.use(yes());
+		if (NODE_ENV === 'production') this.app.use(yes());
 		if (NODE_ENV !== 'test')
 			NODE_ENV !== 'production' ? this.app.use(devLogger) : this.app.use(prodLogger);
 		this.app.use(express.json());
