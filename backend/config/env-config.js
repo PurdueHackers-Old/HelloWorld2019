@@ -18,7 +18,6 @@ const serverRuntimeConfig = {
 	GC_PROJECT_ID: env.GC_PROJECT_ID || 'myprojectid',
 	NODE_ENV: env.NODE_ENV || 'development',
 	ORG_NAME: env.ORG_NAME || 'Purdue Hackers',
-	REDIS_URL: env.REDIS_URL || 'redis://0.0.0.0:6379',
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
 	VAPID_PRIVATE: env.VAPID_PRIVATE || 'my vapid private key',
