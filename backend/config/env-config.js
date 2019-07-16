@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const env = process.env;
 
 const sharedConfig = {
@@ -28,7 +29,7 @@ const serverRuntimeConfig = {
 };
 
 const publicRuntimeConfig = {
-	API_URL: env.API_URL ? env.API_URL : `/api`,
+	API_URL: env.API_URL ? env.API_URL : `https://localhost:${sharedConfig.PORT}/api`,
 	NODE_ENV: env.NODE_ENV || 'development',
 	...sharedConfig
 };
