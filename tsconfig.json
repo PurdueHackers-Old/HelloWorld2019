@@ -9,7 +9,7 @@
 		"allowSyntheticDefaultImports": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"removeComments": false,
+		"removeComments": true,
 		"preserveConstEnums": true,
 		"sourceMap": true,
 		"skipLibCheck": true,

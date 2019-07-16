@@ -28,7 +28,7 @@ const serverRuntimeConfig = {
 };
 
 const publicRuntimeConfig = {
-	API_URL: env.API_URL ? env.API_URL : `http://localhost:${sharedConfig.PORT}/api`,
+	API_URL: env.API_URL ? env.API_URL : `/api`,
 	NODE_ENV: env.NODE_ENV || 'development',
 	...sharedConfig
 };

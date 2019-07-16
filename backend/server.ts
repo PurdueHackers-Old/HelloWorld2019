@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import * as express from 'express';
-import { Server as HTTPServer } from 'http';
+import { Server as HTTPServer, createServer as createHttpServer } from 'http';
+import { Server as HTTPSServer, createServer as createHttpsServer } from 'https';
 import 'express-async-errors';
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
@@ -10,6 +11,7 @@ import * as helmet from 'helmet';
 import * as yes from 'yes-https';
 import * as next from 'next';
 import { join } from 'path';
+import { readFileSync } from 'fs';
 import { useExpressServer, useContainer, getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
@@ -25,6 +27,7 @@ import { createLogger } from './utils/logger';
 import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
 import { OpenAPIObject } from 'openapi3-ts';
+import { readFile } from 'fs';
 
 const { NODE_ENV, DB } = CONFIG;
 const routingControllerOptions = {
@@ -46,7 +49,7 @@ export default class Server {
 	}
 
 	public app: express.Application;
-	public httpServer: HTTPServer;
+	public httpServer: HTTPServer | HTTPSServer;
 	public nextApp: next.Server;
 	public mongoose: typeof mongoose;
 	public logger: Logger;
@@ -92,13 +95,28 @@ export default class Server {
 		// Any unhandled errors will be caught in this middleware
 		this.app.use(globalError);
 		this.setupSwagger();
+		if (CONFIG.NODE_ENV === 'development') {
+			const cert = readFileSync(join(process.cwd(), '/certs/localhost+2.pem'));
+			const key = readFileSync(join(process.cwd(), '/certs/localhost+2-key.pem'));
+			this.httpServer = createHttpsServer(
+				{
+					key,
+					cert,
+					requestCert: false,
+					rejectUnauthorized: false
+				},
+				this.app
+			);
+		} else {
+			this.httpServer = createHttpServer(this.app);
+		}
 	}
 
 	private setupMiddleware() {
 		const devLogger = logger('dev', { skip: r => r.url.startsWith('/_next') });
 		const prodLogger = logger('tiny', { skip: r => r.url.startsWith('/_next') });
 		this.app.use(helmet());
-		if (NODE_ENV === 'production') this.app.use(yes());
+		this.app.use(yes());
 		if (NODE_ENV !== 'test')
 			NODE_ENV !== 'production' ? this.app.use(devLogger) : this.app.use(prodLogger);
 		this.app.use(express.json());
@@ -146,7 +164,7 @@ export default class Server {
 	public async start() {
 		await this.initFrontend();
 
-		this.httpServer = this.app.listen(CONFIG.PORT, () => {
+		this.httpServer.listen(CONFIG.PORT, () => {
 			this.logger.info('CONFIG:', CONFIG);
 			this.logger.info(`Listening on port: ${CONFIG.PORT}`);
 		});

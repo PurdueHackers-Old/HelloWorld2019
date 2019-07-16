@@ -4,7 +4,11 @@ import { IContext } from '../@types';
 const { publicRuntimeConfig: CONFIG } = getConfig();
 
 export const api = axios.create({
-	baseURL: CONFIG.API_URL
+	baseURL: CONFIG.API_URL,
+	proxy: {
+		host: '0.0.0.0',
+		port: CONFIG.PORT
+	}
 });
 
 export const err = e =>
