@@ -113,12 +113,12 @@ export default class Server {
 	}
 
 	private setupMiddleware() {
-		const devLogger = logger('dev', { skip: r => r.url.startsWith('/_next') });
-		const prodLogger = logger('tiny', { skip: r => r.url.startsWith('/_next') });
 		this.app.use(helmet());
 		this.app.use(yes());
-		if (NODE_ENV !== 'test')
-			NODE_ENV !== 'production' ? this.app.use(devLogger) : this.app.use(prodLogger);
+		if (NODE_ENV !== 'test') {
+			const logFormat = NODE_ENV !== 'production' ? 'dev' : 'tiny';
+			this.app.use(logger(logFormat, { skip: r => r.url.startsWith('/_next') }));
+		}
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(cookieParser());
