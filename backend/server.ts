@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import * as express from 'express';
 import { Server as HTTPServer, createServer as createHttpServer } from 'http';
-import { Server as HTTPSServer, createServer as createHttpsServer } from 'https';
 import 'express-async-errors';
 import * as cookieParser from 'cookie-parser';
 import * as logger from 'morgan';
@@ -11,7 +10,6 @@ import * as helmet from 'helmet';
 import * as yes from 'yes-https';
 import * as next from 'next';
 import { join } from 'path';
-import { readFileSync } from 'fs';
 import { useExpressServer, useContainer, getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
@@ -27,7 +25,6 @@ import { createLogger } from './utils/logger';
 import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
 import { OpenAPIObject } from 'openapi3-ts';
-import { readFile } from 'fs';
 
 const { NODE_ENV, DB } = CONFIG;
 const routingControllerOptions = {
@@ -49,7 +46,7 @@ export default class Server {
 	}
 
 	public app: express.Application;
-	public httpServer: HTTPServer | HTTPSServer;
+	public httpServer: HTTPServer;
 	public nextApp: next.Server;
 	public mongoose: typeof mongoose;
 	public logger: Logger;
@@ -89,34 +86,24 @@ export default class Server {
 
 	private setup(): void {
 		this.setupMiddleware();
+
 		// Enable controllers in this.app
 		useContainer(Container);
+
 		this.app = useExpressServer(this.app, routingControllerOptions);
+
 		// Any unhandled errors will be caught in this middleware
 		this.app.use(globalError);
 		this.setupSwagger();
-		if (CONFIG.NODE_ENV === 'development') {
-			const cert = readFileSync(join(process.cwd(), '/certs/localhost+2.pem'));
-			const key = readFileSync(join(process.cwd(), '/certs/localhost+2-key.pem'));
-			this.httpServer = createHttpsServer(
-				{
-					key,
-					cert,
-					requestCert: false,
-					rejectUnauthorized: false
-				},
-				this.app
-			);
-		} else {
-			this.httpServer = createHttpServer(this.app);
-		}
+
+		this.httpServer = createHttpServer(this.app);
 	}
 
 	private setupMiddleware() {
 		this.app.use(helmet());
-		this.app.use(yes());
-		if (NODE_ENV !== 'test') {
-			const logFormat = NODE_ENV !== 'production' ? 'dev' : 'tiny';
+		if (CONFIG.REDIRECT_HTTPS) this.app.use(yes());
+		if (CONFIG.NODE_ENV !== 'test') {
+			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'tiny';
 			this.app.use(logger(logFormat, { skip: r => r.url.startsWith('/_next') }));
 		}
 		this.app.use(express.json());

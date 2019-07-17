@@ -5,6 +5,7 @@ const env = process.env;
 
 const sharedConfig = {
 	PORT: env.PORT || 5000,
+	NODE_ENV: env.NODE_ENV || 'development',
 	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2',
 	VAPID_PUBLIC: env.VAPID_PUBLIC || 'my vapid public key'
 };
@@ -17,7 +18,6 @@ const serverRuntimeConfig = {
 	GC_CLIENT_EMAIL: env.GC_CLIENT_EMAIL || 'my@clientemail.com',
 	GC_PRIVATE_KEY: env.GC_PRIVATE_KEY || 'myprivatekey',
 	GC_PROJECT_ID: env.GC_PROJECT_ID || 'myprojectid',
-	NODE_ENV: env.NODE_ENV || 'development',
 	ORG_NAME: env.ORG_NAME || 'Purdue Hackers',
 	SECRET: env.SECRET || 'my-secret',
 	SENDGRID_KEY: env.SENDGRID_KEY || 'mysendgridkey',
@@ -25,12 +25,12 @@ const serverRuntimeConfig = {
 	HEADLESS: !!env.HEADLESS || false,
 	SLACK_TOKEN: env.SLACK_TOKEN || 'myslacktoken',
 	SLACK_CHANNEL_ID: env.SLACK_CHANNEL_ID || 'announcements',
+	REDIRECT_HTTPS: env.REDIRECT_HTTPS === 'true',
 	...sharedConfig
 };
 
 const publicRuntimeConfig = {
-	API_URL: env.API_URL ? env.API_URL : `https://localhost:${sharedConfig.PORT}/api`,
-	NODE_ENV: env.NODE_ENV || 'development',
+	API_URL: env.API_URL ? env.API_URL : `http://localhost:${sharedConfig.PORT}/api`,
 	...sharedConfig
 };
 
