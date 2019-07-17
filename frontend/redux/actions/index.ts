@@ -78,6 +78,7 @@ export const refreshSession = (ctx?: IContext) => async (dispatch: Dispatch) => 
 		ReactGA.set({ userId: response.user._id });
 		return response;
 	} catch (error) {
+		console.error('Error refreshing token:', error);
 		// if (!error.response) throw error;
 		dispatch(setUser(null));
 		dispatch(setToken(''));
