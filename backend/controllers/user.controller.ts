@@ -14,21 +14,23 @@ import {
 	Params,
 	Req
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
+import { Request } from 'express';
+import { Inject } from 'typedi';
+import { Logger as PinoLogger } from 'pino';
 import { User, UserDto, IUserModel } from '../models/user';
 import { ApplicationDto, Application } from '../models/application';
 import { userMatches, hasPermission } from '../utils';
 import { Role } from '../../shared/user.enums';
-import { Inject } from 'typedi';
 import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { StorageService } from '../services/storage.service';
-import { Request } from 'express';
+import { Logger } from '../utils/logger';
 
 @JsonController('/api/users')
-export class UserController extends BaseController {
+export class UserController {
 	@Inject() globalController: GlobalsController;
 	@Inject() storageService: StorageService;
+	@Logger() logger: PinoLogger;
 
 	@Get('/')
 	@Authorized([Role.EXEC])

@@ -1,13 +1,12 @@
 import {
 	JsonController,
 	Get,
-	QueryParam,
 	BadRequestError,
 	Authorized,
 	Post,
-	BodyParam
+	BodyParam,
+	QueryParam
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { User, UserDto } from '../models/user';
 import { escapeRegEx, getUsersWithApplicationStatus } from '../utils';
@@ -18,7 +17,7 @@ import { Globals } from '../models/globals';
 import { ResponseSchema } from 'routing-controllers-openapi';
 
 @JsonController('/api/admin')
-export class AdminController extends BaseController {
+export class AdminController {
 	@Inject() private emailService: EmailService;
 
 	@Get('/users')

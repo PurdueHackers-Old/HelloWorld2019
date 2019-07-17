@@ -7,14 +7,13 @@ import {
 	Post,
 	Param
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { User } from '../models/user';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/exec')
-export class ExecController extends BaseController {
+export class ExecController {
 	@Post('/checkin/:email')
 	@Authorized([Role.EXEC])
 	async checkin(@Param('email') email: string) {

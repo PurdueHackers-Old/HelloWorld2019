@@ -8,7 +8,6 @@ import {
 	Authorized,
 	Delete
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
 import { Announcement, AnnouncementDto } from '../models/announcement';
 import { NotificationService } from '../services/notification.service';
 import { Role } from '../../shared/user.enums';
@@ -16,13 +15,11 @@ import { SlackService } from '../services/slack.service';
 
 // TODO: Add tests
 @JsonController('/api/announcements')
-export class AnnouncementController extends BaseController {
+export class AnnouncementController {
 	constructor(
 		private notificationService?: NotificationService,
 		private slackService?: SlackService
-	) {
-		super();
-	}
+	) {}
 
 	@Get('/')
 	async getAll(@QueryParam('type') type?: string, @QueryParam('released') released?: boolean) {

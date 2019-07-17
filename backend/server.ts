@@ -16,7 +16,7 @@ import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import * as swaggerUI from 'swagger-ui-express';
 import { Container } from 'typedi';
-import { Logger } from 'winston';
+import { Logger } from 'pino';
 import CONFIG from './config';
 import { globalError } from './middleware/globalError';
 import { SuccessInterceptor } from './interceptors/success.interceptor';

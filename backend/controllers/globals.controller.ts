@@ -8,7 +8,6 @@ import {
 	Body
 } from 'routing-controllers';
 import CONFIG from '../config';
-import { BaseController } from './base.controller';
 import { Role } from '../../shared/user.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Globals, IGlobalsModel } from '../models/globals';
@@ -17,10 +16,8 @@ import { PushSubscription } from 'web-push';
 import { Application } from '../models/application';
 
 @JsonController('/api/globals')
-export class GlobalsController extends BaseController {
-	constructor(private notificationService?: NotificationService) {
-		super();
-	}
+export class GlobalsController {
+	constructor(private notificationService?: NotificationService) {}
 
 	@Get('/')
 	async getGlobals() {
