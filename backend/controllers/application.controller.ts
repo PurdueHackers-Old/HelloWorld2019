@@ -10,14 +10,13 @@ import {
 	BodyParam,
 	Param
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
 import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
-export class ApplicationController extends BaseController {
+export class ApplicationController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(

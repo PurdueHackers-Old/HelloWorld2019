@@ -7,7 +7,8 @@ const sharedConfig = {
 	PORT: env.PORT || 5000,
 	NODE_ENV: env.NODE_ENV || 'development',
 	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2',
-	VAPID_PUBLIC: env.VAPID_PUBLIC || 'my vapid public key'
+	VAPID_PUBLIC: env.VAPID_PUBLIC || 'my vapid public key',
+	ANALYZE: env.ANALYZE === 'true'
 };
 
 const serverRuntimeConfig = {

@@ -15,15 +15,15 @@ import {
 	Get,
 	BodyParam
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
+import { Logger as PinoLogger } from 'pino';
 import { EmailService } from '../services/email.service';
 import { StorageService } from '../services/storage.service';
+import { Logger } from '../utils/logger';
 
 @JsonController('/api/auth')
-export class AuthController extends BaseController {
-	constructor(private emailService?: EmailService, private storageService?: StorageService) {
-		super();
-	}
+export class AuthController {
+	@Logger() logger: PinoLogger;
+	constructor(private emailService?: EmailService, private storageService?: StorageService) {}
 
 	@Post('/signup')
 	async signup(
@@ -89,6 +89,7 @@ export class AuthController extends BaseController {
 			.exec();
 		if (!user) throw new UnauthorizedError('User not found');
 		token = signToken(user);
+		this.logger.info('Refreshing token');
 		return { user, token };
 	}
 

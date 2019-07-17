@@ -3,8 +3,9 @@ const withCss = require('@zeit/next-css');
 const withLess = require('@zeit/next-less');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules');
-const lessToJS = require('less-vars-to-js');
+const withBundleAnalyzer = require('@next/bundle-analyzer');
 const withOffline = require('next-offline');
+const lessToJS = require('less-vars-to-js');
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
@@ -49,6 +50,11 @@ module.exports = withPlugins(
 					swDest: './service-worker.js'
 				}
 			}
+		],
+		[
+			withBundleAnalyzer({
+				enabled: publicRuntimeConfig.ANALYZE
+			})
 		]
 	],
 	{
