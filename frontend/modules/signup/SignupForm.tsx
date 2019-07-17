@@ -41,7 +41,7 @@ export const SignupForm = ({
 			</label>
 			<br />
 			<label>
-				Password Comfirm:
+				Password Confirm:
 				<input
 					required
 					type="password"
