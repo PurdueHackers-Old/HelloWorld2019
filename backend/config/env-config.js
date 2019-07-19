@@ -6,7 +6,7 @@ const env = process.env;
 const sharedConfig = {
 	PORT: env.PORT || 5000,
 	NODE_ENV: env.NODE_ENV || 'development',
-	TRACKING_ID: env.TRACKING_ID || 'UA-124576559-2',
+	TRACKING_ID: env.TRACKING_ID || 'my-google-analytics-key',
 	VAPID_PUBLIC: env.VAPID_PUBLIC || 'my vapid public key',
 	ANALYZE: env.ANALYZE === 'true'
 };
