@@ -1,16 +1,16 @@
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	Post,
-	Body,
-	Param,
 	Authorized,
-	Delete
+	Body,
+	Delete,
+	Get,
+	JsonController,
+	Param,
+	Post,
+	QueryParam
 } from 'routing-controllers';
+import { Role } from '../../shared/user.enums';
 import { Announcement, AnnouncementDto } from '../models/announcement';
 import { NotificationService } from '../services/notification.service';
-import { Role } from '../../shared/user.enums';
 import { SlackService } from '../services/slack.service';
 
 // TODO: Add tests

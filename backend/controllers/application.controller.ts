@@ -1,18 +1,18 @@
 import { ObjectId } from 'mongodb';
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	BadRequestError,
 	Authorized,
+	BadRequestError,
+	BodyParam,
+	Get,
+	JsonController,
+	Param,
 	Params,
 	Post,
-	BodyParam,
-	Param
+	QueryParam
 } from 'routing-controllers';
-import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { Application } from '../models/application';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
