@@ -27,11 +27,13 @@ const serverRuntimeConfig = {
 	SLACK_TOKEN: env.SLACK_TOKEN || 'myslacktoken',
 	SLACK_CHANNEL_ID: env.SLACK_CHANNEL_ID || 'announcements',
 	REDIRECT_HTTPS: env.REDIRECT_HTTPS === 'true',
+	LOG_LEVEL: env.LOG_LEVEL || 'trace',
+	APP_DEBUG: env.APP_DEBUG === 'true',
 	...sharedConfig
 };
 
 const publicRuntimeConfig = {
-	API_URL: env.API_URL ? env.API_URL : `http://localhost:${sharedConfig.PORT}/api`,
+	API_URL: env.API_URL ? env.API_URL : `http://localhost:${serverRuntimeConfig.PORT}/api`,
 	...sharedConfig
 };
 
