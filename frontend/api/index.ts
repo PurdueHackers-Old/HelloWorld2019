@@ -74,6 +74,22 @@ export const sendApplication = async (body: IApplication, ctx?: IContext, id?: s
 	}
 };
 
+export const updateProfile = async (body: { name: string }, ctx?: IContext, id?: string) => {
+	try {
+		const token = getToken(ctx);
+		if (!id) id = (jwt.decode(token) as any)._id;
+		const {
+			data: { response }
+		} = await api.put(`/users/${id}`, body, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const user: IUser = response;
+		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
 // Application Actions
 export const getApplications = async (ctx?: IContext, params?) => {
 	try {
