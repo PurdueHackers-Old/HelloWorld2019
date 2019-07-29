@@ -1,20 +1,20 @@
 import {
-	JsonController,
-	Get,
-	BadRequestError,
 	Authorized,
-	Post,
+	BadRequestError,
 	BodyParam,
+	Get,
+	JsonController,
+	Post,
 	QueryParam
 } from 'routing-controllers';
-import { Role } from '../../shared/user.enums';
-import { User, UserDto } from '../models/user';
-import { escapeRegEx, getUsersWithApplicationStatus } from '../utils';
-import { Inject } from 'typedi';
-import { EmailService } from '../services/email.service';
-import { Status } from '../../shared/app.enums';
-import { Globals } from '../models/globals';
 import { ResponseSchema } from 'routing-controllers-openapi';
+import { Inject } from 'typedi';
+import { Status } from '../../shared/app.enums';
+import { Role } from '../../shared/user.enums';
+import { Globals } from '../models/globals';
+import { User, UserDto } from '../models/user';
+import { EmailService } from '../services/email.service';
+import { escapeRegEx, getUsersWithApplicationStatus } from '../utils';
 
 @JsonController('/api/admin')
 export class AdminController {

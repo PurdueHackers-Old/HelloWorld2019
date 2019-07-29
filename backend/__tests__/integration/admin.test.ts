@@ -1,14 +1,13 @@
 import 'jest';
 import * as supertest from 'supertest';
-import { generateUsers, generateUser, generateApplication } from '../helper';
 import Server from '../../server';
-import { Role } from '../../../shared/user.enums';
-import { IUserModel, User } from '../../models/user';
-import { UserController } from '../../controllers/user.controller';
-import { GlobalsController } from '../../controllers/globals.controller';
 import { Status } from '../../../shared/app.enums';
+import { Role } from '../../../shared/user.enums';
+import { GlobalsController } from '../../controllers/globals.controller';
+import { UserController } from '../../controllers/user.controller';
 import { Application } from '../../models/application';
-import { Request } from 'express';
+import { IUserModel, User } from '../../models/user';
+import { generateApplication, generateUser, generateUsers } from '../helper';
 
 let server: Server;
 let request: supertest.SuperTest<supertest.Test>;

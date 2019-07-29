@@ -1,30 +1,30 @@
+import { Request } from 'express';
 import { ObjectId } from 'mongodb';
+import { Logger as PinoLogger } from 'pino';
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	Param,
+	Authorized,
 	BadRequestError,
-	Put,
 	Body,
 	CurrentUser,
-	UnauthorizedError,
-	Post,
-	Authorized,
+	Get,
+	JsonController,
+	Param,
 	Params,
-	Req
+	Post,
+	Put,
+	QueryParam,
+	Req,
+	UnauthorizedError
 } from 'routing-controllers';
-import { Request } from 'express';
 import { Inject } from 'typedi';
-import { Logger as PinoLogger } from 'pino';
-import { User, UserDto, IUserModel } from '../models/user';
-import { ApplicationDto, Application } from '../models/application';
-import { userMatches, hasPermission } from '../utils';
-import { Role } from '../../shared/user.enums';
-import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { Role } from '../../shared/user.enums';
+import { Application, ApplicationDto } from '../models/application';
+import { IUserModel, User, UserDto } from '../models/user';
 import { StorageService } from '../services/storage.service';
+import { hasPermission, userMatches } from '../utils';
 import { Logger } from '../utils/logger';
+import { GlobalsController } from './globals.controller';
 
 @JsonController('/api/users')
 export class UserController {

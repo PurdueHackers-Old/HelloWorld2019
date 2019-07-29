@@ -1,11 +1,11 @@
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	BadRequestError,
 	Authorized,
+	BadRequestError,
+	Get,
+	JsonController,
+	Param,
 	Post,
-	Param
+	QueryParam
 } from 'routing-controllers';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';

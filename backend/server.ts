@@ -1,30 +1,31 @@
 import 'reflect-metadata';
 import * as express from 'express';
-import { Server as HTTPServer, createServer as createHttpServer } from 'http';
 import 'express-async-errors';
+import { getFromContainer, MetadataStorage } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as cookieParser from 'cookie-parser';
-import * as logger from 'morgan';
-import * as mongoose from 'mongoose';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
-import * as yes from 'yes-https';
+import { createServer as createHttpServer, Server as HTTPServer } from 'http';
+import * as mongoose from 'mongoose';
+import * as logger from 'morgan';
+import { AddressInfo } from 'net';
 import * as next from 'next';
+import { OpenAPIObject } from 'openapi3-ts';
 import { join } from 'path';
-import { useExpressServer, useContainer, getMetadataArgsStorage } from 'routing-controllers';
+import { Logger } from 'pino';
+import { getMetadataArgsStorage, useContainer, useExpressServer } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { getFromContainer, MetadataStorage } from 'class-validator';
 import * as swaggerUI from 'swagger-ui-express';
 import { Container } from 'typedi';
-import { Logger } from 'pino';
+import * as yes from 'yes-https';
 import CONFIG from './config';
-import { globalError } from './middleware/globalError';
 import { SuccessInterceptor } from './interceptors/success.interceptor';
-import { currentUserChecker, authorizationChecker } from './middleware/authentication';
-import { createLogger } from './utils/logger';
+import { authorizationChecker, currentUserChecker } from './middleware/authentication';
+import { globalError } from './middleware/globalError';
 import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
-import { OpenAPIObject } from 'openapi3-ts';
+import { createLogger } from './utils/logger';
 
 const { NODE_ENV, DB } = CONFIG;
 const routingControllerOptions = {
@@ -152,6 +153,7 @@ export default class Server {
 		await this.initFrontend();
 
 		this.httpServer.listen(CONFIG.PORT, () => {
+			CONFIG.PORT = (this.httpServer.address() as AddressInfo).port;
 			this.logger.info('CONFIG:', CONFIG);
 			this.logger.info(`Listening on port: ${CONFIG.PORT}`);
 		});

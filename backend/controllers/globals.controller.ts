@@ -1,19 +1,19 @@
 import {
-	JsonController,
-	Get,
 	Authorized,
-	Post,
-	BodyParam,
 	BadRequestError,
-	Body
+	Body,
+	BodyParam,
+	Get,
+	JsonController,
+	Post
 } from 'routing-controllers';
-import CONFIG from '../config';
-import { Role } from '../../shared/user.enums';
+import { PushSubscription } from 'web-push';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { Role } from '../../shared/user.enums';
+import CONFIG from '../config';
+import { Application } from '../models/application';
 import { Globals, IGlobalsModel } from '../models/globals';
 import { NotificationService } from '../services/notification.service';
-import { PushSubscription } from 'web-push';
-import { Application } from '../models/application';
 
 @JsonController('/api/globals')
 export class GlobalsController {
