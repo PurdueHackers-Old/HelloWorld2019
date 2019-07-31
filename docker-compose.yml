@@ -33,15 +33,14 @@ services:
         build:
             context: ./
         volumes:
-            - ./:/usr/app
-            - /usr/app/node_modules
+            - ./:/usr/app:Z
         depends_on:
             - mongo
         ports:
             - "5000:5000"
             - "9229:9229"
             - "5858:5858"
-        restart: on-failure
+        # restart: on-failure
         environment:
             - DB=mongodb://mongo/HelloWorld
         entrypoint: wait-for-it mongo:27017 -- yarn dev
