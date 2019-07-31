@@ -6,6 +6,7 @@ import { QRCode } from './QRCode';
 import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
 import { getOwnApplication } from '../../api';
+import Link from 'next/link';
 
 interface Props {
 	email: string;
@@ -30,6 +31,11 @@ const Profile = ({ email }: Props) => {
 	return (
 		<div>
 			<h2>Profile Page</h2>
+			<Link href="/profile/edit">
+				<a>
+					<h4>Edit Profile</h4>
+				</a>
+			</Link>
 			<h4>Application Status:</h4>
 			{!application ? (
 				<div>You have not applied yet!</div>

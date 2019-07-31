@@ -777,4 +777,119 @@ describe('Suite: /api/users -- Integration', () => {
 			);
 		});
 	});
+
+	describe('Updates user profile', () => {
+		it('Fails to update profile because  invalid user ID', async () => {
+			const {
+				body: { error },
+				status
+			} = await request.put(`/api/users/InvalidID`).auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Invalid user ID');
+		});
+
+		it('Fails to update profile because user does not exist', async () => {
+			const {
+				body: { error },
+				status
+			} = await request
+				.put(`/api/users/${new ObjectId()}`)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('User not found');
+		});
+
+		it('Fails to update profile because user not logged in', async () => {
+			const {
+				body: { error },
+				status
+			} = await request.put(`/api/users/${user.user._id}`);
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('You must be logged in!');
+		});
+
+		it('Fails to updates another users profile', async () => {
+			const {
+				body: { error },
+				status
+			} = await request
+				.put(`/api/users/${users[0].user._id}`)
+				.auth(users[1].token, { type: 'bearer' });
+
+			expect(status).toEqual(401);
+			expect(error).toEqual('You are unauthorized to edit this profile');
+		});
+
+		it('Fails to update profile because no body', async () => {
+			const {
+				body: { error },
+				status
+			} = await request
+				.put(`/api/users/${user.user._id}`)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please provide your first and last name');
+		});
+
+		it('Fails to update profile because body but no name', async () => {
+			const body = {};
+
+			const {
+				body: { error },
+				status
+			} = await request
+				.put(`/api/users/${user.user._id}`)
+				.send(body)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please provide your first and last name');
+		});
+
+		it('Fails to update profile because no last name', async () => {
+			const body = {
+				name: 'FirstName'
+			};
+
+			const {
+				body: { error },
+				status
+			} = await request
+				.put(`/api/users/${user.user._id}`)
+				.send(body)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(400);
+			expect(error).toEqual('Please provide your first and last name');
+		});
+
+		it('Succesfully updates a users profile', async () => {
+			const body = {
+				name: 'ChangedFirstName LastName'
+			};
+
+			const {
+				body: { response },
+				status
+			} = await request
+				.put(`/api/users/${user.user._id}`)
+				.send(body)
+				.auth(user.token, { type: 'bearer' });
+
+			expect(status).toEqual(200);
+			expect(response).not.toHaveProperty('password');
+			expect(response).toEqual(
+				expect.objectContaining({
+					name: body.name,
+					email: user.user.email,
+					role: user.user.role,
+					checkedin: user.user.checkedin
+				})
+			);
+		});
+	});
 });
