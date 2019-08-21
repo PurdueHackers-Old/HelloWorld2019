@@ -1,6 +1,6 @@
 const withTypescript = require('@zeit/next-typescript');
 const withCss = require('@zeit/next-css');
-const withLess = require('@zeit/next-less');
+const withSass = require('@zeit/next-sass');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
@@ -17,8 +17,6 @@ if (typeof require !== 'undefined') {
 	require.extensions['.css'] = () => {};
 }
 
-const themeVariables = lessToJS(readFileSync(resolve(__dirname, './assets/theme.less'), 'utf8'));
-
 module.exports = withPlugins(
 	[
 		[
@@ -29,15 +27,7 @@ module.exports = withPlugins(
 		],
 		[withTypescript],
 		[withCss],
-		[
-			withLess,
-			{
-				lessLoaderOptions: {
-					javascriptEnabled: true,
-					modifyVars: themeVariables // Change theme
-				}
-			}
-		],
+		[withSass, { cssModules: true }],
 		[
 			withOffline,
 			{
