@@ -80,6 +80,7 @@
 		"routing-controllers-openapi": "^1.7.0",
 		"swagger-ui-express": "^4.0.2",
 		"typedi": "^0.8.0",
+		"uikit": "^3.1.7",
 		"web-push": "^3.3.5",
 		"yes-https": "^1.0.0"
 	},

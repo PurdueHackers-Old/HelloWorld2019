@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Header from './Header';
+import { Container } from 'react-bootstrap';
+import Navigation from './Navigation';
 import FlashMessage from './FlashMessage';
 import { Role } from '../../../shared/user.enums';
 
@@ -15,9 +16,11 @@ interface StateToProps {
 const Layout = ({ token, role, green, red, children }: StateToProps) => {
 	return (
 		<div>
-			<Header token={token} role={role} />
+			<Navigation token={token} role={role} />
 			<FlashMessage green={green} red={red} />
-			{children}
+			<Container as="main" role="main" fluid>
+				{children}
+			</Container>
 		</div>
 	);
 };

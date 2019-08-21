@@ -17,6 +17,7 @@ import { initGA, logPageView } from '../utils/analytics';
 import * as flash from '../utils/flash';
 import { IStoreState } from '../@types';
 import { registerServiceWorker } from '../utils/service-worker';
+import 'uikit/dist/css/uikit.min.css';
 import '../assets/theme.scss';
 
 interface Props {

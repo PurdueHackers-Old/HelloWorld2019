@@ -19,7 +19,16 @@ export default class MyDocument extends Document {
 					/>
 					<style jsx global>{`
 						@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+						@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 					`}</style>
+					<script
+						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit.min.js"
+						defer
+					></script>
+					<script
+						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit-icons.min.js"
+						defer
+					></script>
 				</Head>
 				<body>
 					<Main />

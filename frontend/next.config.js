@@ -5,9 +5,8 @@ const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 const withOffline = require('next-offline');
-const lessToJS = require('less-vars-to-js');
-const { readFileSync } = require('fs');
-const { resolve } = require('path');
+const defaultGetLocalIdent = require('css-loader/lib/getLocalIdent');
+const { basename } = require('path');
 const { publicRuntimeConfig, serverRuntimeConfig } = require('../backend/config/env-config');
 
 // fix: prevents error when .css/.less files are required by node
@@ -27,7 +26,31 @@ module.exports = withPlugins(
 		],
 		[withTypescript],
 		[withCss],
-		[withSass, { cssModules: true }],
+		[
+			withSass,
+			{
+				// cssModules: true,
+				cssLoaderOptions: {
+					// localIdentName: "[name]__[local]",
+					getLocalIdent: (loaderContext, localIdentName, localName, options) => {
+						const fileName = basename(loaderContext.resourcePath);
+						if (fileName.indexOf('theme.scss') !== -1) {
+							return localName;
+						} else {
+							return defaultGetLocalIdent(
+								loaderContext,
+								localIdentName,
+								localName,
+								options
+							);
+						}
+					}
+				},
+				sassLoaderOptions: {
+					includePaths: ['node_modules', '../node_modules']
+				}
+			}
+		],
 		[
 			withOffline,
 			{
