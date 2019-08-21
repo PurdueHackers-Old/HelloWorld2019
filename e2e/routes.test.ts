@@ -11,7 +11,7 @@ import { Role } from '../dist/shared/user.enums';
 jest.setTimeout(100000);
 
 const routes = [
-	{ route: '/', text: 'Home Page' },
+	{ route: '/', text: 'freshman-only' },
 	{ route: '/announcements', text: 'Announcements Page' },
 	{ route: '/applications', text: 'Applications Page' },
 	{ route: '/apply', text: 'Apply Page' },

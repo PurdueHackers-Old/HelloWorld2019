@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Cover = () => (
+export const Banner = () => (
 	<div className="uk-section section-primary uk-section-default uk-flex hero">
 		<div
 			className="uk-container uk-container-small fullwidth uk-margin-large-top"

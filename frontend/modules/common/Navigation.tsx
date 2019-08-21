@@ -8,44 +8,42 @@ interface Props {
 	role?: Role;
 }
 
-const AccountDropdown = ({ token }: { token?: string }) =>
-	token ? (
-		<li>
-			<a href="#">Account</a>
-			<div className="uk-navbar-dropdown">
-				<ul className="uk-nav uk-navbar-dropdown-nav">
-					<li>
-						<Link href="/profile">
-							<a>Profile</a>
-						</Link>
-					</li>
-					<li>
-						<Link href="/logout">
-							<a>Logout</a>
-						</Link>
-					</li>
-				</ul>
-			</div>
-		</li>
-	) : (
-		<li>
-			<a href="#">Account</a>
-			<div className="uk-navbar-dropdown">
-				<ul className="uk-nav uk-navbar-dropdown-nav">
-					<li>
-						<Link href="/login">
-							<a>Login</a>
-						</Link>
-					</li>
-					<li>
-						<Link href="/signup">
-							<a>Signup</a>
-						</Link>
-					</li>
-				</ul>
-			</div>
-		</li>
-	);
+const AccountDropdown = ({ token }: { token?: string }) => (
+	<li>
+		<a href="#">Account</a>
+		<div className="uk-navbar-dropdown">
+			<ul className="uk-nav uk-navbar-dropdown-nav">
+				{token ? (
+					<>
+						<li>
+							<Link href="/profile">
+								<a>Profile</a>
+							</Link>
+						</li>
+						<li>
+							<Link href="/logout">
+								<a>Logout</a>
+							</Link>
+						</li>
+					</>
+				) : (
+					<>
+						<li>
+							<Link href="/login">
+								<a>Login</a>
+							</Link>
+						</li>
+						<li>
+							<Link href="/signup">
+								<a>Signup</a>
+							</Link>
+						</li>
+					</>
+				)}
+			</ul>
+		</div>
+	</li>
+);
 
 const ManageDropdown = ({ role }: { role?: Role }) => {
 	if (!role || !roleMatches(role, Role.EXEC)) return null;
@@ -110,51 +108,6 @@ const Navigation = ({ token, role }: Props) => {
 				</div>
 			</nav>
 		</div>
-
-		// <Navbar variant="dark" expand="sm" fixed="top">
-		// 	<Navbar.Toggle aria-controls="basic-navbar-nav" />
-		// 	<Navbar.Collapse>
-		// 		{/* <Navbar.Brand href="#home">Navbar</Navbar.Brand> */}
-		// 		<Nav className="mr-auto">
-		// 			<Link href="/" passHref>
-		// 				<Nav.Link>Home</Nav.Link>
-		// 			</Link>
-		// 			<Link href="/announcements" passHref>
-		// 				<Nav.Link>Announcements</Nav.Link>
-		// 			</Link>
-		// 			{role && roleMatches(role, Role.EXEC) && (
-		// 				<Link href="/dashboard" passHref>
-		// 					<Nav.Link>Dashboard</Nav.Link>
-		// 				</Link>
-		// 			)}
-		// 			{role && roleMatches(role, Role.ADMIN) && (
-		// 				<Link href="/admin" passHref>
-		// 					<Nav.Link>Admin</Nav.Link>
-		// 				</Link>
-		// 			)}
-		// 			{token && (
-		// 				<Link href="/profile" passHref>
-		// 					<Nav.Link>Profile</Nav.Link>
-		// 				</Link>
-		// 			)}
-		// 			{token && (
-		// 				<Link href="/logout" passHref>
-		// 					<Nav.Link>Logout</Nav.Link>
-		// 				</Link>
-		// 			)}
-		// 			{!token && (
-		// 				<>
-		// 					<Link href="/login" passHref>
-		// 						<Nav.Link>Login</Nav.Link>
-		// 					</Link>
-		// 					<Link href="/signup" passHref>
-		// 						<Nav.Link>Signup</Nav.Link>
-		// 					</Link>
-		// 				</>
-		// 			)}
-		// 		</Nav>
-		// 	</Navbar.Collapse>
-		// </Navbar>
 	);
 };
 

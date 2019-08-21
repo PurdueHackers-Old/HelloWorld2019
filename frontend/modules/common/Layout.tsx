@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'react-bootstrap';
 import Navigation from './Navigation';
 import FlashMessage from './FlashMessage';
 import { Role } from '../../../shared/user.enums';
@@ -18,9 +17,7 @@ const Layout = ({ token, role, green, red, children }: StateToProps) => {
 		<div>
 			<Navigation token={token} role={role} />
 			<FlashMessage green={green} red={red} />
-			<Container as="main" role="main" fluid>
-				{children}
-			</Container>
+			{children}
 		</div>
 	);
 };
