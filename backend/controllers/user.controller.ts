@@ -1,31 +1,36 @@
+import { Request } from 'express';
 import { ObjectId } from 'mongodb';
+import { Logger as PinoLogger } from 'pino';
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	Param,
+	Authorized,
 	BadRequestError,
-	Put,
 	Body,
 	CurrentUser,
-	UnauthorizedError,
+	Get,
+	JsonController,
+	Param,
+	Params,
 	Post,
-	Authorized,
-	Params
+	Put,
+	QueryParam,
+	Req,
+	UnauthorizedError
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
-import { User, UserDto, IUserModel } from '../models/user';
-import { ApplicationDto, Application } from '../models/application';
-import { userMatches, hasPermission } from '../utils';
-import { Role } from '../../shared/user.enums';
 import { Inject } from 'typedi';
-import { GlobalsController } from './globals.controller';
 import { ApplicationsStatus } from '../../shared/globals.enums';
-import { Status } from '../../shared/app.enums';
+import { Role } from '../../shared/user.enums';
+import { Application, ApplicationDto } from '../models/application';
+import { IUserModel, User } from '../models/user';
+import { StorageService } from '../services/storage.service';
+import { hasPermission, userMatches } from '../utils';
+import { Logger } from '../utils/logger';
+import { GlobalsController } from './globals.controller';
 
 @JsonController('/api/users')
-export class UserController extends BaseController {
+export class UserController {
 	@Inject() globalController: GlobalsController;
+	@Inject() storageService: StorageService;
+	@Logger() logger: PinoLogger;
 
 	@Get('/')
 	@Authorized([Role.EXEC])
@@ -91,20 +96,24 @@ export class UserController extends BaseController {
 	}
 
 	// TODO: Add tests
+	// Note: Users can only update their names through PUT /users/:id
 	@Put('/:id')
 	@Authorized()
 	async updateById(
 		@Param('id') id: string,
-		@Body() userDto: UserDto,
+		@Body() userDto: { name: string },
 		@CurrentUser({ required: true }) currentUser: IUserModel
 	) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		let user = await User.findById(id).exec();
+		if (!user) throw new BadRequestError('User not found');
 		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this profile');
-		let user = await User.findById(id, '+password').exec();
-		if (!user) throw new BadRequestError('User not found');
 
-		user = await User.findByIdAndUpdate(id, userDto, { new: true })
+		if (!userDto || !userDto.name || !/([a-zA-Z']+ )+[a-zA-Z']+$/.test(userDto.name))
+			throw new BadRequestError('Please provide your first and last name');
+
+		user = await User.findByIdAndUpdate(id, { name: userDto.name }, { new: true })
 			.lean()
 			.exec();
 		return user;
@@ -113,6 +122,7 @@ export class UserController extends BaseController {
 	@Post('/:id/apply')
 	@Authorized()
 	async apply(
+		@Req() req: Request,
 		@Param('id') id: string,
 		@Body() applicationDto: ApplicationDto,
 		@CurrentUser({ required: true }) currentUser: IUserModel
@@ -130,6 +140,22 @@ export class UserController extends BaseController {
 				: globals.applicationsStatus === ApplicationsStatus.CLOSED;
 
 		if (closed) throw new UnauthorizedError('Sorry, applications are closed!');
+
+		const files: Express.Multer.File[] = req.files ? (req.files as Express.Multer.File[]) : [];
+
+		const resume = files.find(file => file.fieldname === 'resume');
+		if (resume) {
+			try {
+				applicationDto.resume = await this.storageService.uploadToStorage(
+					resume,
+					'resumes',
+					currentUser
+				);
+			} catch (error) {
+				this.logger.emerg('Error uploading resume:', error);
+				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
+			}
+		}
 
 		const appQuery = Application.findOneAndUpdate(
 			{ user },

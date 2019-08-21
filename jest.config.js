@@ -32,6 +32,25 @@ module.exports = {
 			testEnvironment: '<rootDir>/backend/__tests__/globals/env.js',
 			testMatch: ['**/backend/__tests__/**/*.test.ts'],
 			testPathIgnorePatterns: ['dist']
+		},
+		{
+			collectCoverage: true,
+			displayName: 'e2e',
+			globals: {
+				'ts-jest': {
+					tsConfig: './tsconfig.server.json'
+					// tsConfig: './tsconfig.json'
+				}
+			},
+			transform: {
+				'^.+\\.tsx?$': 'ts-jest'
+			},
+			moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+			name: 'e2e',
+			preset: 'jest-puppeteer',
+			testEnvironment: '<rootDir>/backend/__tests__/globals/env.js',
+			testMatch: ['**/e2e/**/*.test.ts'],
+			testPathIgnorePatterns: ['dist']
 		}
 	],
 	testPathIgnorePatterns: ['<rootDir>/node_modules/', 'dist/'],

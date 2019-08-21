@@ -105,6 +105,7 @@ const schema = new Schema(
 		website: { type: String, default: '' },
 		answer1: { type: String, required: true },
 		answer2: { type: String, required: true },
+		resume: { type: String, default: '' },
 		statusPublic: { type: String, default: Status.PENDING, enum: Object.values(Status) },
 		statusInternal: {
 			type: String,

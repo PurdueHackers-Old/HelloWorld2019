@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IContext, IStoreState, IApplication } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import { getOwnApplication } from '../../redux/actions';
 import { QRCode } from './QRCode';
 import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
+import { getOwnApplication } from '../../api';
+import Link from 'next/link';
 
-type Props = { email: string };
+interface Props {
+	email: string;
+}
 
-const Profile = (props: Props) => {
-	const { email } = props;
-
-	const [application, setApplication] = useState(null);
+const Profile = ({ email }: Props) => {
+	const [application, setApplication] = useState<IApplication>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -30,6 +31,11 @@ const Profile = (props: Props) => {
 	return (
 		<div>
 			<h2>Profile Page</h2>
+			<Link href="/profile/edit">
+				<a>
+					<h4>Edit Profile</h4>
+				</a>
+			</Link>
 			<h4>Application Status:</h4>
 			{!application ? (
 				<div>You have not applied yet!</div>
@@ -46,8 +52,8 @@ const Profile = (props: Props) => {
 	);
 };
 
-Profile.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must be logged in!' }))
+Profile.getInitialProps = (ctx: IContext) => {
+	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must be logged in!' }))
 		return endResponse(ctx);
 };
 

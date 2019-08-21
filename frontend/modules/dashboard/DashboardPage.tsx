@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { sendErrorMessage, getStats } from '../../redux/actions';
+import { sendErrorMessage } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
+import { getStats } from '../../api';
 
-type Props = { flashError: (msg: string, ctx?: IContext) => void };
+interface Props {
+	flashError: (msg: string, ctx?: IContext) => void;
+}
 
 export const Dashboard = ({ flashError }: Props) => {
 	const [state, setState] = useState({
@@ -53,12 +56,12 @@ export const Dashboard = ({ flashError }: Props) => {
 				<a>Applications</a>
 			</Link>
 			<br />
-			<Link href="/announcement">
-				<a>Post Announcement</a>
+			<Link href="/announcements/new">
+				<a>Create Announcement</a>
 			</Link>
 			<br />
-			<Link href="/announcements">
-				<a>View Announcements</a>
+			<Link href="/announcements/manage">
+				<a>Manage Announcements</a>
 			</Link>
 			<br />
 			<Link href="/checkin">
@@ -68,7 +71,7 @@ export const Dashboard = ({ flashError }: Props) => {
 	);
 };
 
-Dashboard.getInitialProps = async (ctx: IContext) => {
+Dashboard.getInitialProps = (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.EXEC] })) return endResponse(ctx);
 };
 

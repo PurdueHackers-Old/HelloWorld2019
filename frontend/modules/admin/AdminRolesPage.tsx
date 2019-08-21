@@ -3,20 +3,15 @@ import { redirectIfNotAuthenticated } from '../../utils/session';
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	clearFlashMessages,
-	updateRole,
-	getUsers
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err, endResponse } from '../../utils';
+import { getUsers, updateRole } from '../../api';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AdminRoles = ({ flashError, flashSuccess, clear }: Props) => {
 	const [users, setUsers] = useState([]);

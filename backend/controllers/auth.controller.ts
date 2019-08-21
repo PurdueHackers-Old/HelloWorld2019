@@ -1,32 +1,28 @@
-import * as express from 'express';
 import { Request } from 'express';
-import { ObjectId } from 'mongodb';
-import { isEmail } from 'validator';
 import * as jwt from 'jsonwebtoken';
-import CONFIG from '../config';
-import { User, UserDto } from '../models/user';
-import { extractToken, signToken } from '../utils';
+import { ObjectId } from 'mongodb';
+import { Logger as PinoLogger } from 'pino';
 import {
+	BadRequestError,
+	Body,
+	BodyParam,
+	Get,
 	JsonController,
 	Post,
 	Req,
-	Body,
-	BadRequestError,
-	UnauthorizedError,
-	Get,
-	BodyParam
+	UnauthorizedError
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
+import { isEmail } from 'validator';
+import CONFIG from '../config';
+import { User, UserDto } from '../models/user';
 import { EmailService } from '../services/email.service';
-import { StorageService } from '../services/storage.service';
-
-export const router = express.Router();
+import { extractToken, signToken } from '../utils';
+import { Logger } from '../utils/logger';
 
 @JsonController('/api/auth')
-export class AuthController extends BaseController {
-	constructor(private emailService?: EmailService, private storageService?: StorageService) {
-		super();
-	}
+export class AuthController {
+	@Logger() logger: PinoLogger;
+	constructor(private emailService?: EmailService) {}
 
 	@Post('/signup')
 	async signup(
@@ -92,6 +88,7 @@ export class AuthController extends BaseController {
 			.exec();
 		if (!user) throw new UnauthorizedError('User not found');
 		token = signToken(user);
+		this.logger.info('Refreshing token');
 		return { user, token };
 	}
 

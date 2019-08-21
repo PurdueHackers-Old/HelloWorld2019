@@ -1,29 +1,27 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import {
-	fetchGlobals,
-	sendErrorMessage,
-	updateApplicationsStatus,
-	sendSuccessMessage,
-	clearFlashMessages,
-	makePublicApplications,
-	sendMassEmails
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { err, formatDate, endResponse } from '../../utils';
 import { connect } from 'react-redux';
+import {
+	fetchGlobals,
+	updateApplicationsStatus,
+	makePublicApplications,
+	sendMassEmails
+} from '../../api';
 
-type Props = {
+interface Props {
 	applicationsPublic: boolean;
 	emailsSent: Date | null;
 	applicationsStatus: ApplicationsStatus;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Admin = ({
 	applicationsPublic,
@@ -136,7 +134,7 @@ const Admin = ({
 	);
 };
 
-Admin.getInitialProps = async (ctx: IContext) => {
+Admin.getInitialProps = (ctx: IContext) => {
 	if (redirectIfNotAuthenticated('/', ctx, { roles: [Role.ADMIN] })) endResponse(ctx);
 };
 

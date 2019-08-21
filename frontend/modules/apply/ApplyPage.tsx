@@ -1,14 +1,7 @@
-import React, { Component, FormEvent, ChangeEvent, useState, useEffect } from 'react';
+import React, { FormEvent, ChangeEvent, useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import {
-	sendErrorMessage,
-	sendSuccessMessage,
-	getOwnApplication,
-	sendApplication,
-	clearFlashMessages,
-	fetchGlobals
-} from '../../redux/actions';
-import { IContext, IApplication, IStoreState, IUser, IGlobals } from '../../@types';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
+import { IContext, IStoreState, IUser } from '../../@types';
 import { redirectIfNotAuthenticated } from '../../utils/session';
 import {
 	Gender,
@@ -22,15 +15,17 @@ import { err, formatDate, endResponse } from '../../utils';
 import { ApplicationForm } from './ApplicationForm';
 import { ApplicationsStatus } from '../../../shared/globals.enums';
 import { Role } from '../../../shared/user.enums';
+import { fetchGlobals, getOwnApplication, sendApplication } from '../../api';
 
-type Props = {
+interface Props {
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
+	const formRef = useRef<HTMLFormElement>();
 	const [state, setState] = useState({
 		gender: Gender.MALE,
 		ethnicity: ethnicities[0],
@@ -46,6 +41,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 		answer2: '',
 		updatedAt: null,
 		statusPublic: null,
+		resume: null,
 		closed: false,
 		loading: true
 	});
@@ -72,18 +68,13 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			});
 	}, []);
 
-	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-		setState({ ...state, [e.target.name]: e.target.value });
-
-	const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
-		setState({ ...state, [e.target.name]: e.target.value });
-
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			clear();
 			flashSuccess('Submitting application...');
-			await sendApplication(state as any);
+			const formData = new FormData(formRef.current);
+			await sendApplication(formData as any);
 			clear();
 			flashSuccess('Application successful!');
 		} catch (error) {
@@ -122,10 +113,9 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			{state.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
 			<ApplicationForm
 				{...state as any}
+				formRef={formRef}
 				disabled={closed}
 				user={user}
-				onChange={onChange}
-				onSelect={onSelect}
 				onSubmit={onSubmit}
 			/>
 		</div>

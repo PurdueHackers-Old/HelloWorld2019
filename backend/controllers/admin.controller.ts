@@ -1,27 +1,25 @@
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	BadRequestError,
 	Authorized,
+	BadRequestError,
+	BodyParam,
+	Get,
+	JsonController,
 	Post,
-	BodyParam
+	QueryParam
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
-import { Role } from '../../shared/user.enums';
-import { User, UserDto } from '../models/user';
-import { escapeRegEx, getUsersWithStatus } from '../utils';
-import { Inject } from 'typedi';
-import { EmailService } from '../services/email.service';
-import { Status } from '../../shared/app.enums';
-import { Globals } from '../models/globals';
 import { ResponseSchema } from 'routing-controllers-openapi';
+import { Inject } from 'typedi';
+import { Status } from '../../shared/app.enums';
+import { Role } from '../../shared/user.enums';
+import { Globals } from '../models/globals';
+import { User, UserDto } from '../models/user';
+import { EmailService } from '../services/email.service';
+import { escapeRegEx, getUsersWithApplicationStatus } from '../utils';
 
 @JsonController('/api/admin')
-export class AdminController extends BaseController {
+export class AdminController {
 	@Inject() private emailService: EmailService;
 
-	// TODO: Add tests
 	@Get('/users')
 	@Authorized([Role.ADMIN])
 	@ResponseSchema(UserDto, {
@@ -53,14 +51,13 @@ export class AdminController extends BaseController {
 		return user;
 	}
 
-	// TODO: Add tests
 	@Post('/emails')
 	@Authorized([Role.ADMIN])
 	async sendMassEmails() {
 		const [accepted, rejected, waitlisted] = await Promise.all([
-			getUsersWithStatus(Status.ACCEPTED),
-			getUsersWithStatus(Status.REJECTED),
-			getUsersWithStatus(Status.WAITLIST)
+			getUsersWithApplicationStatus(Status.ACCEPTED),
+			getUsersWithApplicationStatus(Status.REJECTED),
+			getUsersWithApplicationStatus(Status.WAITLIST)
 		]);
 
 		await Promise.all([

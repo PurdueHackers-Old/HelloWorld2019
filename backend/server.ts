@@ -1,29 +1,31 @@
 import 'reflect-metadata';
 import * as express from 'express';
 import 'express-async-errors';
+import { getFromContainer, MetadataStorage } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as cookieParser from 'cookie-parser';
-import * as logger from 'morgan';
-import * as mongoose from 'mongoose';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
-import * as yes from 'yes-https';
+import { createServer as createHttpServer, Server as HTTPServer } from 'http';
+import * as mongoose from 'mongoose';
+import * as logger from 'morgan';
+import { AddressInfo } from 'net';
 import * as next from 'next';
+import { OpenAPIObject } from 'openapi3-ts';
 import { join } from 'path';
-import { useExpressServer, useContainer, getMetadataArgsStorage } from 'routing-controllers';
+import { Logger } from 'pino';
+import { getMetadataArgsStorage, useContainer, useExpressServer } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { getFromContainer, MetadataStorage } from 'class-validator';
 import * as swaggerUI from 'swagger-ui-express';
 import { Container } from 'typedi';
-import { Logger } from 'winston';
+import * as yes from 'yes-https';
 import CONFIG from './config';
-import { globalError } from './middleware/globalError';
 import { SuccessInterceptor } from './interceptors/success.interceptor';
-import { currentUserChecker, authorizationChecker } from './middleware/authentication';
-import { createLogger } from './utils/logger';
+import { authorizationChecker, currentUserChecker } from './middleware/authentication';
+import { globalError } from './middleware/globalError';
 import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
-import { OpenAPIObject } from 'openapi3-ts';
+import { createLogger } from './utils/logger';
 
 const { NODE_ENV, DB } = CONFIG;
 const routingControllerOptions = {
@@ -43,7 +45,9 @@ export default class Server {
 		await server.setupMongo();
 		return server;
 	}
+
 	public app: express.Application;
+	public httpServer: HTTPServer;
 	public nextApp: next.Server;
 	public mongoose: typeof mongoose;
 	public logger: Logger;
@@ -54,8 +58,8 @@ export default class Server {
 		this.logger = createLogger(this);
 		this.setup();
 		this.nextApp = next({
-			dev: NODE_ENV !== 'production',
-			dir: join(__dirname + '/../frontend')
+			dev: NODE_ENV === 'development',
+			dir: join(__dirname, '/../frontend')
 		});
 	}
 
@@ -63,6 +67,15 @@ export default class Server {
 		try {
 			await this.nextApp.prepare();
 			const handle = this.nextApp.getRequestHandler();
+			if (CONFIG.NODE_ENV === 'production') {
+				this.app.use(
+					'/service-worker.js',
+					express.static('frontend/.next/service-worker.js')
+				);
+			} else {
+				this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
+			}
+			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});
@@ -74,21 +87,26 @@ export default class Server {
 
 	private setup(): void {
 		this.setupMiddleware();
+
 		// Enable controllers in this.app
 		useContainer(Container);
+
 		this.app = useExpressServer(this.app, routingControllerOptions);
+
 		// Any unhandled errors will be caught in this middleware
 		this.app.use(globalError);
 		this.setupSwagger();
+
+		this.httpServer = createHttpServer(this.app);
 	}
 
 	private setupMiddleware() {
-		const devLogger = logger('dev', { skip: r => r.url.startsWith('/_next') });
-		const prodLogger = logger('tiny', { skip: r => r.url.startsWith('/_next') });
 		this.app.use(helmet());
-		// if (NODE_ENV === 'production') this.app.use(yes());
-		if (NODE_ENV !== 'test')
-			NODE_ENV !== 'production' ? this.app.use(devLogger) : this.app.use(prodLogger);
+		if (CONFIG.REDIRECT_HTTPS) this.app.use(yes());
+		if (CONFIG.NODE_ENV !== 'test') {
+			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'tiny';
+			this.app.use(logger(logFormat, { skip: r => r.url.startsWith('/_next') }));
+		}
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(cookieParser());
@@ -129,6 +147,41 @@ export default class Server {
 			]
 		});
 		this.app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(this.spec));
-		// console.log(this.spec);
+	}
+
+	public async start() {
+		await this.initFrontend();
+
+		this.httpServer.listen(CONFIG.PORT, () => {
+			CONFIG.PORT = (this.httpServer.address() as AddressInfo).port;
+			this.logger.info('CONFIG:', CONFIG);
+			this.logger.info(`Listening on port: ${CONFIG.PORT}`);
+		});
+
+		// Graceful shutdown
+		process.on('SIGTERM', async () => {
+			await this.mongoose.disconnect();
+			await new Promise((resolve, reject) =>
+				this.httpServer.close(err => (err ? reject(err) : resolve()))
+			);
+			process.exit(0);
+		});
+
+		return this;
+	}
+
+	public async stop() {
+		if (this.mongoose) {
+			await Promise.all(
+				this.mongoose.modelNames().map(model => this.mongoose.model(model).ensureIndexes())
+			);
+			await this.mongoose.disconnect();
+		}
+		if (this.httpServer) {
+			await new Promise((resolve, reject) =>
+				this.httpServer.close(err => (err ? reject(err) : resolve()))
+			);
+		}
+		return this;
 	}
 }

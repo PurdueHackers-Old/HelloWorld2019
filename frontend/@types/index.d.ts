@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import { Role } from '../../shared/user.enums';
 import { ClassYear, Gender, Major, Referral, ShirtSize, Status } from '../../shared/app.enums';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { AnnouncementLabel } from '../../shared/announcement.enums';
 
 export interface IStoreState {
 	flashState: IFlashState;
@@ -23,7 +24,6 @@ export interface IUser {
 	name: string;
 	email: string;
 	role: Role;
-	verified: boolean;
 	checkedin: boolean;
 	createdAt: string;
 	updatedAt: string;
@@ -51,9 +51,21 @@ export interface IApplication {
 	user: IUser;
 }
 
+export interface IAnnouncement {
+	_id: string;
+	title: string;
+	body: string;
+	labels: AnnouncementLabel[];
+	createdAt: Date;
+	released: boolean;
+}
+
 export interface IGlobals {
 	applicationsPublic: boolean;
 	applicationsStatus: ApplicationsStatus;
+	hackingTimeStart: string;
+	hackingTimeEnd: string;
+	emailsSent: Date;
 }
 
 export type flashColor = 'red' | 'green';
@@ -70,6 +82,7 @@ export interface ICreateUser {
 export interface ILoginUser {
 	email: string;
 	password: string;
+	rememberMe: boolean;
 }
 
 // Response types

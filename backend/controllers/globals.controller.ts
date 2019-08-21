@@ -1,18 +1,24 @@
 import {
-	JsonController,
-	Get,
 	Authorized,
-	Post,
+	BadRequestError,
+	Body,
 	BodyParam,
-	BadRequestError
+	Get,
+	JsonController,
+	Post
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
-import { Role } from '../../shared/user.enums';
+import { PushSubscription } from 'web-push';
 import { ApplicationsStatus } from '../../shared/globals.enums';
+import { Role } from '../../shared/user.enums';
+import CONFIG from '../config';
+import { Application } from '../models/application';
 import { Globals, IGlobalsModel } from '../models/globals';
+import { NotificationService } from '../services/notification.service';
 
 @JsonController('/api/globals')
-export class GlobalsController extends BaseController {
+export class GlobalsController {
+	constructor(private notificationService?: NotificationService) {}
+
 	@Get('/')
 	async getGlobals() {
 		const globals: IGlobalsModel = await Globals.findOneAndUpdate(
@@ -52,6 +58,22 @@ export class GlobalsController extends BaseController {
 		)
 			.lean()
 			.exec();
+
+		await Application.aggregate([
+			{ $addFields: { statusPublic: '$statusInternal' } },
+			{ $out: 'applications' }
+		]);
+
 		return globals;
+	}
+
+	@Post('/subscription')
+	async subscribe(@Body() subscription: PushSubscription) {
+		this.notificationService.registerNotification(subscription);
+	}
+
+	@Get('/vapid-public-key')
+	getVapidPublicKey() {
+		return CONFIG.VAPID_PUBLIC;
 	}
 }

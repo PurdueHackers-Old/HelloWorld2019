@@ -3,13 +3,20 @@ import Link from 'next/link';
 import { Role } from '../../../shared/user.enums';
 import { roleMatches } from '../../utils/session';
 
-type Props = { token?: string; role?: Role };
+interface Props {
+	token?: string;
+	role?: Role;
+}
 
 const Header = ({ token, role }: Props) => {
 	return (
 		<div>
 			<Link href="/">
 				<a>Home</a>
+			</Link>{' '}
+			|{' '}
+			<Link href="/announcements">
+				<a>Announcements</a>
 			</Link>{' '}
 			|{' '}
 			{role && roleMatches(role, Role.EXEC) && (

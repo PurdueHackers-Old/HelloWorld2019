@@ -2,22 +2,17 @@ import React, { FormEvent, useState, useEffect } from 'react';
 import { IContext, IUser } from '../../@types';
 import { Role } from '../../../shared/user.enums';
 import { redirectIfNotAuthenticated } from '../../utils/session';
-import {
-	sendErrorMessage,
-	getCheckin,
-	checkinUser,
-	sendSuccessMessage,
-	clearFlashMessages
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import { getCheckin, checkinUser } from '../../api';
 
-type Props = {
+interface Props {
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 	const [users, setUsers] = useState<IUser[]>([]);

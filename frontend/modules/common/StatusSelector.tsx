@@ -1,22 +1,17 @@
 import React, { Component, ChangeEvent } from 'react';
-import {
-	sendErrorMessage,
-	getApplication,
-	sendSuccessMessage,
-	clearFlashMessages,
-	updateApplicationStatus
-} from '../../redux/actions';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication } from '../../@types';
 import { err } from '../../utils';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
+import { updateApplicationStatus } from '../../api';
 
-type Props = {
+interface Props {
 	application: IApplication;
 	flashError?: (msg: string, ctx?: IContext) => void;
 	flashSuccess?: (msg: string, ctx?: IContext) => void;
 	clear?: (ctx?: IContext) => void;
-};
+}
 
 @((connect as any)(null, {
 	flashError: sendErrorMessage,
@@ -30,13 +25,12 @@ export class StatusSelector extends Component<Props> {
 	};
 
 	onSelect = async (e: ChangeEvent<HTMLSelectElement>) => {
-		const { application } = this.props;
 		const status = e.target.value as Status;
 
 		const { flashError, flashSuccess, clear } = this.props;
 		try {
 			clear();
-			const app = await updateApplicationStatus(application._id, status);
+			await updateApplicationStatus(this.props.application._id, status);
 			this.setState({ status });
 			return flashSuccess('Successfully updated application status!');
 		} catch (error) {
@@ -54,7 +48,6 @@ export class StatusSelector extends Component<Props> {
 						</option>
 					))}
 				</select>
-				            
 			</div>
 		);
 	}

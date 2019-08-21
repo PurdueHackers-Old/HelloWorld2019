@@ -1,12 +1,5 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import {
-	sendErrorMessage,
-	getApplication,
-	sendSuccessMessage,
-	clearFlashMessages,
-	sendApplication,
-	updateApplicationStatus
-} from '../../redux/actions';
+import React, { ChangeEvent, FormEvent, useState, useRef } from 'react';
+import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IApplication, IUser } from '../../@types';
 import {
 	redirectIfNotAuthenticated,
@@ -19,23 +12,22 @@ import { Role } from '../../../shared/user.enums';
 import { ApplicationForm } from '../apply/ApplicationForm';
 import { connect } from 'react-redux';
 import { Status } from '../../../shared/app.enums';
+import { updateApplicationStatus, sendApplication, getApplication } from '../../api';
 
-type Props = {
+interface Props {
 	application: IApplication;
 	user: IUser;
 	flashError: (msg: string, ctx?: IContext) => void;
 	flashSuccess: (msg: string, ctx?: IContext) => void;
 	clear: (ctx?: IContext) => void;
-};
+}
 
 const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) => {
+	const formRef = useRef<HTMLFormElement>();
 	const [state, setState] = useState({
 		...application,
 		status: application.statusInternal
 	});
-
-	const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-		setState(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
 	const onSelect = (e: ChangeEvent<HTMLSelectElement>) =>
 		setState(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,7 +50,8 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 		try {
 			clear();
 			flashSuccess('Updating application...');
-			await sendApplication(state, null, application.user._id);
+			const formData = new FormData(formRef.current);
+			await sendApplication(formData as any, null, application.user._id);
 			clear();
 			return flashSuccess('Application successful!');
 		} catch (error) {
@@ -88,13 +81,7 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 			</form>
 			<br />
 			<br />
-			<ApplicationForm
-				{...state}
-				disabled={disabled}
-				onChange={onChange}
-				onSelect={onSelect}
-				onSubmit={onSubmit}
-			/>
+			<ApplicationForm {...state} formRef={formRef} disabled={disabled} onSubmit={onSubmit} />
 		</div>
 	);
 };

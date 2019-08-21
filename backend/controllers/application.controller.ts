@@ -1,23 +1,22 @@
 import { ObjectId } from 'mongodb';
 import {
-	JsonController,
-	Get,
-	QueryParam,
-	BadRequestError,
 	Authorized,
+	BadRequestError,
+	BodyParam,
+	Get,
+	JsonController,
+	Param,
 	Params,
 	Post,
-	BodyParam,
-	Param
+	QueryParam
 } from 'routing-controllers';
-import { BaseController } from './base.controller';
-import { Application } from '../models/application';
 import { Status } from '../../shared/app.enums';
 import { Role } from '../../shared/user.enums';
+import { Application } from '../models/application';
 import { escapeRegEx } from '../utils';
 
 @JsonController('/api/applications')
-export class ApplicationController extends BaseController {
+export class ApplicationController {
 	@Get('/')
 	@Authorized([Role.EXEC])
 	async getAll(
@@ -32,19 +31,26 @@ export class ApplicationController extends BaseController {
 			if (Array.isArray(value)) {
 				if (value.length) filter[key] = { $in: value };
 				else delete filter[key];
-			} else if (key === 'name' || key === 'email')
+			} else if (key === 'name' || key === 'email') {
 				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
+			} else if (key === 'resume') {
+				if (filter[key] === 'Yes') {
+					filter[key] = { $ne: null };
+				} else {
+					filter[key] = null;
+				}
+			}
 		});
 
 		const resultsQuery = Application.aggregate([
 			{
 				$lookup: {
 					from: 'users',
-					let: { user_id: '$user' },
+					let: { userId: '$user' },
 					as: 'user',
 					pipeline: [
 						{
-							$match: { $expr: { $eq: ['$_id', '$$user_id'] } }
+							$match: { $expr: { $eq: ['$_id', '$$userId'] } }
 						},
 						{
 							$project: {
