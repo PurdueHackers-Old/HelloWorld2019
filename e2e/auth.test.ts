@@ -31,10 +31,10 @@ describe('Suite: Authentication Flows -- E2E', () => {
 	it('Successfully signs up', async () => {
 		const fakeUser = generateUser();
 		const page = await browser.newPage();
-		await page.goto(`http://localhost:${CONFIG.PORT}`);
-		const [signup] = await page.$x(`//a[@href="/signup"]`);
-		await signup.click();
-		await page.waitForNavigation();
+		await page.goto(`http://localhost:${CONFIG.PORT}/signup`, {
+			waitUntil: 'domcontentloaded'
+		});
+
 		await page.type('input[name=name]', fakeUser.name);
 		await page.type('input[name=email]', fakeUser.email);
 		await page.type('input[name=password]', fakeUser.password);
@@ -57,10 +57,10 @@ describe('Suite: Authentication Flows -- E2E', () => {
 		).exec();
 
 		const page = await browser.newPage();
-		await page.goto(`http://localhost:${CONFIG.PORT}`);
-		const [login] = await page.$x(`//a[@href="/login"]`);
-		await login.click();
-		await page.waitForNavigation();
+		await page.goto(`http://localhost:${CONFIG.PORT}/login`, {
+			waitUntil: 'domcontentloaded'
+		});
+
 		await page.type('input[name=email]', user.user.email);
 		await page.type('input[name=password]', fakeUser.password);
 		await page.click('input[value="Submit"]');
@@ -76,9 +76,9 @@ describe('Suite: Authentication Flows -- E2E', () => {
 			expect(error).toBeFalsy();
 		}
 
-		const [logout] = await page.$x(`//a[@href="/logout"]`);
-		await logout.click();
-		await page.waitForNavigation();
+		await page.goto(`http://localhost:${CONFIG.PORT}/logout`, {
+			waitUntil: 'domcontentloaded'
+		});
 		await expect(page).toMatch(`Successfully logged out`);
 		cookies = await page.cookies();
 		cookie = cookies.find(c => c.name === 'token');

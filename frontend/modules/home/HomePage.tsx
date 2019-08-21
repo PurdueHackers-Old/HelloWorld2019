@@ -1,16 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
+import { Banner } from './Banner';
+import { ApplyBanner } from './ApplyBanner';
+import { Schedule } from './Schedule';
+import { Faq } from './Faq';
+import { Sponsors } from './Sponsors';
 
 export const HomePage = () => {
 	return (
-		<div>
-			<div>
-				<h3>Home Page</h3>
-			</div>
-			<br />
-			<Link href="/apply">
-				<button>Apply</button>
-			</Link>
-		</div>
+		<>
+			<Banner />
+			<ApplyBanner />
+			<Schedule />
+			<Faq />
+			<Sponsors />
+		</>
 	);
 };
