@@ -1,37 +1,18 @@
 import React from 'react';
+import Link from 'next/link';
 
 export const Banner = () => (
 	<div className="uk-section section-primary uk-section-default uk-flex hero">
-		<div
-			className="uk-container uk-container-small fullwidth uk-margin-large-top"
-			style={{ zIndex: 1, padding: 0 }}
-		>
+		<div className="uk-container uk-container-small fullwidth uk-margin-large-top">
 			<div>
-				<h1 className="h1-light">
-					Purdue&apos;s
-					<br />
-					freshman-only
-					<br />
-					hackathon.
-				</h1>
-				<a
-					className="uk-button p-large-light uk-margin-top"
-					href="http://bit.ly/hw2018slack"
-					target="_blank"
-					rel="noopener noreferrer"
-					style={{ color: 'white !important' }}
-				>
-					Slack
-				</a>
-				<a
-					className="uk-button p-large-light uk-margin-top uk-margin-left"
-					href="https://helpq-helloworld.herokuapp.com/"
-					target="_blank"
-					rel="noopener noreferrer"
-					style={{ color: 'white !important' }}
-				>
-					HELPq
-				</a>
+				<h1 className="h1-light uk-heading-xlarge">Hello World</h1>
+				<h2 className="h2-light">Purdue&apos;s beginner-oriented hackathon.</h2>
+				<hr />
+				<h2 className="h2-light">Reach new heights.</h2>
+				{/* <h2 className="h2-light">Reach new heights.</h2> */}
+				<Link href="/apply">
+					<a className="uk-button p-large-light uk-margin-top">Apply Now</a>
+				</Link>
 			</div>
 		</div>
 		<div className="hero-img-container">
