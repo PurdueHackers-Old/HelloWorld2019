@@ -206,8 +206,8 @@ h1 {
 }
 .h1-light {
 	font-family: 'Lato', sans-serif !important;
-	font-size: 48px;
-	font-weight: bold;
+	// font-size: 48px;
+	// font-weight: bold;
 	font-style: normal;
 	font-stretch: normal;
 	line-height: 1.25;
@@ -362,6 +362,10 @@ p {
 	border-radius: 15px;
 	background-color: #8b95a6;
 	border: solid 1px #8b95a6;
+}
+
+.uk-navbar-dropdown {
+	margin-top: 0;
 }
 
 .uk-label.food {

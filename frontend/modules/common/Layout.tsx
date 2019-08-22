@@ -15,8 +15,8 @@ interface StateToProps {
 const Layout = ({ token, role, green, red, children }: StateToProps) => {
 	return (
 		<div>
-			<Navigation token={token} role={role} />
 			<FlashMessage green={green} red={red} />
+			<Navigation token={token} role={role} />
 			{children}
 		</div>
 	);

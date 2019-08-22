@@ -36,7 +36,7 @@ describe('Suite: Create application -- E2E', () => {
 		await page.waitForNavigation();
 		await expect(page).toMatch(`Welcome ${fakeUser.name}`);
 
-		const [applyButton] = await page.$x(`//button[text()="Apply"]`);
+		const [applyButton] = await page.$x(`//a[text()="Apply"]`);
 		await applyButton.click();
 		await page.waitForNavigation();
 		await page.waitForXPath(`//h3[text()="Apply Page"]`);
