@@ -11,7 +11,7 @@ export const Banner = () => (
 				<h2 className="h2-light">Reach new heights.</h2>
 				{/* <h2 className="h2-light">Reach new heights.</h2> */}
 				<Link href="/apply">
-					<a className="uk-button p-large-light uk-margin-top">Apply Now</a>
+					<a className="uk-button p-large-light uk-margin-top">Apply</a>
 				</Link>
 			</div>
 		</div>
