@@ -112,7 +112,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			)}
 			{state.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
 			<ApplicationForm
-				{...state as any}
+				{...(state as any)}
 				formRef={formRef}
 				disabled={closed}
 				user={user}
@@ -123,7 +123,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' }))
+	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must login to apply' }))
 		return endResponse(ctx);
 
 	const { user } = ctx.store.getState().sessionState;

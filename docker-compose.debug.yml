@@ -43,5 +43,5 @@ services:
             - "5858:5858"
         restart: on-failure
         environment:
-            - DB=mongodb://mongo/HelloWorld
+            - MONGODB_URI=mongodb://mongo/HelloWorld
         entrypoint: wait-for-it mongo:27017 -- yarn dev:debug

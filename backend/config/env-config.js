@@ -12,7 +12,7 @@ const sharedConfig = {
 };
 
 const serverRuntimeConfig = {
-	DB: env.DB || 'mongodb://0.0.0.0:27017/HelloWorld',
+	MONGODB_URI: env.MONGODB_URI || 'mongodb://0.0.0.0:27017/HelloWorld',
 	EMAIL: env.EMAIL || 'my@email.com',
 	EXPIRES_IN: env.EXPIRES_IN || '7 days',
 	GC_BUCKET: env.GC_BUCKET || 'mybucket',

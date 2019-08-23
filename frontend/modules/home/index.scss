@@ -1,0 +1,41 @@
+.container-fluid {
+	background-image: url('/static/images/HomeBackground.jpg');
+	background-position: center top;
+	/*    Parallax effect   */
+	background-attachment: fixed;
+	padding: 0;
+}
+
+.foreground {
+	background-image: url('/static/images/HomeForeground.png');
+	background-position: center top;
+	height: 2500px;
+}
+
+.subsection {
+	display: inline-block;
+	width: 80%;
+	padding-bottom: 75px;
+}
+
+.subsection p {
+	color: #5b2c6f;
+	text-align: left;
+	padding-top: 10px;
+}
+
+.subheader {
+	display: inline-block;
+	padding: 10px;
+	// padding-right: 15px;
+	// padding-left: 15px;
+	color: #f39c12;
+
+	background-color: #5b2c6f;
+}
+
+.subheader h1 {
+	// margin-top: -5px;
+	// margin-bottom: 5px;
+	margin-bottom: 0;
+}
