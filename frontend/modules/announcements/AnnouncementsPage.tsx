@@ -6,6 +6,7 @@ import { IContext, IAnnouncement } from '../../@types';
 import { getAllAnnouncements } from '../../api';
 import Announcement from './Announcement';
 import { isSWSupported } from '../../utils/service-worker';
+import './index.scss'
 
 interface Props {
 	announcements: IAnnouncement[];
@@ -31,12 +32,15 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 				navigator.serviceWorker.removeEventListener('message', handleMessage);
 		};
 	}, []);
+
 	return (
-		<div>
-			<h3>Announcements Page</h3>
-			{announcements.map(announcement => (
-				<Announcement key={announcement._id} {...announcement} />
-			))}
+		<div id="background-announcement" className="uk-section section-primary uk-section-default uk-flex hero">
+			<div className="foreground-announcement">
+				{/* <h3>Announcements Page</h3> */}
+				{announcements.map(announcement => (
+					<Announcement key={announcement._id} {...announcement} />
+				))}
+			</div>
 		</div>
 	);
 };
