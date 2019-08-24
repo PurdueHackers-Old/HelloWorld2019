@@ -13,7 +13,7 @@ html {
 }
 
 body {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	margin: 0;
 	color: white;
 	background-size: 100% auto;
@@ -21,8 +21,12 @@ body {
 	overflow-x: hidden;
 }
 
+a {
+	font-family: 'krungthep', sans-serif !important;
+}
+
 h1 {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 48px;
 	font-weight: bold;
 	font-style: normal;
@@ -33,7 +37,7 @@ h1 {
 	color: var(--dark-blue);
 }
 .h1-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	// font-size: 48px;
 	// font-weight: bold;
 	font-style: normal;
@@ -42,8 +46,20 @@ h1 {
 	letter-spacing: normal;
 	color: #ffffff;
 }
+
+.h1-purple {
+	font-family: 'krungthep', sans-serif !important;
+	// font-size: 48px;
+	// font-weight: bold;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: 1.25;
+	letter-spacing: normal;
+	color: #7233ad;
+}
+
 .h2-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 32px;
 	font-weight: bold;
 	font-style: normal;
@@ -52,8 +68,31 @@ h1 {
 	letter-spacing: normal;
 	color: #ffffff;
 }
+
+.h2-yellow {
+	font-family: 'krungthep', sans-serif !important;
+	font-size: 32px;
+	font-weight: bold;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #f39c12;
+}
+
+.h2-purple {
+	font-family: 'krungthep', sans-serif !important;
+	font-size: 32px;
+	font-weight: bold;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #7233ad;
+}
+
 h2 {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 32px;
 	font-weight: bold;
 	font-style: normal;
@@ -64,7 +103,7 @@ h2 {
 	color: var(--dark-blue);
 }
 .h3-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 24px;
 	font-weight: bold;
 	font-style: normal;
@@ -74,7 +113,7 @@ h2 {
 	color: #ffffff;
 }
 h3 {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 24px;
 	font-weight: bold;
 	font-style: normal;
@@ -85,7 +124,7 @@ h3 {
 	color: var(--dark-blue);
 }
 .p-lead {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 20px;
 	font-weight: normal;
 	font-style: normal;
@@ -96,7 +135,7 @@ h3 {
 	color: var(--dark-blue);
 }
 .p-lead-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 20px;
 	font-weight: 300;
 	font-style: normal;
@@ -106,7 +145,7 @@ h3 {
 	color: #ffffff;
 }
 h4 {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: bold;
 	font-style: normal;
@@ -117,7 +156,7 @@ h4 {
 	color: var(--dark-blue);
 }
 .h4-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: bold;
 	font-style: normal;
@@ -127,7 +166,7 @@ h4 {
 	color: #ffffff;
 }
 p {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: normal;
 	font-style: normal;
@@ -139,7 +178,7 @@ p {
 }
 
 .p-large-dark {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: normal;
 	font-style: normal;
@@ -151,7 +190,7 @@ p {
 }
 
 .p-large-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: normal;
 	font-style: normal;
@@ -160,8 +199,19 @@ p {
 	letter-spacing: normal;
 	color: #ffffff;
 }
+
+.p-large-yellow {
+	font-family: 'krungthep', sans-serif !important;
+	font-size: 18px;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: 1.33;
+	letter-spacing: normal;
+	color: #f39c12;
+}
 .p-small {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 14px;
 	font-weight: normal;
 	font-style: normal;
@@ -172,7 +222,7 @@ p {
 	color: var(--dark-blue);
 }
 .p-small-light {
-	font-family: 'Lato', sans-serif !important;
+	font-family: 'krungthep', sans-serif !important;
 	font-size: 14px;
 	font-weight: normal;
 	font-style: normal;
@@ -206,13 +256,13 @@ p {
 	border: solid 1px #ee3e23;
 }
 
-p > a {
-	color: var(--purple) !important;
-}
+// p > a {
+// 	color: var(--purple) !important;
+// }
 
-p > a:hover {
-	color: var(--dark-blue) !important;
-}
+// p > a:hover {
+// 	color: var(--dark-blue) !important;
+// }
 
 .uk-navbar-nav > li > a {
 	font-size: 1em;
@@ -261,6 +311,7 @@ table {
 .uk-button:hover {
 	background-color: #7233ad;
 	border: solid 1px #7233ad;
+	color: #f39c12
 }
 
 .uk-button:active {
@@ -496,6 +547,11 @@ table {
 	margin: 0 !important;
 }
 
+.logo-hw {
+	text-decoration: none;
+	color: #f39c12
+}
+
 .action-btn {
 	padding: 0;
 	height: 2em;
@@ -544,6 +600,10 @@ table {
 	right: calc(100% - 2em);
 }
 
+.text-align-center {
+	text-align: center !important
+}
+
 html,
 body {
 	height: 100%;
@@ -560,4 +620,36 @@ body {
 body {
 	margin: 0;
 	font-family: 'Roboto', sans-serif;
+}
+
+.text-purple {
+	color: #5b2c6f !important
+}
+
+.text-yellow {
+	color: #f39c12 !important
+}
+
+.bg-purple {
+	background-color: rgb(91, 44, 111);
+}
+
+.bg-yellow {
+	background-color: #f39c12;
+}
+
+.bg-purple-gradient {
+	background: linear-gradient(#5b2c6f, #2b0a3a);
+}
+
+.text-purple-link {
+	color: #5b2c6f !important
+}
+
+.text-purple-link:hover {
+	color: white;
+}
+
+.uk-dark {
+	background-color: rgba(0, 0, 0, 0.3)
 }
