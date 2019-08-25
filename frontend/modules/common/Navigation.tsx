@@ -60,11 +60,11 @@ const ManageDropdown = ({ role }: { role?: Role }) => {
 const Navigation = ({ token, role }: Props) => {
 	return (
 		<div className="uk-position-top" style={{ top: 'unset' }}>
-			<div style={{ zIndex: 5 }} 
+			{/* <div style={{ zIndex: 5 }} 
 				uk-sticky="sel-target: .uk-navbar;
 				cls-active: uk-navbar-sticky;
 				cls-inactive: uk-navbar-transparent;
-				bottom: 230px;">
+				bottom: 230px;"> */}
 			<nav className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
 				<div className="uk-navbar-left uk-flex uk-flex-middle">
 					<Link href="/">
@@ -119,7 +119,7 @@ const Navigation = ({ token, role }: Props) => {
 						uk-toggle="target: #sidenav"
 					>
 						<svg
-							fill="white"
+							fill="#f39c12"
 							width="20"
 							height="20"
 							viewBox="0 0 20 20"
@@ -155,7 +155,7 @@ const Navigation = ({ token, role }: Props) => {
 					</ul>
 				</div>
 			</div>
-			</div>
+			{/* </div> */}
 		</div>
 	);
 };

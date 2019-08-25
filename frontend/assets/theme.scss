@@ -299,6 +299,27 @@ table {
 	color: white;
 }
 
+.uk-button-ancmnt {
+	font-family: 'krungthep', sans-serif !important;
+	border: none;
+	cursor: pointer !important;
+	padding: 1em 2em;
+	display: inline-block;
+	text-transform: uppercase;
+	text-decoration: none;
+	outline: none;
+	position: relative;
+	font-size: 12px;
+	border-radius: 20px;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.5);
+	background-color: #f39c12;
+	border: solid 1px var(--dark-blue);
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+	color: #7233ad;
+}
+
 .uk-button:after {
 	content: '';
 	position: absolute;
@@ -308,10 +329,27 @@ table {
 	transition: all 0.3s;
 }
 
+.uk-button-ancmnt:after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
 .uk-button:hover {
-	background-color: #7233ad;
+	background-color: #320a58;
 	border: solid 1px #7233ad;
 	color: #f39c12
+}
+
+.uk-button-ancmnt:hover {
+	background-color: #320a58;
+	border: solid 1px #320a58;
+	color: #f39c12;
+	border-radius: 0px;
+	transition: ease-in-out 1s;
 }
 
 .uk-button:active {
