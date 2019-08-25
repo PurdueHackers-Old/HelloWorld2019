@@ -14,9 +14,22 @@
 		"sourceMap": true,
 		"skipLibCheck": true,
 		"outDir": "dist",
-		"typeRoots": ["./node_modules/@types", "./frontend/@types"],
-		"lib": ["dom", "es2017", "webworker"]
+		"typeRoots": [
+			"./node_modules/@types",
+			"./frontend/@types"
+		],
+		"lib": [
+			"dom",
+			"es2017",
+			"webworker"
+		]
 	},
-	"exclude": ["./node_modules"],
-	"include": ["backend", "frontend"]
+	"exclude": [
+		"./node_modules"
+	],
+	"include": [
+		"backend",
+		"frontend",
+		"jest.config.js"
+	]
 }

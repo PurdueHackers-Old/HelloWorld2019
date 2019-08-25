@@ -16,7 +16,11 @@ module.exports = {
 			setupFiles: ['./frontend/jest.setup.js'],
 			testEnvironment: 'jsdom',
 			testMatch: ['**/frontend/__tests__/**/*.test.tsx'],
-			testPathIgnorePatterns: ['.next']
+			testPathIgnorePatterns: ['.next'],
+			moduleNameMapper: {
+				'\\.(css|less|sass|scss)$': '<rootDir>/frontend/__tests__/__mocks__/styleMock.js',
+				'\\.(gif|ttf|eot|svg)$': '<rootDir>/frontend/__tests__/__mocks__/fileMock.js'
+			}
 		},
 		{
 			collectCoverage: true,

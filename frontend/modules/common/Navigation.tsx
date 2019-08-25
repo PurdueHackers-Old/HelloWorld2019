@@ -13,29 +13,29 @@ const AccountDropdown = ({ token }: { token?: string }) =>
 		<>
 			<li>
 				<Link href="/profile">
-					<a>Profile</a>
+					<a className="text-purple-link">Profile</a>
 				</Link>
 			</li>
 			<li>
 				<Link href="/logout">
-					<a>Logout</a>
+					<a className="text-purple-link">Logout</a>
 				</Link>
 			</li>
 		</>
 	) : (
-		<>
-			<li>
-				<Link href="/login">
-					<a>Login</a>
-				</Link>
-			</li>
-			<li>
-				<Link href="/signup">
-					<a>Signup</a>
-				</Link>
-			</li>
-		</>
-	);
+			<>
+				<li>
+					<Link href="/login">
+						<a className="text-purple-link">Login</a>
+					</Link>
+				</li>
+				<li>
+					<Link href="/signup">
+						<a className="text-purple-link">Signup</a>
+					</Link>
+				</li>
+			</>
+		);
 
 const ManageDropdown = ({ role }: { role?: Role }) => {
 	if (!role || !roleMatches(role, Role.EXEC)) return null;
@@ -60,38 +60,43 @@ const ManageDropdown = ({ role }: { role?: Role }) => {
 const Navigation = ({ token, role }: Props) => {
 	return (
 		<div className="uk-position-top" style={{ top: 'unset' }}>
-			<nav className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
+			{/* <div style={{ zIndex: 5 }} 
+				uk-sticky="sel-target: .uk-navbar;
+				cls-active: uk-navbar-sticky;
+				cls-inactive: uk-navbar-transparent;
+				bottom: 230px;"> */}
+			<nav id="navbar" className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
 				<div className="uk-navbar-left uk-flex uk-flex-middle">
 					<Link href="/">
-						<a className="uk-navbar-item uk-logo">
-							<img
+						<a className="uk-navbar-item" style={{ color: "#f39c12", textDecoration: 'none' }}>
+							{/* <img
 								alt="logo"
 								className="logo"
 								src="/static/images/icons/icon-72x72.png"
-							/>
+							/> */}
+							<h3 className="h2-light no-margin text-yellow">Hello World</h3>
 						</a>
 					</Link>
-					<h3 className="h3-light no-margin uk-visible@m">Hello World</h3>
 				</div>
 				<div className="uk-navbar-right">
 					<ul className="uk-navbar-nav uk-visible@s">
 						<li>
 							<Link href="/announcements">
-								<a>Announcements</a>
+								<a className="text-yellow">Announcements</a>
 							</Link>
 						</li>
 						<li>
-							<a href="#schedule">Schedule</a>
+							<a href="#schedule" className="text-yellow">Schedule</a>
 						</li>
 						<li>
-							<a href="#faq">FAQ</a>
+							<a href="#faq" className="text-yellow">FAQ</a>
 						</li>
 						<li>
-							<a href="#sponsors">Sponsors</a>
+							<a href="#sponsors" className="text-yellow">Sponsors</a>
 						</li>
 						{!role || !roleMatches(role, Role.EXEC) ? null : (
 							<li>
-								<a href="#">Manage</a>
+								<a href="#" className="text-yellow">Manage</a>
 								<div className="uk-navbar-dropdown">
 									<ul className="uk-nav uk-navbar-dropdown-nav">
 										<ManageDropdown role={role} />
@@ -100,8 +105,8 @@ const Navigation = ({ token, role }: Props) => {
 							</li>
 						)}
 						<li>
-							<a href="#">Account</a>
-							<div className="uk-navbar-dropdown">
+							<a href="#" className="text-yellow">Account</a>
+							<div className="uk-navbar-dropdown bg-yellow" style={{ borderRadius: '10px' }}>
 								<ul className="uk-nav uk-navbar-dropdown-nav">
 									<AccountDropdown token={token} />
 								</ul>
@@ -114,7 +119,7 @@ const Navigation = ({ token, role }: Props) => {
 						uk-toggle="target: #sidenav"
 					>
 						<svg
-							fill="white"
+							fill="#f39c12"
 							width="20"
 							height="20"
 							viewBox="0 0 20 20"
@@ -129,7 +134,7 @@ const Navigation = ({ token, role }: Props) => {
 				</div>
 			</nav>
 			<div id="sidenav" uk-offcanvas="flip: true" className="uk-offcanvas">
-				<div className="uk-offcanvas-bar" uk-navbar="mode: click">
+				<div className="uk-offcanvas-bar bg-yellow" uk-navbar="mode: click">
 					<ul className="uk-nav">
 						<li>
 							<Link href="/announcements">
@@ -150,6 +155,7 @@ const Navigation = ({ token, role }: Props) => {
 					</ul>
 				</div>
 			</div>
+			{/* </div> */}
 		</div>
 	);
 };
