@@ -65,7 +65,7 @@ const Navigation = ({ token, role }: Props) => {
 				cls-active: uk-navbar-sticky;
 				cls-inactive: uk-navbar-transparent;
 				bottom: 230px;"> */}
-			<nav className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
+			<nav id="navbar" className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
 				<div className="uk-navbar-left uk-flex uk-flex-middle">
 					<Link href="/">
 						<a className="uk-navbar-item" style={{ color: "#f39c12", textDecoration: 'none' }}>
