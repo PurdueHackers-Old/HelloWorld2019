@@ -34,9 +34,9 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 	}, []);
 
 	return (
-		<div id="background-announcement" className="uk-section section-primary uk-section-default uk-flex hero">
+		<div id="background-announcement" style={{ backgroundImage: "url('/static/images/DefaultBackground.jpg')" }} className="uk-section section-primary uk-section-default uk-flex hero">
 			<h1 id="ancmt-heading" className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top">Announcements</h1>
-			<div className="foreground-announcement">
+			<div className="foreground-announcement" style={{ backgroundImage: "url('/static/images/DefaultForeground.png')", backgroundPosition: 'center top', backgroundSize: 'cover', height: '3000px' }}>
 				<div style={{ height: '380px' }}></div>
 				<div className="uk-section uk-section uk-flex uk-flex-around uk-flex-wrap">
 					{announcements.map(announcement => (
