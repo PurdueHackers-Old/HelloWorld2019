@@ -21,14 +21,6 @@ export default class MyDocument extends Document {
 						href="https://fonts.googleapis.com/css?family=Lato|Roboto&display=swap"
 						rel="stylesheet"
 					></link>
-					<script
-						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit.min.js"
-						defer
-					></script>
-					<script
-						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit-icons.min.js"
-						defer
-					></script>
 				</Head>
 				<body>
 					<Main />
