@@ -20,7 +20,7 @@ import { Inject } from 'typedi';
 import { ApplicationsStatus } from '../../shared/globals.enums';
 import { Role } from '../../shared/user.enums';
 import { Application, ApplicationDto } from '../models/application';
-import { IUserModel, User, UserDto } from '../models/user';
+import { IUserModel, User } from '../models/user';
 import { StorageService } from '../services/storage.service';
 import { hasPermission, userMatches } from '../utils';
 import { Logger } from '../utils/logger';
@@ -96,20 +96,24 @@ export class UserController {
 	}
 
 	// TODO: Add tests
+	// Note: Users can only update their names through PUT /users/:id
 	@Put('/:id')
 	@Authorized()
 	async updateById(
 		@Param('id') id: string,
-		@Body() userDto: UserDto,
+		@Body() userDto: { name: string },
 		@CurrentUser({ required: true }) currentUser: IUserModel
 	) {
 		if (!ObjectId.isValid(id)) throw new BadRequestError('Invalid user ID');
+		let user = await User.findById(id).exec();
+		if (!user) throw new BadRequestError('User not found');
 		if (!userMatches(currentUser, id))
 			throw new UnauthorizedError('You are unauthorized to edit this profile');
-		let user = await User.findById(id, '+password').exec();
-		if (!user) throw new BadRequestError('User not found');
 
-		user = await User.findByIdAndUpdate(id, userDto, { new: true })
+		if (!userDto || !userDto.name || !/([a-zA-Z']+ )+[a-zA-Z']+$/.test(userDto.name))
+			throw new BadRequestError('Please provide your first and last name');
+
+		user = await User.findByIdAndUpdate(id, { name: userDto.name }, { new: true })
 			.lean()
 			.exec();
 		return user;

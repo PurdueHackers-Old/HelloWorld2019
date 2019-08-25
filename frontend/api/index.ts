@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import { decode } from 'jsonwebtoken';
 import { api } from '../utils';
 import { getToken } from '../utils/session';
 import { IContext, IGlobals, IUser, IApplication, IStatsResponse, IAnnouncement } from '../@types';
@@ -51,7 +51,7 @@ export const getUserApplication = async (id: string, ctx?: IContext) => {
 export const getOwnApplication = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
-		const id = (jwt.decode(token) as any)._id;
+		const id = (decode(token) as any)._id;
 		return getUserApplication(id, ctx);
 	} catch (error) {
 		throw error.response ? error.response.data : error;
@@ -61,7 +61,7 @@ export const getOwnApplication = async (ctx?: IContext) => {
 export const sendApplication = async (body: IApplication, ctx?: IContext, id?: string) => {
 	try {
 		const token = getToken(ctx);
-		if (!id) id = (jwt.decode(token) as any)._id;
+		if (!id) id = (decode(token) as any)._id;
 		const {
 			data: { response }
 		} = await api.post(`/users/${id}/apply`, body, {

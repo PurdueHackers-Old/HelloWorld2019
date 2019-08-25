@@ -27,7 +27,7 @@ import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
 import { createLogger } from './utils/logger';
 
-const { NODE_ENV, DB } = CONFIG;
+const { NODE_ENV, MONGODB_URI } = CONFIG;
 const routingControllerOptions = {
 	cors: true,
 	defaultErrorHandler: false,
@@ -116,13 +116,13 @@ export default class Server {
 
 	private async setupMongo() {
 		try {
-			this.mongoose = await mongoose.connect(DB, {
+			this.mongoose = await mongoose.connect(MONGODB_URI, {
 				useNewUrlParser: true,
 				useCreateIndex: true,
 				useFindAndModify: false
 			});
 			this.mongoose.Promise = Promise;
-			this.logger.info('Connected to mongo:', DB);
+			this.logger.info('Connected to mongo:', MONGODB_URI);
 			return this.mongoose;
 		} catch (error) {
 			this.logger.error('Error connecting to mongo:', error);

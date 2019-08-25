@@ -1,6 +1,7 @@
 import ReactGA from 'react-ga';
 import { Dispatch } from 'redux';
-import { ICreateUser, ILoginUser, ILoginResponse, IContext } from '../../@types';
+import { decode } from 'jsonwebtoken';
+import { ICreateUser, ILoginUser, ILoginResponse, IContext, IUser } from '../../@types';
 import { api } from '../../utils';
 import { setCookie, removeCookie, getToken } from '../../utils/session';
 import * as flash from '../../utils/flash';
@@ -85,6 +86,26 @@ export const refreshSession = (ctx?: IContext) => async (dispatch: Dispatch) => 
 		removeCookie('token', ctx);
 		ReactGA.set({ userId: null });
 		return null;
+	}
+};
+
+// User actions
+export const updateProfile = (body: { name: string }, ctx?: IContext, id?: string) => async (
+	dispatch: Dispatch
+) => {
+	try {
+		const token = getToken(ctx);
+		if (!id) id = (decode(token) as any)._id;
+		const {
+			data: { response }
+		} = await api.put(`/users/${id}`, body, {
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const user: IUser = response;
+		dispatch(setUser(user));
+		return user;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
 	}
 };
 

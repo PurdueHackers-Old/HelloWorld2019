@@ -11,8 +11,8 @@ class MongoDbEnvironment extends NodeEnvironment {
 
 	async setup() {
 		await super.setup();
-		const DB = await global.mongod.getConnectionString(true);
-		process.env.DB = DB;
+		const MONGODB_URI = await global.mongod.getConnectionString(true);
+		process.env.MONGODB_URI = MONGODB_URI;
 	}
 
 	async teardown() {

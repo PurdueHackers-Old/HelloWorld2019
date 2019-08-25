@@ -1,0 +1,89 @@
+.container-fluid {
+	background-image: url('/static/images/HomeBackground.jpg');
+	background-position: center top;
+	/*    Parallax effect   */
+	background-attachment: fixed;
+	padding: 0;
+}
+
+.foreground {
+	background-image: url('/static/images/HomeForeground.png');
+	background-position: center;
+	height: 2500px;
+}
+
+.subsection {
+	display: inline-block;
+	width: 80%;
+	padding-bottom: 75px;
+}
+
+.subsection p {
+	color: #5b2c6f;
+	text-align: left;
+	padding-top: 10px;
+}
+
+.subheader {
+	margin: 10px;
+	display: inline-block;
+	padding: 10px;
+	// padding-right: 15px;
+	// padding-left: 15px;
+	color: #f39c12;
+	background-color: #5b2c6f;
+}
+
+.subheader-inverted {
+	margin: 10px;
+	display: inline-block;
+	padding: 10px;
+	// padding-right: 15px;
+	// padding-left: 15px;
+	color: #5b2c6f;
+	background-color: #f39c12;
+}
+
+.subheader h1 {
+	// margin-top: -5px;
+	// margin-bottom: 5px;
+	margin-bottom: 0;
+	color: #f39c12;
+}
+
+#faq {
+	background-color: #f39c12;
+}
+
+.bg-purple-faded {
+	background-color: rgba(91, 44, 111, 0.5);
+}
+
+.text-purple {
+	color: #5b2c6f !important
+}
+
+.text-yellow {
+	color: #f39c12 !important
+}
+
+.bg-purple {
+	background-color: rgb(91, 44, 111);
+}
+
+.bg-purple-gradient {
+	background: linear-gradient(#5b2c6f, #2b0a3a);
+}
+
+#banner {
+	background-image: url('/static/images/HomeBackground.jpg'); 
+	background-repeat: no;
+	background-position: center top;
+	background-attachment: fixed;
+}
+
+@media(max-width: 636px) {
+	#banner {
+		background-image: url('/static/images/HomeBackground1080x2102.jpg'); 
+	}
+}
