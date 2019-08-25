@@ -145,6 +145,7 @@ h3 {
 	color: #ffffff;
 }
 h4 {
+
 	font-family: 'krungthep', sans-serif !important;
 	font-size: 18px;
 	font-weight: bold;
@@ -350,6 +351,10 @@ table {
 	color: #f39c12;
 	border-radius: 0px;
 	transition: ease-in-out 1s;
+
+.uk-button:hover {
+	background-color: #7233ad;
+	border: solid 1px #7233ad;
 }
 
 .uk-button:active {
@@ -589,7 +594,7 @@ table {
 	text-decoration: none;
 	color: #f39c12
 }
-
+  
 .action-btn {
 	padding: 0;
 	height: 2em;
@@ -640,6 +645,14 @@ table {
 
 .text-align-center {
 	text-align: center !important
+
+.mat-row {
+	transition: all ease 0.25s;
+}
+
+.mat-row:hover {
+	transform: scale(1.02);
+	cursor: pointer;
 }
 
 html,
@@ -691,3 +704,4 @@ body {
 .uk-dark {
 	background-color: rgba(0, 0, 0, 0.3)
 }
+
