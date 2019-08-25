@@ -741,3 +741,35 @@ table {
 	// position: fixed;
 	z-index: 0;
 }
+
+.text-purple {
+	color: #5b2c6f !important;
+}
+
+.text-yellow {
+	color: #f39c12 !important;
+}
+
+.bg-purple {
+	background-color: rgb(91, 44, 111);
+}
+
+.bg-yellow {
+	background-color: #f39c12;
+}
+
+.bg-purple-gradient {
+	background: linear-gradient(#5b2c6f, #2b0a3a);
+}
+
+.text-purple-link {
+	color: #5b2c6f !important;
+}
+
+.text-purple-link:hover {
+	color: white;
+}
+
+.uk-dark {
+	background-color: rgba(0, 0, 0, 0.3);
+}
