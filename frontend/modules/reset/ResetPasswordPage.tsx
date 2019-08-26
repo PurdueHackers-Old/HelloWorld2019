@@ -36,9 +36,12 @@ const ResetPassword = ({ token, flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div>
-			<h3>Reset Your Password</h3>
-			<ResetPasswordForm {...state} onChange={onChange} onSubmit={onSubmit} />
+		<div className="uk-section section-primary uk-section-primary uk-flex uk-flex-center bg-purple-gradient fullscreen">
+			<div className="uk-container-small fullwidth uk-margin-large-bottom">
+				<h2 className="h1-light text-yellow">Reset Your Password</h2>
+				<br />
+				<ResetPasswordForm {...state} onChange={onChange} onSubmit={onSubmit} />
+			</div>
 		</div>
 	);
 };

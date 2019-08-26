@@ -8,7 +8,9 @@
 	--bluey-purple-50: rgba(114, 51, 173, 0.5);
 }
 
-html {
+html,
+body {
+	height: 100%;
 	width: 100%;
 }
 
@@ -685,33 +687,6 @@ table {
 	text-align: center !important;
 }
 
-.mat-row {
-	transition: all ease 0.25s;
-}
-
-.mat-row:hover {
-	transform: scale(1.02);
-	cursor: pointer;
-}
-
-html,
-body {
-	height: 100%;
-}
-body {
-	margin: 0;
-	font-family: 'Roboto', sans-serif;
-}
-
-html,
-body {
-	height: 100%;
-}
-body {
-	margin: 0;
-	font-family: 'Roboto', sans-serif;
-}
-
 .text-purple {
 	color: #5b2c6f !important;
 }
@@ -744,16 +719,16 @@ body {
 	background-color: rgba(0, 0, 0, 0.3);
 }
 
-.uk-form-label	{
+.uk-form-label {
 	font-size: 1.3rem;
 }
 
 #ancmt-heading {
-    position: fixed;
-    z-index: 1;
+	position: fixed;
+	z-index: 1;
 }
 
 #apply-heading {
-    // position: fixed;
-    z-index: 0;
+	// position: fixed;
+	z-index: 0;
 }
