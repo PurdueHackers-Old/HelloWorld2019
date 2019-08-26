@@ -4,6 +4,7 @@ import 'express-async-errors';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as cookieParser from 'cookie-parser';
+import * as compression from 'compression';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { createServer as createHttpServer, Server as HTTPServer } from 'http';
@@ -27,7 +28,7 @@ import { ValidationMiddleware } from './middleware/validation';
 import { multer } from './utils';
 import { createLogger } from './utils/logger';
 
-const { NODE_ENV, DB } = CONFIG;
+const { NODE_ENV, MONGODB_URI } = CONFIG;
 const routingControllerOptions = {
 	cors: true,
 	defaultErrorHandler: false,
@@ -112,17 +113,18 @@ export default class Server {
 		this.app.use(cookieParser());
 		this.app.use(cors());
 		this.app.use(multer.any());
+		this.app.use(compression());
 	}
 
 	private async setupMongo() {
 		try {
-			this.mongoose = await mongoose.connect(DB, {
+			this.mongoose = await mongoose.connect(MONGODB_URI, {
 				useNewUrlParser: true,
 				useCreateIndex: true,
 				useFindAndModify: false
 			});
 			this.mongoose.Promise = Promise;
-			this.logger.info('Connected to mongo:', DB);
+			this.logger.info('Connected to mongo:', MONGODB_URI);
 			return this.mongoose;
 		} catch (error) {
 			this.logger.error('Error connecting to mongo:', error);

@@ -86,44 +86,46 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 	if (state.loading) return <span>Loading...</span>;
 
 	return (
-		<div>
-			<h3>Apply Page</h3>
-			<br />
-			{state.updatedAt && (
-				<>
-					<br />
-					<div>
-						Last Updated:
+		<div className="bg-purple-gradient uk-section" style={{ minHeight: '100vh', paddingBottom: 0 }}>
+			<h1 id="apply-heading" className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top">Apply Page</h1>
+			{/* <br /> */}
+			<div className="foreground-announcement" style={{ backgroundImage: "url('/static/images/DefaultForeground.png')", backgroundPosition: 'center top', backgroundSize: 'cover', height: '2000px' }}>
+				{state.updatedAt && (
+					<>
 						<br />
-						{formatDate(state.updatedAt)}
-					</div>
-					<br />
-				</>
-			)}
-			{state.statusPublic && (
-				<>
-					<div>
-						Status:
+						<div className="text-yellow">
+							Last Updated:
 						<br />
-						{state.statusPublic}
-					</div>
-					<br />
-				</>
-			)}
-			{state.closed && <h2>APPLICATIONS ARE CLOSED!</h2>}
-			<ApplicationForm
-				{...state as any}
-				formRef={formRef}
-				disabled={closed}
-				user={user}
-				onSubmit={onSubmit}
-			/>
+							{formatDate(state.updatedAt)}
+						</div>
+						<br />
+					</>
+				)}
+				{state.statusPublic && (
+					<>
+						<div className="text-yellow">
+							Status:
+						<br />
+							{state.statusPublic}
+						</div>
+						<br />
+					</>
+				)}
+				{state.closed && <h2 className="text-align-center" style={{ color: 'red' }}>APPLICATIONS ARE CLOSED!</h2>}
+				<ApplicationForm
+					{...(state as any)}
+					formRef={formRef}
+					disabled={closed}
+					user={user}
+					onSubmit={onSubmit}
+				/>
+			</div>
 		</div>
 	);
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/', ctx, { msg: 'You must login to apply' }))
+	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must login to apply' }))
 		return endResponse(ctx);
 
 	const { user } = ctx.store.getState().sessionState;

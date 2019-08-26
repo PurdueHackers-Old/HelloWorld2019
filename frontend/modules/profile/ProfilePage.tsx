@@ -29,25 +29,31 @@ const Profile = ({ email }: Props) => {
 
 	if (loading) return <span>Loading...</span>;
 	return (
-		<div>
-			<h2>Profile Page</h2>
-			<Link href="/profile/edit">
-				<a>
-					<h4>Edit Profile</h4>
-				</a>
-			</Link>
-			<h4>Application Status:</h4>
-			{!application ? (
-				<div>You have not applied yet!</div>
-			) : application.statusPublic !== Status.ACCEPTED ? (
-				<div>{application.statusPublic}</div>
-			) : (
-				<div>
-					<b>{application.statusPublic}</b>
-					<h4>QR Code:</h4>
-					<QRCode email={email} />
-				</div>
-			)}
+		<div
+			className="uk-section uk-section-primary uk-flex uk-flex-center bg-purple-gradient"
+			id="schedule"
+			style={{ paddingBottom: 0, minHeight: '100vh' }}
+		>
+			<div className="uk-container-small fullwidth uk-margin-large-bottom">
+				<h2 className="h1-light text-yellow">Profile Page</h2>
+				<Link href="/profile/edit">
+					<a>
+						<h4>Edit Profile</h4>
+					</a>
+				</Link>
+				<h4>Application Status:</h4>
+				{!application ? (
+					<div>You have not applied yet!</div>
+				) : application.statusPublic !== Status.ACCEPTED ? (
+					<div>{application.statusPublic}</div>
+				) : (
+							<div>
+								<b>{application.statusPublic}</b>
+								<h4>QR Code:</h4>
+								<QRCode email={email} />
+							</div>
+						)}
+			</div>
 		</div>
 	);
 };

@@ -40,10 +40,15 @@ const Signup = ({ signup, flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div>
-			<h3>Signup Page</h3>
-			<br />
-			<SignupForm onSubmit={onSubmit} onChange={onChange} {...state} />
+		<div
+			className="uk-section section-primary uk-section-primary uk-flex uk-flex-center bg-purple-gradient fullscreen"
+			style={{ paddingBottom: 0 }}
+		>
+			<div className="uk-container-small fullwidth uk-margin-large-bottom">
+				<h2 className="h1-light text-yellow">Signup Page</h2>
+				<br />
+				<SignupForm onSubmit={onSubmit} onChange={onChange} {...state} />
+			</div>
 		</div>
 	);
 };

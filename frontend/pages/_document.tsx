@@ -12,6 +12,19 @@ export default class MyDocument extends Document {
 					<meta name="title" content="Hello World" />
 					<meta name="description" content="Purdue's beginner oriented hackathon" />
 					<link rel="manifest" href="/static/manifest.json" />
+					<link
+						rel="icon"
+						type="image/png"
+						href="/static/images/icons/icon-512x512.png"
+					/>
+					<script
+						defer
+						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit.min.js"
+					></script>
+					<script
+						defer
+						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit-icons.min.js"
+					></script>
 				</Head>
 				<body>
 					<Main />

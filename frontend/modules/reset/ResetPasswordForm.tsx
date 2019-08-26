@@ -16,6 +16,7 @@ export const ResetPasswordForm = ({ password, passwordConfirm, onChange, onSubmi
 					required
 					type="password"
 					name="password"
+					className="form-control uk-textarea"
 					placeholder="Password"
 					value={password}
 					onChange={onChange}
@@ -28,14 +29,14 @@ export const ResetPasswordForm = ({ password, passwordConfirm, onChange, onSubmi
 					required
 					type="password"
 					name="passwordConfirm"
+					className="form-control uk-textarea"
 					value={passwordConfirm}
 					onChange={onChange}
 					placeholder="Confirm Password"
 				/>
 			</label>
-			<span>
-				<input type="submit" value="Reset Password" />
-			</span>
+			<br />
+			<input type="submit" className="uk-button-ancmnt" value="Reset Password" />
 		</form>
 	);
 };
