@@ -41,30 +41,39 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div>
-			<h3>Checkin Page</h3>
-			<Link href="/checkin/scan">
-				<a>Scan QR Code</a>
-			</Link>
-			<br />
-			<br />
-			<form onSubmit={onSubmit}>
-				<input
-					autoComplete="off"
-					list="emails"
-					name="email"
-					value={email}
-					onChange={e => setEmail(e.target.value)}
-				/>
-				<datalist id="emails">
-					{users.map(user => (
-						<option key={user._id} id={user._id} value={user.email}>
-							{user.email}
-						</option>
-					))}
-				</datalist>
-				<input type="submit" />
-			</form>
+		<div
+			className="uk-section uk-section-primary uk-flex uk-flex-center bg-purple-gradient"
+			id="schedule"
+			style={{ paddingBottom: 0 }}
+		>
+			<div className="uk-container-small fullwidth uk-margin-large-bottom">
+				<h2 className="h1-light text-yellow">Checkin Page</h2>
+				<br />
+				<Link href="/checkin/scan">
+					<a>Scan QR Code</a>
+				</Link>
+				<br />
+				<br />
+				<form onSubmit={onSubmit}>
+					<input
+						autoComplete="off"
+						className="uk-textarea"
+						list="emails"
+						name="email"
+						value={email}
+						onChange={e => setEmail(e.target.value)}
+					/>
+					<datalist id="emails">
+						{users.map(user => (
+							<option key={user._id} id={user._id} value={user.email}>
+								{user.email}
+							</option>
+						))}
+					</datalist>
+					<br />
+					<input type="submit" className="uk-button-ancmnt" />
+				</form>
+			</div>
 		</div>
 	);
 };
