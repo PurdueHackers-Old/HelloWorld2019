@@ -8,7 +8,9 @@
 	--bluey-purple-50: rgba(114, 51, 173, 0.5);
 }
 
-html {
+html,
+body {
+	height: 100%;
 	width: 100%;
 }
 
@@ -645,33 +647,6 @@ table {
 
 .text-align-center {
 	text-align: center !important;
-}
-
-.mat-row {
-	transition: all ease 0.25s;
-}
-
-.mat-row:hover {
-	transform: scale(1.02);
-	cursor: pointer;
-}
-
-html,
-body {
-	height: 100%;
-}
-body {
-	margin: 0;
-	font-family: 'Roboto', sans-serif;
-}
-
-html,
-body {
-	height: 100%;
-}
-body {
-	margin: 0;
-	font-family: 'Roboto', sans-serif;
 }
 
 .text-purple {
