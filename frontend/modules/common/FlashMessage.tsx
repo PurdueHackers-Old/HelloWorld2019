@@ -26,13 +26,6 @@ const FlashMessage = ({ green, red, clear }: Props) => {
 					/>
 					<p>{green}</p>
 				</div>
-				// <div className="section alert-section" style={{ paddingTop: 0 }}>
-				// 	<div className="section-container">
-				// 		<div className="alert alert-success" role="alert">
-				// 			{green}
-				// 		</div>
-				// 	</div>
-				// </div>
 			)}
 			{red && (
 				<div
@@ -48,13 +41,6 @@ const FlashMessage = ({ green, red, clear }: Props) => {
 					/>
 					<p>{red}</p>
 				</div>
-				// <div className="section alert-section" style={{ paddingTop: 0 }}>
-				// 	<div className="section-container">
-				// 		<div className="alert alert-danger" role="alert">
-				// 			{red}
-				// 		</div>
-				// 	</div>
-				// </div>
 			)}
 		</React.Fragment>
 	);
