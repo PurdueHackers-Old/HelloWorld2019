@@ -86,32 +86,50 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 	if (state.loading) return <span>Loading...</span>;
 
 	return (
-		<div className="bg-purple-gradient uk-section" style={{ minHeight: '100vh', paddingBottom: 0 }}>
-			<h1 id="apply-heading" className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top">Apply Page</h1>
-			{/* <br /> */}
-			<div className="foreground-announcement" style={{ backgroundImage: "url('/static/images/DefaultForeground.png')", backgroundPosition: 'center top', backgroundSize: 'cover', height: '2000px' }}>
+		<div
+			className="bg-purple-gradient uk-section fullscreen"
+			style={{ minHeight: '100vh', paddingBottom: 0 }}
+		>
+			<h1
+				id="apply-heading"
+				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
+			>
+				Apply Page
+			</h1>
+			<div
+				className="foreground-announcement"
+				style={{
+					backgroundImage: "url('/static/images/DefaultForeground.png')",
+					backgroundPosition: 'center top',
+					backgroundSize: 'cover'
+				}}
+			>
 				{state.updatedAt && (
-					<>
+					<div className="uk-margin-large-top uk-margin-large-left">
 						<br />
 						<div className="text-yellow">
 							Last Updated:
-						<br />
+							<br />
 							{formatDate(state.updatedAt)}
 						</div>
 						<br />
-					</>
+					</div>
 				)}
 				{state.statusPublic && (
-					<>
+					<div className="uk-margin-large-top uk-margin-large-left">
 						<div className="text-yellow">
 							Status:
-						<br />
+							<br />
 							{state.statusPublic}
 						</div>
 						<br />
-					</>
+					</div>
 				)}
-				{state.closed && <h2 className="text-align-center" style={{ color: 'red' }}>APPLICATIONS ARE CLOSED!</h2>}
+				{state.closed && (
+					<h2 className="text-align-center" style={{ color: 'red' }}>
+						APPLICATIONS ARE CLOSED!
+					</h2>
+				)}
 				<ApplicationForm
 					{...(state as any)}
 					formRef={formRef}
