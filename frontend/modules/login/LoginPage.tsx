@@ -44,7 +44,10 @@ const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div className="uk-section section-primary uk-section-primary uk-flex uk-flex-center bg-purple-gradient fullscreen">
+		<div
+			className="uk-section section-primary uk-section-primary uk-flex uk-flex-center bg-purple-gradient fullscreen"
+			style={{ minHeight: '100vh' }}
+		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
 				<h2 className="h1-light text-yellow">Login Page</h2>
 				<br />

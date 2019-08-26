@@ -1,6 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
-import { err, endResponse } from '../../utils';
 import { connect } from 'react-redux';
 import { IContext, IAnnouncement } from '../../@types';
 import { getAllAnnouncements } from '../../api';
@@ -36,6 +35,7 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 	return (
 		<div
 			id="background-announcement"
+			style={{ backgroundImage: "url('/static/images/DefaultBackground.jpg')" }}
 			className="uk-section section-primary uk-section-default uk-flex hero fullscreen"
 		>
 			<h1
@@ -44,7 +44,15 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 			>
 				Announcements
 			</h1>
-			<div className="foreground-announcement">
+			<div
+				className="foreground-announcement"
+				style={{
+					backgroundImage: "url('/static/images/DefaultForeground.png')",
+					backgroundPosition: 'center top',
+					backgroundSize: 'cover',
+					height: '3000px'
+				}}
+			>
 				<div style={{ height: '380px' }}></div>
 				<div className="uk-section uk-section uk-flex uk-flex-around uk-flex-wrap">
 					{announcements.map(announcement => (

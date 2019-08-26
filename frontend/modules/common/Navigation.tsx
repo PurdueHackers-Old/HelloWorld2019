@@ -159,19 +159,15 @@ const Navigation = ({ token, role }: Props) => {
 			<div id="sidenav" uk-offcanvas="flip: true" className="uk-offcanvas">
 				<div className="uk-offcanvas-bar bg-yellow" uk-navbar="mode: click">
 					<ul className="uk-nav">
-						<li>
+						{/* <li>
 							<Link href="/announcements">
 								<a>Announcements</a>
 							</Link>
-						</li>
+						</li> */}
 						<li>
-							<a href="#schedule">Schedule</a>
-						</li>
-						<li>
-							<a href="#faq">FAQ</a>
-						</li>
-						<li>
-							<a href="#sponsors">Sponsors</a>
+							<Link href="/">
+								<a>Home</a>
+							</Link>
 						</li>
 						<ManageDropdown role={role} />
 						<AccountDropdown token={token} />

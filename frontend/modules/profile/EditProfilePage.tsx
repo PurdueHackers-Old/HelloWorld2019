@@ -46,7 +46,7 @@ const EditProfile = ({ name, update, flashError, flashSuccess, clear }: Props) =
 		<div
 			className="uk-section uk-section-primary uk-flex uk-flex-center bg-purple-gradient"
 			id="schedule"
-			style={{ paddingBottom: 0 }}
+			style={{ paddingBottom: 0, minHeight: '100vh' }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
 				<h2 className="h1-light text-yellow">Edit Profile Page</h2>
