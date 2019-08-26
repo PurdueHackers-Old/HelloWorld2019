@@ -39,7 +39,7 @@ describe('Suite: Create application -- E2E', () => {
 		const [applyButton] = await page.$x(`//a[text()="Apply"]`);
 		await applyButton.click();
 		await page.waitForNavigation();
-		await page.waitForXPath(`//h3[text()="Apply Page"]`);
+		await page.waitForXPath(`//h1[text()="Apply Page"]`);
 
 		const application = generateApplication();
 		await page.select('select[name=gender]', application.gender);
