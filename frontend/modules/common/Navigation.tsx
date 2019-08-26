@@ -43,13 +43,13 @@ const ManageDropdown = ({ role }: { role?: Role }) => {
 		<>
 			<li>
 				<Link href="/dashboard">
-					<a>Dashboard</a>
+					<a className="text-purple-link">Dashboard</a>
 				</Link>
 			</li>
 			{role && roleMatches(role, Role.ADMIN) && (
 				<li>
 					<Link href="/admin">
-						<a>Admin</a>
+						<a className="text-purple-link">Admin</a>
 					</Link>
 				</li>
 			)}
@@ -87,11 +87,11 @@ const Navigation = ({ token, role }: Props) => {
 				</div>
 				<div className="uk-navbar-right">
 					<ul className="uk-navbar-nav uk-visible@s">
-						<li>
+						{/* <li>
 							<Link href="/announcements">
 								<a className="text-yellow">Announcements</a>
 							</Link>
-						</li>
+						</li> */}
 						<li>
 							<Link href="/#schedule">
 								<a className="text-yellow">Schedule</a>
@@ -112,7 +112,10 @@ const Navigation = ({ token, role }: Props) => {
 								<a href="#" className="text-yellow">
 									Manage
 								</a>
-								<div className="uk-navbar-dropdown">
+								<div
+									className="uk-navbar-dropdown bg-yellow"
+									style={{ borderRadius: '10px' }}
+								>
 									<ul className="uk-nav uk-navbar-dropdown-nav">
 										<ManageDropdown role={role} />
 									</ul>

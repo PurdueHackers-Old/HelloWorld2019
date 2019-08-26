@@ -9,5 +9,5 @@ interface Props {
 }
 
 export const QRCode = ({ email }: Props) => {
-	return <QR value={email} />;
+	return <QR value={email} size={128 * 4} />;
 };

@@ -60,11 +60,11 @@
 }
 
 .text-purple {
-	color: #5b2c6f !important
+	color: #5b2c6f !important;
 }
 
 .text-yellow {
-	color: #f39c12 !important
+	color: #f39c12 !important;
 }
 
 .bg-purple {
@@ -76,14 +76,14 @@
 }
 
 #banner {
-	background-image: url('/static/images/HomeBackground.jpg'); 
+	background-image: url('/static/images/HomeBackground.jpg');
 	background-repeat: no;
 	background-position: center top;
 	background-attachment: fixed;
 }
 
-@media(max-width: 636px) {
+@media (max-width: 636px) {
 	#banner {
-		background-image: url('/static/images/HomeBackground1080x2102.jpg'); 
+		background-image: url('/static/images/HomeBackground1080x2102.jpg');
 	}
 }
