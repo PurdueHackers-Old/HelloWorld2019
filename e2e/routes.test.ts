@@ -14,7 +14,7 @@ const routes = [
 	{ route: '/', text: 'beginner-oriented' },
 	{ route: '/announcements', text: 'Announcements' },
 	{ route: '/applications', text: 'Applications Page' },
-	{ route: '/apply', text: 'Apply Page' },
+	{ route: '/apply', text: 'Apply' },
 	{ route: '/checkin', text: 'Checkin Page' },
 	{ route: '/dashboard', text: 'Dashboard' },
 	{ route: '/profile', text: 'Profile Page' }

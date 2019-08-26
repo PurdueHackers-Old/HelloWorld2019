@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent, useState, useEffect, useRef } from 'react';
+import React, { FormEvent, useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IStoreState, IUser } from '../../@types';
@@ -94,7 +94,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 				id="apply-heading"
 				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
 			>
-				Apply Page
+				Apply
 			</h1>
 			<div
 				className="foreground-announcement"
@@ -116,7 +116,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 					</div>
 				)}
 				{state.statusPublic && (
-					<div className="uk-margin-large-top uk-margin-large-left">
+					<div className="uk-margin-large-left">
 						<div className="text-yellow">
 							Status:
 							<br />

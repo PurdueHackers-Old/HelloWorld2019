@@ -19,7 +19,11 @@ interface Props extends IApplication {
 
 export const ApplicationForm = (props: Props) => {
 	return (
-		<form className="uk-fieldset uk-card uk-card-body uk-form" onSubmit={props.onSubmit} ref={props.formRef}>
+		<form
+			className="uk-fieldset uk-card uk-card-body uk-form"
+			onSubmit={props.onSubmit}
+			ref={props.formRef}
+		>
 			<div style={{ height: '380px' }}></div>
 			<label className="uk-form-label text-purple">Name: {props.user.name}</label>
 			<div className="uk-margin"></div>
@@ -97,7 +101,13 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 			<label className="uk-form-label text-purple" htmlFor="major">
 				Major{' '}
-				<select disabled={props.disabled} className="uk-select" required name="major" defaultValue={props.major}>
+				<select
+					disabled={props.disabled}
+					className="uk-select"
+					required
+					name="major"
+					defaultValue={props.major}
+				>
 					{Object.values(Major).map(major => (
 						<option value={major} key={major}>
 							{major}
