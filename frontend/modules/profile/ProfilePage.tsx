@@ -47,12 +47,12 @@ const Profile = ({ email }: Props) => {
 				) : application.statusPublic !== Status.ACCEPTED ? (
 					<div>{application.statusPublic}</div>
 				) : (
-							<div>
-								<b>{application.statusPublic}</b>
-								<h4>QR Code:</h4>
-								<QRCode email={email} />
-							</div>
-						)}
+					<div>
+						<b>{application.statusPublic}</b>
+						<h4>QR Code:</h4>
+						<QRCode email={email} />
+					</div>
+				)}
 			</div>
 		</div>
 	);
