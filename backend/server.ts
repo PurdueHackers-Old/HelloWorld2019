@@ -4,6 +4,7 @@ import 'express-async-errors';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as cookieParser from 'cookie-parser';
+import * as compression from 'compression';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import { createServer as createHttpServer, Server as HTTPServer } from 'http';
@@ -112,6 +113,7 @@ export default class Server {
 		this.app.use(cookieParser());
 		this.app.use(cors());
 		this.app.use(multer.any());
+		this.app.use(compression());
 	}
 
 	private async setupMongo() {
