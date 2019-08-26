@@ -59,7 +59,7 @@ const AppsPage = ({ flashError, clear }: Props) => {
 
 	return (
 		<div>
-			<h3>Applications Page</h3>
+			<h3>Applications</h3>
 			<br />
 			<ApplicationsTable
 				{...state}

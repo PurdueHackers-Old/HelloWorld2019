@@ -35,7 +35,7 @@ const Profile = ({ email }: Props) => {
 			style={{ paddingBottom: 0, minHeight: '100vh' }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
-				<h2 className="h1-light text-yellow">Profile Page</h2>
+				<h2 className="h1-light text-yellow">Profile</h2>
 				<Link href="/profile/edit">
 					<a>
 						<h4>Edit Profile</h4>
@@ -47,12 +47,12 @@ const Profile = ({ email }: Props) => {
 				) : application.statusPublic !== Status.ACCEPTED ? (
 					<div>{application.statusPublic}</div>
 				) : (
-							<div>
-								<b>{application.statusPublic}</b>
-								<h4>QR Code:</h4>
-								<QRCode email={email} />
-							</div>
-						)}
+					<div>
+						<b>{application.statusPublic}</b>
+						<h4>QR Code:</h4>
+						<QRCode email={email} />
+					</div>
+				)}
 			</div>
 		</div>
 	);
