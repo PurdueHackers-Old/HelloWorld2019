@@ -1,5 +1,6 @@
 import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
+import Link from 'next/link';
 import Router from 'next/router';
 import {
 	signUp,
@@ -45,9 +46,14 @@ const Signup = ({ signup, flashError, flashSuccess, clear }: Props) => {
 			style={{ paddingBottom: 0 }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
-				<h2 className="h1-light text-yellow">Signup Page</h2>
+				<h2 className="h1-light text-yellow">Signup</h2>
 				<br />
 				<SignupForm onSubmit={onSubmit} onChange={onChange} {...state} />
+				<br />
+				Already have an account?{' '}
+				<Link href="/login">
+					<a>Click Here</a>
+				</Link>
 			</div>
 		</div>
 	);

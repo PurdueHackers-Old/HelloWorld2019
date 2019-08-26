@@ -42,12 +42,14 @@ export const LoginForm = ({
 			</label>
 			<br />
 			<label>
-				Remember Me:
+				Remember Me:{' '}
 				<input
+					className="uk-checkbox"
 					type="checkbox"
 					name="rememberMe"
 					checked={rememberMe}
 					onChange={onChecked}
+					style={{ marginTop: 1 }}
 				/>
 			</label>
 			<br />

@@ -49,7 +49,7 @@ const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 			style={{ minHeight: '100vh' }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
-				<h2 className="h1-light text-yellow">Login Page</h2>
+				<h2 className="h1-light text-yellow">Login</h2>
 				<br />
 				<LoginForm
 					onSubmit={onSubmit}
@@ -61,6 +61,12 @@ const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 				Forgot your password?{' '}
 				<Link href="/forgot">
 					<a>Click Here</a>
+				</Link>
+				<br />
+				<br />
+				Don&apos;t have an account?{' '}
+				<Link href="/signup">
+					<a>Sign Up</a>
 				</Link>
 			</div>
 		</div>

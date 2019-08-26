@@ -14,7 +14,7 @@ export const globalError = (err, req, res, next) => {
 	httpCode = httpCode || 500;
 	// Send an email if error is from server
 	if (httpCode === 500) {
-		logger.emerg('Unhandled exception:', err);
+		logger.fatal('Unhandled exception:', err);
 		if (CONFIG.NODE_ENV === 'production')
 			emailService
 				.sendErrorEmail(err, req.user)
