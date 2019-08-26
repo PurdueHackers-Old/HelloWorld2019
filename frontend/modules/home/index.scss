@@ -76,8 +76,9 @@
 }
 
 #banner {
-	background-image: url('/static/images/HomeBackground.jpg');
-	background-repeat: no;
+	background-image: url('/static/images/HomeBackground\ copy.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
 	background-position: center top;
 	background-attachment: fixed;
 }
