@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export const Faq = () => (
 	<div className="uk-section uk-section-secondary uk-flex uk-flex-around uk-flex-wrap" id="faq">
@@ -44,9 +45,11 @@ export const Faq = () => (
 					<h3>How do I apply?</h3>
 					<p>
 						Just sign up
-						<a href="/#/register" style={{ color: 'white' }}> here!</a> with your Purdue email and fill out the
-						application form. We’ll let you know in the next few weeks if you’ve been
-						accepted.
+						<Link href="/signup">
+							<a style={{ color: 'white' }}> here!</a>
+						</Link>{' '}
+						with your Purdue email and fill out the application form. We’ll let you know
+						in the next few weeks if you’ve been accepted.
 					</p>
 				</div>
 			</div>
@@ -62,7 +65,7 @@ export const Faq = () => (
 			<div className="uk-padding-small uk-width-1-3@m">
 				<div className="uk-card uk-card-body fullheight bg-purple-faded">
 					<h3>Are teams allowed?</h3>
-					<p>Yes! You can have teams of up to 4 people.</p>
+					<p>Yes! You can have teams of up to 5 people.</p>
 				</div>
 			</div>
 			<div className="uk-padding-small uk-width-1-3@m">
@@ -90,9 +93,7 @@ export const Faq = () => (
 					<h3>I have more questions!</h3>
 					<p>
 						No problem! You can email us at<span> </span>
-						<a href="mailto:helloworld@purduehackers.com">
-							helloworld@purduehackers.com
-						</a>
+						<a href="mailto:helloworldpurdue@gmail.com">helloworldpurdue@gmail.com</a>
 					</p>
 				</div>
 			</div>
