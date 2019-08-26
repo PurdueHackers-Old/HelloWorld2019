@@ -21,30 +21,17 @@ export const SignupForm = ({
 		<form onSubmit={onSubmit}>
 			<label>
 				Name:
-				<input
-					className="uk-textarea"
-					required
-					name="name"
-					value={name}
-					onChange={onChange}
-				/>
+				<input required name="name" value={name} onChange={onChange} />
 			</label>
 			<br />
 			<label>
 				Email:
-				<input
-					className="uk-textarea"
-					required
-					name="email"
-					value={email}
-					onChange={onChange}
-				/>
+				<input required name="email" value={email} onChange={onChange} />
 			</label>
 			<br />
 			<label>
 				Password:
 				<input
-					className="uk-textarea"
 					required
 					type="password"
 					name="password"
@@ -56,7 +43,6 @@ export const SignupForm = ({
 			<label>
 				Password Confirm:
 				<input
-					className="uk-textarea"
 					required
 					type="password"
 					name="passwordConfirm"
@@ -65,7 +51,7 @@ export const SignupForm = ({
 				/>
 			</label>
 			<br />
-			<input className="uk-button-ancmnt" type="submit" value="Submit" />
+			<input type="submit" value="Submit" />
 		</form>
 	);
 };

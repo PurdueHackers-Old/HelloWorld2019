@@ -14,14 +14,13 @@ export const ForgotPasswordForm = ({ email, onChange, onSubmit }: Props) => {
 				<input
 					type="email"
 					name="email"
-					className="form-control uk-textarea"
+					className="form-control"
 					placeholder="email@purdue.edu"
 					value={email}
 					onChange={onChange}
 				/>
 			</label>
-			<br />
-			<input type="submit" className="uk-button-ancmnt" value="Reset Password" />
+			<input type="submit" value="Reset Password" />
 		</form>
 	);
 };
