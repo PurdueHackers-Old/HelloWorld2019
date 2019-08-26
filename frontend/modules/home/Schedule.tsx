@@ -27,7 +27,7 @@ export const Schedule = () => (
 					<p className="p-large-yellow">
 						<b>Date:</b>
 					</p>
-					<p className="p-large-yellow"> September 15 - 16 </p>
+					<p className="p-large-yellow"> September 14 - 15 </p>
 					<hr />
 					<p className="p-large-yellow">
 						<b>Location: </b>
