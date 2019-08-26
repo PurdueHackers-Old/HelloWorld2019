@@ -44,15 +44,25 @@ const Login = ({ signin, flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div>
-			<h3>Login Page</h3>
-			<br />
-			<LoginForm onSubmit={onSubmit} onChange={onChange} onChecked={onChecked} {...state} />
-			<br />
-			Forgot your password?{' '}
-			<Link href="/forgot">
-				<a>Click Here</a>
-			</Link>
+		<div
+			className="yo uk-section uk-section-primary uk-flex uk-flex-center bg-purple-gradient"
+			style={{}}
+		>
+			<div className="uk-container-small fullwidth uk-margin-large-bottom">
+				<h2 className="h1-light text-yellow">Login Page</h2>
+				<br />
+				<LoginForm
+					onSubmit={onSubmit}
+					onChange={onChange}
+					onChecked={onChecked}
+					{...state}
+				/>
+				<br />
+				Forgot your password?{' '}
+				<Link href="/forgot">
+					<a>Click Here</a>
+				</Link>
+			</div>
 		</div>
 	);
 };
