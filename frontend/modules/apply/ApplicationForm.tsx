@@ -19,15 +19,17 @@ interface Props extends IApplication {
 
 export const ApplicationForm = (props: Props) => {
 	return (
-		<form onSubmit={props.onSubmit} ref={props.formRef}>
-			<label>Name: {props.user.name}</label>
+		<form className="uk-fieldset uk-card uk-card-body uk-form" onSubmit={props.onSubmit} ref={props.formRef}>
+			<div style={{ height: '380px' }}></div>
+			<label className="uk-form-label text-purple">Name: {props.user.name}</label>
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple">Email: {props.user.email}</label>
 			<br />
-			<label>Email: {props.user.email}</label>
 			<br />
-			<br />
-			<label htmlFor="gender">
+			<label className="uk-form-label text-purple" htmlFor="gender">
 				Gender{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="gender"
@@ -41,9 +43,11 @@ export const ApplicationForm = (props: Props) => {
 				</select>
 			</label>
 			<br />
-			<label htmlFor="ethnicity">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="ethnicity">
 				Ethnicity{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="ethnicity"
@@ -56,10 +60,11 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="classYear">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="classYear">
 				Class Year{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="classYear"
@@ -72,10 +77,11 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="graduationYear">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="graduationYear">
 				Graduation Year{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="graduationYear"
@@ -88,10 +94,10 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="major">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="major">
 				Major{' '}
-				<select disabled={props.disabled} required name="major" defaultValue={props.major}>
+				<select disabled={props.disabled} className="uk-select" required name="major" defaultValue={props.major}>
 					{Object.values(Major).map(major => (
 						<option value={major} key={major}>
 							{major}
@@ -99,10 +105,11 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="referral">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="referral">
 				Referral{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="referral"
@@ -115,10 +122,11 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="hackathons">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="hackathons">
 				Hackathons{' '}
 				<input
+					className="uk-input"
 					disabled={props.disabled}
 					required
 					min="0"
@@ -127,10 +135,11 @@ export const ApplicationForm = (props: Props) => {
 					defaultValue={`${props.hackathons}`}
 				/>
 			</label>
-			<br />
-			<label htmlFor="shirtSize">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="shirtSize">
 				Shirt Size{' '}
 				<select
+					className="uk-select"
 					disabled={props.disabled}
 					required
 					name="shirtSize"
@@ -143,56 +152,60 @@ export const ApplicationForm = (props: Props) => {
 					))}
 				</select>
 			</label>
-			<br />
-			<label htmlFor="dietaryRestrictions">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="dietaryRestrictions">
 				Dietary Restrictions{' '}
 				<input
+					className="uk-input"
 					disabled={props.disabled}
 					name="dietaryRestrictions"
 					defaultValue={props.dietaryRestrictions}
 				/>
 			</label>
-			<br />
-			<label htmlFor="website">
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="website">
 				Website{' '}
 				<input
+					className="uk-input"
 					disabled={props.disabled}
 					name="website"
 					type="url"
 					defaultValue={props.website}
 				/>
 			</label>
-			<br />
-			<label htmlFor="answer1">
-				Answer 1
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="answer1">
+				Why do you want to attend Hello World?<span style={{ color: 'red' }}>*</span>
 				<br />
 				<textarea
+					className="uk-textarea"
 					disabled={props.disabled}
 					required
 					name="answer1"
 					defaultValue={props.answer1}
 				/>
 			</label>
-			<br />
-			<label htmlFor="answer2">
-				Answer 2
+			<div className="uk-margin"></div>
+			<label className="uk-form-label text-purple" htmlFor="answer2">
+				What do you hope to learn at Hello World?<span style={{ color: 'red' }}>*</span>
 				<br />
 				<textarea
+					className="uk-textarea"
 					disabled={props.disabled}
 					required
 					name="answer2"
 					defaultValue={props.answer2}
 				/>
 			</label>
-			<br />
+			<div className="uk-margin"></div>
 
-			<label htmlFor="resume">
+			<label className="uk-form-label text-purple" htmlFor="resume">
 				{props.resume && <>&#9989;</>} Resume:{' '}
-				<input type="file" name="resume" accept="application/pdf" />
+				<input className="" type="file" name="resume" accept="application/pdf" />
 			</label>
 			<br />
 			<br />
-			<input type="submit" value="Submit" />
+			<input className="uk-button-apply" type="submit" value="Submit" />
 		</form>
 	);
 };
