@@ -36,9 +36,9 @@ const Profile = ({ email }: Props) => {
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
 				<h2 className="h1-light text-yellow">Profile</h2>
-				<Link href="/profile/edit">
+				<Link href="/apply">
 					<a>
-						<h4>Edit Profile</h4>
+						<h4>View Application</h4>
 					</a>
 				</Link>
 				<h4>Application Status:</h4>
