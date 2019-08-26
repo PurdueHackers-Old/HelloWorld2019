@@ -6,7 +6,7 @@ import { IContext, IAnnouncement } from '../../@types';
 import { getAllAnnouncements } from '../../api';
 import Announcement from './Announcement';
 import { isSWSupported } from '../../utils/service-worker';
-import './index.scss'
+import './index.scss';
 
 interface Props {
 	announcements: IAnnouncement[];
@@ -34,8 +34,16 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 	}, []);
 
 	return (
-		<div id="background-announcement" className="uk-section section-primary uk-section-default uk-flex hero">
-			<h1 id="ancmt-heading" className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top">Announcements</h1>
+		<div
+			id="background-announcement"
+			className="uk-section section-primary uk-section-default uk-flex hero fullscreen"
+		>
+			<h1
+				id="ancmt-heading"
+				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
+			>
+				Announcements
+			</h1>
 			<div className="foreground-announcement">
 				<div style={{ height: '380px' }}></div>
 				<div className="uk-section uk-section uk-flex uk-flex-around uk-flex-wrap">
