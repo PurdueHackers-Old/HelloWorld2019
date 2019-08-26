@@ -143,7 +143,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
-	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must login to apply' }))
+	if (redirectIfNotAuthenticated('/signup', ctx, { msg: 'You must login to apply' }))
 		return endResponse(ctx);
 
 	const { user } = ctx.store.getState().sessionState;

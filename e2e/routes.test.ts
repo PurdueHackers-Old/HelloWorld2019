@@ -13,11 +13,11 @@ jest.setTimeout(100000);
 const routes = [
 	{ route: '/', text: 'beginner-oriented' },
 	{ route: '/announcements', text: 'Announcements' },
-	{ route: '/applications', text: 'Applications Page' },
+	{ route: '/applications', text: 'Applications' },
 	{ route: '/apply', text: 'Apply' },
-	{ route: '/checkin', text: 'Checkin Page' },
+	{ route: '/checkin', text: 'Checkin' },
 	{ route: '/dashboard', text: 'Dashboard' },
-	{ route: '/profile', text: 'Profile Page' }
+	{ route: '/profile', text: 'Profile' }
 ];
 
 let server: ServerType;
