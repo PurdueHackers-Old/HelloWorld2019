@@ -19,12 +19,20 @@ export const LoginForm = ({
 		<form onSubmit={onSubmit}>
 			<label>
 				Email:
-				<input required type="email" name="email" value={email} onChange={onChange} />
+				<input
+					className="uk-textarea"
+					required
+					type="email"
+					name="email"
+					value={email}
+					onChange={onChange}
+				/>
 			</label>
 			<br />
 			<label>
 				Password:
 				<input
+					className="uk-textarea"
 					required
 					type="password"
 					name="password"
@@ -43,7 +51,8 @@ export const LoginForm = ({
 				/>
 			</label>
 			<br />
-			<input type="submit" value="Submit" />
+			<br />
+			<input type="submit" className="uk-button-ancmnt" value="Submit" />
 		</form>
 	);
 };
