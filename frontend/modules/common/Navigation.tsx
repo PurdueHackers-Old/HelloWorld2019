@@ -23,19 +23,19 @@ const AccountDropdown = ({ token }: { token?: string }) =>
 			</li>
 		</>
 	) : (
-			<>
-				<li>
-					<Link href="/login">
-						<a className="text-purple-link">Login</a>
-					</Link>
-				</li>
-				<li>
-					<Link href="/signup">
-						<a className="text-purple-link">Signup</a>
-					</Link>
-				</li>
-			</>
-		);
+		<>
+			<li>
+				<Link href="/login">
+					<a className="text-purple-link">Login</a>
+				</Link>
+			</li>
+			<li>
+				<Link href="/signup">
+					<a className="text-purple-link">Signup</a>
+				</Link>
+			</li>
+		</>
+	);
 
 const ManageDropdown = ({ role }: { role?: Role }) => {
 	if (!role || !roleMatches(role, Role.EXEC)) return null;
@@ -65,10 +65,17 @@ const Navigation = ({ token, role }: Props) => {
 				cls-active: uk-navbar-sticky;
 				cls-inactive: uk-navbar-transparent;
 				bottom: 230px;"> */}
-			<nav id="navbar" className="uk-container uk-navbar-transparent uk-navbar" uk-navbar="true">
+			<nav
+				id="navbar"
+				className="uk-container uk-navbar-transparent uk-navbar"
+				uk-navbar="true"
+			>
 				<div className="uk-navbar-left uk-flex uk-flex-middle">
 					<Link href="/">
-						<a className="uk-navbar-item" style={{ color: "#f39c12", textDecoration: 'none' }}>
+						<a
+							className="uk-navbar-item"
+							style={{ color: '#f39c12', textDecoration: 'none' }}
+						>
 							{/* <img
 								alt="logo"
 								className="logo"
@@ -86,17 +93,25 @@ const Navigation = ({ token, role }: Props) => {
 							</Link>
 						</li>
 						<li>
-							<a href="#schedule" className="text-yellow">Schedule</a>
+							<Link href="/#schedule">
+								<a className="text-yellow">Schedule</a>
+							</Link>
 						</li>
 						<li>
-							<a href="#faq" className="text-yellow">FAQ</a>
+							<Link href="/#faq">
+								<a className="text-yellow">FAQ</a>
+							</Link>
 						</li>
 						<li>
-							<a href="#sponsors" className="text-yellow">Sponsors</a>
+							<Link href="/#sponsors">
+								<a className="text-yellow">Sponsors</a>
+							</Link>
 						</li>
 						{!role || !roleMatches(role, Role.EXEC) ? null : (
 							<li>
-								<a href="#" className="text-yellow">Manage</a>
+								<a href="#" className="text-yellow">
+									Manage
+								</a>
 								<div className="uk-navbar-dropdown">
 									<ul className="uk-nav uk-navbar-dropdown-nav">
 										<ManageDropdown role={role} />
@@ -105,8 +120,13 @@ const Navigation = ({ token, role }: Props) => {
 							</li>
 						)}
 						<li>
-							<a href="#" className="text-yellow">Account</a>
-							<div className="uk-navbar-dropdown bg-yellow" style={{ borderRadius: '10px' }}>
+							<a href="#" className="text-yellow">
+								Account
+							</a>
+							<div
+								className="uk-navbar-dropdown bg-yellow"
+								style={{ borderRadius: '10px' }}
+							>
 								<ul className="uk-nav uk-navbar-dropdown-nav">
 									<AccountDropdown token={token} />
 								</ul>
