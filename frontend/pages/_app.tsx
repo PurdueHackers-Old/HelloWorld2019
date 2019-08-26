@@ -42,11 +42,14 @@ export default class MyApp extends App<Props> {
 	}
 
 	componentWillMount() {
-		Router.onRouteChangeStart = () => {
+		Router.events.on('routeChangeStart', () => {
 			const { store } = this.props;
 			const { flashState } = store.getState();
 			if (flashState.green || flashState.red) store.dispatch(clearFlashMessages() as any);
-		};
+		});
+		Router.events.on('routeChangeComplete', () => {
+			window.scrollTo(0, 0);
+		});
 	}
 
 	componentDidMount() {
