@@ -47,7 +47,7 @@ const Checkin = ({ flashError, flashSuccess, clear }: Props) => {
 			style={{ paddingBottom: 0 }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
-				<h2 className="h1-light text-yellow">Checkin Page</h2>
+				<h2 className="h1-light text-yellow">Checkin</h2>
 				<br />
 				<Link href="/checkin/scan">
 					<a>Scan QR Code</a>
