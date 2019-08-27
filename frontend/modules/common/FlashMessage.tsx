@@ -1,11 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { clearFlashMessages } from '../../redux/actions';
+import { IContext } from '../../@types';
 
 interface Props {
 	green: string;
 	red: string;
+	clear: (ctx?: IContext) => void;
 }
 
-const FlashMessage = ({ green, red }: Props) => {
+const FlashMessage = ({ green, red, clear }: Props) => {
 	return (
 		<React.Fragment>
 			{green && (
@@ -15,7 +19,12 @@ const FlashMessage = ({ green, red }: Props) => {
 					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
-					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
+					<a
+						className="uk-alert-close"
+						uk-close="true"
+						style={{ opacity: 'unset' }}
+						onClick={() => clear()}
+					/>
 					<p>{green}</p>
 				</div>
 			)}
@@ -26,7 +35,12 @@ const FlashMessage = ({ green, red }: Props) => {
 					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
-					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
+					<a
+						className="uk-alert-close"
+						uk-close="true"
+						style={{ opacity: 'unset' }}
+						onClick={() => clear()}
+					/>
 					<p>{red}</p>
 				</div>
 			)}
@@ -39,4 +53,7 @@ FlashMessage.defaultProps = {
 	red: ''
 };
 
-export default FlashMessage;
+export default connect(
+	null,
+	{ clear: clearFlashMessages }
+)(FlashMessage);
