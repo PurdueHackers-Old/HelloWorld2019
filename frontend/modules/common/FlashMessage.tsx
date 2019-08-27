@@ -12,6 +12,7 @@ const FlashMessage = ({ green, red }: Props) => {
 				<div
 					className="uk-alert-success"
 					uk-alert="true"
+					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
 					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
@@ -22,6 +23,7 @@ const FlashMessage = ({ green, red }: Props) => {
 				<div
 					className="uk-alert-danger"
 					uk-alert="true"
+					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
 					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
