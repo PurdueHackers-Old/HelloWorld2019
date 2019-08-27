@@ -15,6 +15,7 @@ export const Schedule = () => (
 			<div uk-grid="" className="uk-grid">
 				<div className="uk-width-2-3@m uk-first-column">
 					<iframe
+						title="Location Map"
 						allowFullScreen
 						frameBorder="0"
 						height="300px"
