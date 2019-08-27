@@ -93,7 +93,7 @@ export const Faq = () => (
 					<h3>I have more questions!</h3>
 					<p>
 						No problem! You can email us at<span> </span>
-						<a href="mailto:helloworldpurdue@gmail.com">helloworldpurdue@gmail.com</a>
+						<a href="mailto:2019@helloworldpurdue.com">2019@helloworldpurdue.com</a>
 					</p>
 				</div>
 			</div>
