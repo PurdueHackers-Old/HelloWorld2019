@@ -99,7 +99,8 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 			<div
 				className="foreground-announcement"
 				style={{
-					backgroundImage: "url('/static/images/DefaultForeground.png')",
+					backgroundImage: `url(${require('../../static/images/DefaultForeground.png')})`,
+
 					backgroundPosition: 'center top',
 					backgroundSize: 'cover'
 				}}

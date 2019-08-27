@@ -4,6 +4,7 @@ const withSass = require('@zeit/next-sass');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
+const optimizedImages = require('next-optimized-images');
 const withOffline = require('next-offline');
 const defaultGetLocalIdent = require('css-loader/lib/getLocalIdent');
 const { basename } = require('path');
@@ -51,6 +52,7 @@ module.exports = withPlugins(
 				}
 			}
 		],
+		[optimizedImages],
 		[
 			withOffline,
 			{
