@@ -1,7 +1,6 @@
 import { getFromContainer } from 'routing-controllers';
 import { AuthorizationRequiredError } from 'routing-controllers/error/AuthorizationRequiredError';
 import { Request, Response, NextFunction } from 'express';
-import { MulterError } from 'multer';
 import { errorRes } from '../utils';
 import { createLogger } from '../utils/logger';
 import { EmailService } from '../services/email.service';
@@ -16,7 +15,7 @@ export const globalError = (err, req: Request, res: Response, next: NextFunction
 	httpCode = httpCode || 500;
 
 	// Send an email if error is from server
-	if (!(err instanceof MulterError) && httpCode === 500) {
+	if (err.name !== 'MulterError' && httpCode === 500) {
 		logger.fatal('Unhandled exception:', err);
 		if (CONFIG.NODE_ENV === 'production')
 			emailService
