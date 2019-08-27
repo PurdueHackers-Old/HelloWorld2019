@@ -35,6 +35,6 @@ export const HomePage = () => {
 					<Sponsors />
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
