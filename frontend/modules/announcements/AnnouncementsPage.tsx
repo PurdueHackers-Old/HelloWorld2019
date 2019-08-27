@@ -35,7 +35,9 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 	return (
 		<div
 			id="background-announcement"
-			style={{ backgroundImage: "url('/static/images/DefaultBackground.jpg')" }}
+			style={{
+				backgroundImage: `url(${require('../../static/images/DefaultBackground.jpg')})`
+			}}
 			className="uk-section section-primary uk-section-default uk-flex hero fullscreen"
 		>
 			<h1
@@ -47,7 +49,7 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 			<div
 				className="foreground-announcement"
 				style={{
-					backgroundImage: "url('/static/images/DefaultForeground.png')",
+					backgroundImage: `url(${require('../../static/images/DefaultForeground.png')})`,
 					backgroundPosition: 'center top',
 					backgroundSize: 'cover',
 					height: '3000px'
