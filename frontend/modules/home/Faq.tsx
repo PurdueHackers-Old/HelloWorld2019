@@ -82,7 +82,7 @@ export const Faq = () => (
 				<div className="uk-card uk-card-body fullheight bg-purple-faded">
 					<h3>When is Hello World?</h3>
 					<p>
-						Hello World will take place on September 15th and 16th. We’ll have mentors
+						Hello World will take place on September 14th and 15th. We’ll have mentors
 						and volunteers in the building for all 24 hours, so you can code through the
 						night if you want! We’ll have a more detailed schedule coming soon.
 					</p>
@@ -93,7 +93,7 @@ export const Faq = () => (
 					<h3>I have more questions!</h3>
 					<p>
 						No problem! You can email us at<span> </span>
-						<a href="mailto:helloworldpurdue@gmail.com">helloworldpurdue@gmail.com</a>
+						<a href="mailto:2019@helloworldpurdue.com">2019@helloworldpurdue.com</a>
 					</p>
 				</div>
 			</div>

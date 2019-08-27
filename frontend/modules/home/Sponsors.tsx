@@ -7,18 +7,18 @@ export const Sponsors = () => (
 		id="sponsors"
 	>
 		<div className="uk-container-small fullwidth">
-			<div className="uk-container-small fullwidth">
+			<div className="uk-container-small">
 				<h2 className="h1-light text-align-center text-yellow">Sponsors</h2>
 			</div>
-			<div className="uk-container-small fullwidth">
+			<div className="uk-container-small">
 				<p className="text-yellow text-align-center">
-					If you are interested in sponsoring Hello World 2018, email us at{' '}
+					If you are interested in sponsoring Hello World 2019, email us at{' '}
 					<a
 						className="uk-link-text"
-						href="mailto:helloworldpurdue@gmail.com"
+						href="mailto:2019@helloworldpurdue.com"
 						style={{ color: 'white' }}
 					>
-						helloworldpurdue@gmail.com
+						2019@helloworldpurdue.com
 					</a>{' '}
 					for more details!
 				</p>
