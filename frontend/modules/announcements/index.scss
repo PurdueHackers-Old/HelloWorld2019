@@ -3,7 +3,7 @@ body, html {
   }
   
 #background-announcement {
-	background-image: url('/static/images/DefaultBackground.jpg'); 
+	background-image: url('../../static/images/DefaultBackground.jpg'); 
 	background-repeat: no;
 	background-position: center top;
     background-attachment: fixed;
@@ -11,7 +11,7 @@ body, html {
 }
   
 .foreground-announcement {
-    background-image: url('/static/images/DefaultForeground.png');
+    background-image: url('../../static/images/DefaultForeground.png');
     background-position: center top;
     background-size: cover;
     height: 2000px;

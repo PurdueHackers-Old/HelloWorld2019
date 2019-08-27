@@ -25,13 +25,31 @@ export const Sponsors = () => (
 			</div>
 		</div>
 		<div className="uk-container fullwidth uk-flex uk-flex-between uk-flex-wrap">
-			<SponsorCard src="/static/images/sponsors/cummins.png" title="Cummins" />
-			<SponsorCard src="/static/images/sponsors/soga.png" title="SOGA" />
-			<SponsorCard src="/static/images/sponsors/cs_department.png" title="CS Department" />
-			<SponsorCard src="/static/images/sponsors/microsoft.png" title="Microsoft" />
-			<SponsorCard src="/static/images/sponsors/agorize.png" title="Agorize" />
-			<SponsorCard src="/static/images/sponsors/gwc.png" title="Girls Who Code" />
-			<SponsorCard src="/static/images/sponsors/sugarcrm.png" title="SugarCRM" />
+			<SponsorCard
+				src={require('../../static/images/sponsors/cummins.png')}
+				title="Cummins"
+			/>
+			<SponsorCard src={require('../../static/images/sponsors/soga.png')} title="SOGA" />
+			<SponsorCard
+				src={require('../../static/images/sponsors/cs_department.jpg')}
+				title="CS Department"
+			/>
+			<SponsorCard
+				src={require('../../static/images/sponsors/microsoft.png')}
+				title="Microsoft"
+			/>
+			<SponsorCard
+				src={require('../../static/images/sponsors/agorize.png')}
+				title="Agorize"
+			/>
+			<SponsorCard
+				src={require('../../static/images/sponsors/gwc.png')}
+				title="Girls Who Code"
+			/>
+			<SponsorCard
+				src={require('../../static/images/sponsors/sugarcrm.png')}
+				title="SugarCRM"
+			/>
 		</div>
 	</div>
 );

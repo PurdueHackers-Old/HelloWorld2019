@@ -19,7 +19,8 @@ module.exports = {
 			testPathIgnorePatterns: ['.next'],
 			moduleNameMapper: {
 				'\\.(css|less|sass|scss)$': '<rootDir>/frontend/__tests__/__mocks__/styleMock.js',
-				'\\.(gif|ttf|eot|svg)$': '<rootDir>/frontend/__tests__/__mocks__/fileMock.js'
+				'\\.(gif|ttf|eot|svg|png|jpg|jpeg)$':
+					'<rootDir>/frontend/__tests__/__mocks__/fileMock.js'
 			}
 		},
 		{
