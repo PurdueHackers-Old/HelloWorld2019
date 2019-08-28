@@ -1,6 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+@font-face {
+	font-family: 'krungthep';
+	src: url('/static/fonts/krungthep-webfont.woff2') format('woff2'),
+		url('/static/fonts/krungthep-webfont.woff') format('woff');
+}
+
 /* Color palette */
 :root {
 	--dark-blue: #1d1f7a;
