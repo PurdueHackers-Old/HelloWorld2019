@@ -1,11 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+@font-face {
+	font-family: 'krungthep';
+	src: url('/static/fonts/krungthep-webfont.woff2') format('woff2'),
+		url('/static/fonts/krungthep-webfont.woff') format('woff');
+}
+
 /* Color palette */
 :root {
 	--dark-blue: #1d1f7a;
 	--purple: #7233ad;
 	--bluey-purple-50: rgba(114, 51, 173, 0.5);
+}
+
+html {
+	overflow: hidden;
 }
 
 html,
@@ -740,4 +750,36 @@ table {
 #apply-heading {
 	// position: fixed;
 	z-index: 0;
+}
+
+.text-purple {
+	color: #5b2c6f !important;
+}
+
+.text-yellow {
+	color: #f39c12 !important;
+}
+
+.bg-purple {
+	background-color: rgb(91, 44, 111);
+}
+
+.bg-yellow {
+	background-color: #f39c12;
+}
+
+.bg-purple-gradient {
+	background: linear-gradient(#5b2c6f, #2b0a3a);
+}
+
+.text-purple-link {
+	color: #5b2c6f !important;
+}
+
+.text-purple-link:hover {
+	color: white;
+}
+
+.uk-dark {
+	background-color: rgba(0, 0, 0, 0.3);
 }
