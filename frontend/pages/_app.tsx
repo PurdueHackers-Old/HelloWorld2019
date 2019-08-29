@@ -3,8 +3,10 @@ import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import Router from 'next/router';
 import Head from 'next/head';
+import getConfig from 'next/config';
 import withRedux from 'next-redux-wrapper';
 import { Store } from 'redux';
+import * as Sentry from '@sentry/browser';
 import makeStore from '../redux/store';
 import {
 	clearFlashMessages,
@@ -19,6 +21,16 @@ import { IStoreState } from '../@types';
 import { registerServiceWorker } from '../utils/service-worker';
 import 'uikit/dist/css/uikit.min.css';
 import '../assets/theme.scss';
+
+const {
+	publicRuntimeConfig: { SENTRY_KEY, NODE_ENV, SENTRY_ENVIRONMENT }
+} = getConfig();
+
+Sentry.init({
+	dsn: SENTRY_KEY,
+	environment: SENTRY_ENVIRONMENT,
+	enabled: NODE_ENV === 'production'
+});
 
 interface Props {
 	store: Store<IStoreState>;
@@ -39,6 +51,18 @@ export default class MyApp extends App<Props> {
 		return {
 			pageProps: Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
 		};
+	}
+
+	componentDidCatch(error, errorInfo) {
+		Sentry.withScope(scope => {
+			Object.keys(errorInfo).forEach(key => {
+				scope.setExtra(key, errorInfo[key]);
+			});
+
+			Sentry.captureException(error);
+		});
+
+		super.componentDidCatch(error, errorInfo);
 	}
 
 	componentWillMount() {

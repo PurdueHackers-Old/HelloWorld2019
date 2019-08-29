@@ -6,6 +6,7 @@ export default class MyDocument extends Document {
 		return (
 			<html lang="en">
 				<Head>
+					<meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 					<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 					<meta name="theme-color" content="#c09ed0" />
@@ -17,6 +18,13 @@ export default class MyDocument extends Document {
 						type="image/png"
 						href="/static/images/icons/icon-512x512.png"
 					/>
+					<link rel="apple-touch-icon" href="/static/images/icons/icon-512x512.png" />
+					<link
+						rel="apple-touch-icon"
+						sizes="180x180"
+						href="/static/images/icons/icon-512x512.png"
+					/>
+
 					<script
 						defer
 						src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.7/js/uikit.min.js"
