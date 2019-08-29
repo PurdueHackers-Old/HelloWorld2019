@@ -105,7 +105,7 @@ export default class Server {
 		this.app.use(helmet());
 		if (CONFIG.REDIRECT_HTTPS) this.app.use(yes());
 		if (CONFIG.NODE_ENV !== 'test') {
-			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'tiny';
+			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'combined';
 			this.app.use(
 				logger(logFormat, {
 					skip: r =>
