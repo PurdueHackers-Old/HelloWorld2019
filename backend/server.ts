@@ -106,7 +106,12 @@ export default class Server {
 		if (CONFIG.REDIRECT_HTTPS) this.app.use(yes());
 		if (CONFIG.NODE_ENV !== 'test') {
 			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'tiny';
-			this.app.use(logger(logFormat, { skip: r => r.url.startsWith('/_next') }));
+			this.app.use(
+				logger(logFormat, {
+					skip: r =>
+						r.originalUrl.startsWith('/_next/') || r.originalUrl.startsWith('/static/')
+				})
+			);
 		}
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
