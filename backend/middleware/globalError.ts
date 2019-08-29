@@ -25,7 +25,7 @@ export const globalError = (err, req: Request, res: Response, next: NextFunction
 		errorRes(res, httpCode, 'Whoops! Something went wrong!');
 	} else {
 		if (err instanceof AuthorizationRequiredError) message = 'You must be logged in!';
-		logger.error('Caught error:', message);
+		logger.error('Caught error:', message, '\tInfo:', { body: req.body, query: req.query });
 		errorRes(res, httpCode, message);
 	}
 };
