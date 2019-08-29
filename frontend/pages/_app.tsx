@@ -26,11 +26,12 @@ const {
 	publicRuntimeConfig: { SENTRY_KEY, NODE_ENV, SENTRY_ENVIRONMENT }
 } = getConfig();
 
-Sentry.init({
-	dsn: SENTRY_KEY,
-	environment: SENTRY_ENVIRONMENT,
-	enabled: NODE_ENV === 'production'
-});
+if (NODE_ENV === 'production')
+	Sentry.init({
+		dsn: SENTRY_KEY,
+		environment: SENTRY_ENVIRONMENT,
+		enabled: NODE_ENV === 'production'
+	});
 
 interface Props {
 	store: Store<IStoreState>;
@@ -54,13 +55,14 @@ export default class MyApp extends App<Props> {
 	}
 
 	componentDidCatch(error, errorInfo) {
-		Sentry.withScope(scope => {
-			Object.keys(errorInfo).forEach(key => {
-				scope.setExtra(key, errorInfo[key]);
-			});
+		if (NODE_ENV === 'production')
+			Sentry.withScope(scope => {
+				Object.keys(errorInfo).forEach(key => {
+					scope.setExtra(key, errorInfo[key]);
+				});
 
-			Sentry.captureException(error);
-		});
+				Sentry.captureException(error);
+			});
 
 		super.componentDidCatch(error, errorInfo);
 	}
