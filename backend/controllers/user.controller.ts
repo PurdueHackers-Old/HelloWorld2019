@@ -152,7 +152,7 @@ export class UserController {
 					currentUser
 				);
 			} catch (error) {
-				this.logger.emerg('Error uploading resume:', error);
+				this.logger.fatal('Error uploading resume:', error);
 				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
 			}
 		}
