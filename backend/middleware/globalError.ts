@@ -16,7 +16,14 @@ export const globalError = (err, req: Request, res: Response, next: NextFunction
 
 	// Send an email if error is from server
 	if (err.name !== 'MulterError' && httpCode === 500) {
-		logger.fatal('Unhandled exception:', err);
+		logger.fatal({
+			message: `Unhandled exception: ${message}`,
+			stack: err.stack,
+			req: {
+				body: req.body,
+				query: req.query
+			}
+		});
 		if (CONFIG.NODE_ENV === 'production')
 			emailService
 				.sendErrorEmail(err, req.user)
@@ -25,7 +32,13 @@ export const globalError = (err, req: Request, res: Response, next: NextFunction
 		errorRes(res, httpCode, 'Whoops! Something went wrong!');
 	} else {
 		if (err instanceof AuthorizationRequiredError) message = 'You must be logged in!';
-		logger.error('Caught error:', message, '\tInfo:', { body: req.body, query: req.query });
+		logger.error({
+			message: `Caught error: ${message}`,
+			req: {
+				body: req.body,
+				query: req.query
+			}
+		});
 		errorRes(res, httpCode, message);
 	}
 };
