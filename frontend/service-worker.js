@@ -171,7 +171,7 @@ const initializeWorkboxCaching = _workbox => {
 };
 
 try {
-	if (workbox) {
+	if (typeof workbox !== 'undefined') {
 		initializeWorkboxCaching(workbox);
 	}
 } catch (error) {
