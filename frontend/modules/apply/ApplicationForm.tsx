@@ -14,6 +14,7 @@ interface Props extends IApplication {
 	formRef: MutableRefObject<HTMLFormElement>;
 	user: IUser;
 	disabled?: boolean;
+	admin?: boolean;
 	onSubmit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
@@ -210,8 +211,16 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 
 			<label className="uk-form-label text-purple" htmlFor="resume">
-				{props.resume && <>&#9989;</>} Resume:{' '}
-				<input className="" type="file" name="resume" accept="application/pdf" />
+				{props.resume && <>&#9989;</>}
+				{props.admin && (
+					<>
+						<a href={props.resume} rel="noopener noreferrer" target="_blank">
+							View Here{' '}
+						</a>
+						<br />
+					</>
+				)}
+				Resume: <input className="" type="file" name="resume" accept="application/pdf" />
 			</label>
 			<br />
 			<br />
