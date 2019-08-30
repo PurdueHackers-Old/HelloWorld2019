@@ -52,6 +52,7 @@ export enum Status {
 
 export enum Major {
 	COMPUTER_SCIENCE = 'Computer Science',
+	DATA_SCIENCE = 'Data Science',
 	COMPUTER_ENGINEERING = 'Computer Engineering',
 	ELECTRICAL_ENGINEERING = 'Electrical Engineering',
 	MECHANICAL_ENGINEERING = 'Mechanical Engineering',
