@@ -94,7 +94,8 @@ export class ApplicationController {
 			{ $unwind: '$pagination' }
 		]);
 
-		const [results] = await resultsQuery.exec();
+		const arr = await resultsQuery.exec();
+		const [results] = arr;
 		return results;
 	}
 
