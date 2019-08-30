@@ -14,7 +14,8 @@ import {
 	Put,
 	QueryParam,
 	Req,
-	UnauthorizedError
+	UnauthorizedError,
+	InternalServerError
 } from 'routing-controllers';
 import { Inject } from 'typedi';
 import { ApplicationsStatus } from '../../shared/globals.enums';
@@ -152,8 +153,10 @@ export class UserController {
 					currentUser
 				);
 			} catch (error) {
-				this.logger.fatal('Error uploading resume:', error);
-				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
+				this.logger.fatal('Error uploading resume:', error.message);
+				throw new InternalServerError(
+					'Something is wrong! Unable to upload at the moment!'
+				);
 			}
 		}
 
