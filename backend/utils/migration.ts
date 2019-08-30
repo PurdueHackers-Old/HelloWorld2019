@@ -10,6 +10,7 @@ import { Role } from '../../shared/user.enums';
 import { UserController } from '../controllers/user.controller';
 import { ApplicationController } from '../controllers/application.controller';
 import { GlobalsController } from '../controllers/globals.controller';
+import Container from 'typedi';
 
 let server: Server;
 
@@ -17,9 +18,8 @@ const start = async () => {
 	try {
 		const NUM_USERS = 50;
 		server = await Server.createInstance();
-		const authController = new AuthController();
-		const userController = new UserController();
-		userController.globalController = new GlobalsController();
+		const authController = Container.get(AuthController);
+		const userController = Container.get(UserController);
 
 		let user = await authController.signup('test123', 'test123', {
 			name: 'Test Testerson',
@@ -71,10 +71,10 @@ const start = async () => {
 			applications.map(app => {
 				let update;
 				const i = Math.floor(Math.random() * 12) + 0;
-				if (i < 6) update = { statusInternal: Status.PENDING };
+				if (i < 6) update = { statusInternal: Status.PENDING, resume: '' };
 				else if (i < 8) update = { statusInternal: Status.ACCEPTED };
 				else if (i < 10) update = { statusInternal: Status.REJECTED };
-				else update = { statusInternal: Status.WAITLIST };
+				else update = { statusInternal: Status.WAITLIST, resume: '' };
 
 				return Application.findByIdAndUpdate(app._id, update).exec();
 			})
