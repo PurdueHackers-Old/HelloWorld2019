@@ -77,6 +77,7 @@ export default class Server {
 				this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
 			}
 			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
+			this.app.use('/robots.txt', express.static('frontend/static/robots.txt'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});

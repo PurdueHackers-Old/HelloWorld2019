@@ -28,7 +28,11 @@ const AppsPage = ({ flashError, clear }: Props) => {
 		try {
 			clear();
 			setState(prev => ({ ...prev, loading: true }));
-			const response = await getApplications(null, params);
+			let response = (await getApplications(null, params)) || {
+				applications: [],
+				pagination: { total: 0, pageSize: 0, page: 1, pages: 1 }
+			};
+			console.log('Response:', response);
 			setState(prev => ({ ...prev, loading: false, ...response }));
 		} catch (error) {
 			setState(prev => ({ ...prev, loading: false }));
