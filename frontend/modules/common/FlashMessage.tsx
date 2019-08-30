@@ -16,7 +16,6 @@ const FlashMessage = ({ green, red, clear }: Props) => {
 				<div
 					className="uk-alert-success"
 					uk-alert="true"
-					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
 					<a
@@ -32,7 +31,6 @@ const FlashMessage = ({ green, red, clear }: Props) => {
 				<div
 					className="uk-alert-danger"
 					uk-alert="true"
-					uk-sticky="bottom: #offset"
 					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
 				>
 					<a

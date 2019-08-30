@@ -34,11 +34,9 @@ export class ApplicationController {
 			} else if (key === 'name' || key === 'email') {
 				filter[key] = new RegExp(escapeRegEx(value as string), 'i');
 			} else if (key === 'resume') {
-				if (filter[key] === 'Yes') {
-					filter[key] = { $ne: null };
-				} else {
-					filter[key] = null;
-				}
+				if (filter[key] === 'Yes') filter[key] = { $ne: '', $exists: true };
+				else if (filter[key] === 'No') filter[key] = { $eq: '' };
+				else delete filter[key];
 			}
 		});
 
