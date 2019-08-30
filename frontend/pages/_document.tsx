@@ -18,12 +18,8 @@ export default class MyDocument extends Document {
 						type="image/png"
 						href="/static/images/icons/icon-512x512.png"
 					/>
-					<link rel="apple-touch-icon" href="/static/images/icons/icon-512x512.png" />
-					<link
-						rel="apple-touch-icon"
-						sizes="180x180"
-						href="/static/images/icons/icon-512x512.png"
-					/>
+					<link rel="apple-touch-icon" href="/static/images/icons/icon-180x180.png" />
+					<link rel="preconnect" href="https://fonts.googleapis.com" />
 
 					<script
 						defer
