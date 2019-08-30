@@ -15,7 +15,11 @@ const bucket = storage.bucket(CONFIG.GC_BUCKET);
 
 @Service('storageService')
 export class StorageService {
-	async uploadToStorage(file: Express.Multer.File, folder: string, user: UserDto) {
+	async uploadToStorage(
+		file: Express.Multer.File,
+		folder: 'pictures' | 'resumes',
+		user: UserDto
+	) {
 		if (!file) throw new Error('No image file');
 		else if (folder === 'pictures' && !file.originalname.match(/\.(jpg|jpeg|png|gif)$/i))
 			throw new Error(`File: ${file.originalname} is an invalid image type`);
@@ -34,7 +38,7 @@ export class StorageService {
 			});
 
 			blobStream.on('error', error => {
-				console.error('Error uploading file to folder:', folder);
+				console.error('Error uploading file to folder:', folder, error);
 				// reject(new Error('Something is wrong! Unable to upload at the moment.'));
 				reject(error);
 			});
