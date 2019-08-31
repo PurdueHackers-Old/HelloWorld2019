@@ -59,9 +59,12 @@ export class EmailService {
 			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
 			to: 'purduehackers@gmail.com',
 			dynamicTemplateData: {
-				timestamp: new Date(Date.now()).toLocaleString(),
+				timestamp: new Date(Date.now()).toLocaleString([], {
+					timeZone: 'America/New_York'
+				}),
+				error,
 				message: error.message.replace(/\n/g, '<br>'),
-				stack: error.stack.replace(/\n/g, '<br>&emsp;'),
+				stack: error.stack ? error.stack.replace(/\n/g, '<br>&emsp;') : 'No Stack',
 				user
 			},
 			mailSettings: {
