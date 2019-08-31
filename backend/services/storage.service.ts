@@ -39,7 +39,6 @@ export class StorageService {
 
 			blobStream.on('error', error => {
 				console.error('Error uploading file to folder:', folder, error);
-				// reject(new Error('Something is wrong! Unable to upload at the moment.'));
 				reject(error);
 			});
 

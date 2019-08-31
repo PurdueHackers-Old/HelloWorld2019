@@ -53,16 +53,18 @@ export class EmailService {
 		} as any);
 	}
 
-	sendErrorEmail(error: Error, user?: UserDto) {
+	sendErrorEmail(error: Error) {
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',
 			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
 			to: 'purduehackers@gmail.com',
 			dynamicTemplateData: {
-				timestamp: new Date(Date.now()).toLocaleString(),
+				timestamp: new Date(Date.now()).toLocaleString([], {
+					timeZone: 'America/New_York'
+				}),
+				error,
 				message: error.message.replace(/\n/g, '<br>'),
-				stack: error.stack.replace(/\n/g, '<br>&emsp;'),
-				user
+				stack: error.stack ? error.stack.replace(/\n/g, '<br>&emsp;') : 'No Stack'
 			},
 			mailSettings: {
 				sandboxMode: {

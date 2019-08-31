@@ -34,7 +34,7 @@ export class NotificationService {
 				await sendNotification(subscription.content, content);
 			} catch (error) {
 				if (!(error instanceof WebPushError)) {
-					this.logger.fatal('Error sending push notification:', error);
+					this.logger.fatal('Error sending push notification:', { err: error });
 					this.emailService
 						.sendErrorEmail(error)
 						.then(() => this.logger.info('Email sent'))

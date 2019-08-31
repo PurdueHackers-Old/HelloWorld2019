@@ -48,6 +48,8 @@ export class AuthController {
 		delete u.password;
 		const token = signToken(u);
 
+		this.logger.info('User has successfully signed up:', user);
+
 		return {
 			user: u,
 			token
