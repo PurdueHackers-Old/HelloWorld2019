@@ -2,6 +2,7 @@ import CONFIG from '../config';
 import { Storage } from '@google-cloud/storage';
 import { Service } from 'typedi';
 import { UserDto } from '../models/user';
+import { BadRequestError } from 'routing-controllers';
 
 const storage = new Storage({
 	projectId: CONFIG.GC_PROJECT_ID,
@@ -24,7 +25,7 @@ export class StorageService {
 		else if (folder === 'pictures' && !file.originalname.match(/\.(jpg|jpeg|png|gif)$/i))
 			throw new Error(`File: ${file.originalname} is an invalid image type`);
 		else if (folder === 'resumes' && !file.originalname.match(/\.(pdf)$/i))
-			throw new Error(`File: ${file.originalname} is an invalid image type`);
+			throw new BadRequestError(`File: ${file.originalname} must be a .pdf file`);
 
 		const fileName = `${folder}/${user.email.replace('@', '_')}`;
 		const fileUpload = bucket.file(fileName);
