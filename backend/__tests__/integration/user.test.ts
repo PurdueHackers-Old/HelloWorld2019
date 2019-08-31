@@ -286,9 +286,9 @@ describe('Suite: /api/users -- Integration', () => {
 			expect(error).toEqual('Please provide an answer');
 		});
 
-		it('Fails to create an application because answer1 is too short', async () => {
+		it('Fails to create an application because answer1 is too long', async () => {
 			const app = generateApplication();
-			app.answer1 = '1234567890'.repeat(50);
+			app.answer1 = '1234567890'.repeat(100);
 			const {
 				body: { error },
 				status
@@ -298,7 +298,7 @@ describe('Suite: /api/users -- Integration', () => {
 				.auth(user.token, { type: 'bearer' });
 
 			expect(status).toEqual(400);
-			expect(error).toEqual('Your answer must be less than 250 characters');
+			expect(error).toEqual('Your answer must be less than 500 characters');
 		});
 
 		it('Fails to create an application because invalid user ID', async () => {

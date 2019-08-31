@@ -53,7 +53,7 @@ export class EmailService {
 		} as any);
 	}
 
-	sendErrorEmail(error: Error, user?: UserDto) {
+	sendErrorEmail(error: Error) {
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',
 			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
@@ -64,8 +64,7 @@ export class EmailService {
 				}),
 				error,
 				message: error.message.replace(/\n/g, '<br>'),
-				stack: error.stack ? error.stack.replace(/\n/g, '<br>&emsp;') : 'No Stack',
-				user
+				stack: error.stack ? error.stack.replace(/\n/g, '<br>&emsp;') : 'No Stack'
 			},
 			mailSettings: {
 				sandboxMode: {

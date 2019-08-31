@@ -25,7 +25,7 @@ export const globalError = (err, req: Request, res: Response, next: NextFunction
 		});
 		if (CONFIG.NODE_ENV === 'production')
 			emailService
-				.sendErrorEmail(err, req.user)
+				.sendErrorEmail(err)
 				.then(() => logger.info('Email sent'))
 				.catch(error => logger.error('Error sending email:', error));
 		errorRes(res, httpCode, 'Whoops! Something went wrong!');

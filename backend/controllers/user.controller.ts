@@ -154,7 +154,7 @@ export class UserController {
 				);
 			} catch (error) {
 				if (error.code === 429)
-					throw new BadRequestError(
+					throw new InternalServerError(
 						'You are uploading your resume too fast! Please try again in 5 minutes!'
 					);
 				else throw error;
@@ -175,9 +175,6 @@ export class UserController {
 		const app = await appQuery.exec();
 		user.application = app;
 		await user.save();
-
-		this.logger.info('User has successfully applied:', user);
-
 		return app;
 	}
 }
