@@ -153,10 +153,12 @@ export class UserController {
 					currentUser
 				);
 			} catch (error) {
-				this.logger.fatal('Error uploading resume:', error.message);
-				throw new InternalServerError(
-					'Something is wrong! Unable to upload at the moment!'
-				);
+        this.logger.fatal('Error uploading resume:', {err: error});
+				if (error.code === 429)
+					throw new BadRequestError(
+						'You are uploading your resume too fast! Please try again in 5 minutes!'
+					);
+				else throw error;
 			}
 		}
 
