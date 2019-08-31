@@ -153,8 +153,9 @@ export class UserController {
 					currentUser
 				);
 			} catch (error) {
+        this.logger.fatal('Error uploading resume:', {err: error});
 				if (error.code === 429)
-					throw new InternalServerError(
+					throw new BadRequestError(
 						'You are uploading your resume too fast! Please try again in 5 minutes!'
 					);
 				else throw error;
