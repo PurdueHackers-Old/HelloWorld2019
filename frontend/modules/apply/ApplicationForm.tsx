@@ -211,7 +211,6 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 
 			<label className="uk-form-label text-purple" htmlFor="resume">
-				{props.resume && <>&#9989;</>}
 				{props.admin && (
 					<>
 						<a href={props.resume} rel="noopener noreferrer" target="_blank">
@@ -220,7 +219,8 @@ export const ApplicationForm = (props: Props) => {
 						<br />
 					</>
 				)}
-				Resume: <input className="" type="file" name="resume" accept="application/pdf" />
+				Resume (.pdf file):{props.resume && <> &#9989;</>}{' '}
+				<input className="" type="file" name="resume" accept="application/pdf" />
 			</label>
 			<br />
 			<br />
