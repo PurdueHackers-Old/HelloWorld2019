@@ -9,7 +9,7 @@ export const Schedule = () => (
 	>
 		<div className="uk-container-small fullwidth uk-margin-large-bottom">
 			<div className="uk-container-small fullwidth">
-				<h2 className="h1-light text-align-center text-yellow">Location</h2>
+				<h2 className="h1-light text-align-center text-yellow">Schedule</h2>
 			</div>
 			<div
 				style={{
@@ -20,7 +20,7 @@ export const Schedule = () => (
 				}}
 			>
 				<iframe
-					src="https://calendar.google.com/calendar/embed?src=helloworldpurdue%40gmail.com&ctz=America%2FNew_York&dates=20190901/20190930"
+					src="https://calendar.google.com/calendar/embed?src=helloworldpurdue%40gmail.com&ctz=America%2FNew_York"
 					style={{
 						border: 0,
 						position: 'absolute',
