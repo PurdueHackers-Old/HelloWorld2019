@@ -16,6 +16,9 @@ export const ApplyBanner = () => (
 							Apply
 						</a>
 					</Link>
+					<h4 className="h4-purple text-align-center">
+						Applications close September 7th 11:59 PM
+					</h4>
 				</div>
 			</div>
 		</div>
