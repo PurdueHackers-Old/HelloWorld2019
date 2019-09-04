@@ -8,37 +8,12 @@ export const Schedule = () => (
 		style={{ paddingBottom: 0 }}
 	>
 		<div className="uk-container-small fullwidth uk-margin-large-bottom">
-			<div className="uk-container-small fullwidth">
-				<h2 className="h1-light text-align-center text-yellow">Schedule</h2>
+			<h2 className="uk-padding-small h1-light text-align-center text-yellow">Schedule</h2>
+			<div style={{ position: 'relative', overflow: 'hidden' }}>
+				<img src={require(`../../static/images/WorkshopFlyer.jpg`)} />
 			</div>
-			<div
-				style={{
-					position: 'relative',
-					paddingBottom: '75%',
-					height: 0,
-					overflow: 'hidden'
-				}}
-			>
-				<iframe
-					src="https://calendar.google.com/calendar/embed?src=helloworldpurdue%40gmail.com&ctz=America%2FNew_York"
-					style={{
-						border: 0,
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						width: '100%',
-						height: '100%'
-					}}
-					frameBorder="0"
-					scrolling="no"
-				></iframe>
-			</div>
-
 			<hr />
-
-			<div className="uk-container-small fullwidth">
-				<h2 className="h1-light text-align-center text-yellow">Location</h2>
-			</div>
+			<h2 className="uk-padding-small h1-light text-align-center text-yellow">Location</h2>
 			<div uk-grid="" className="uk-grid">
 				<div className="uk-width-2-3@m uk-first-column">
 					<iframe
