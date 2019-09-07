@@ -6,7 +6,7 @@ import { Subscription } from '../models/subscription';
 import { EmailService } from './email.service';
 import { createLogger } from '../utils/logger';
 
-setVapidDetails('https://purduehackers.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_PRIVATE);
+setVapidDetails('https://www.helloworldpurdue.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_PRIVATE);
 
 @Service('notificationService')
 export class NotificationService {
