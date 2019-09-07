@@ -34,7 +34,7 @@ export class EmailService {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
 				? 'http://localhost:5000'
-				: 'https://helloworldpurdue.com';
+				: 'https://www.helloworldpurdue.com';
 
 		return sendGrid.send({
 			templateId: 'd-0bba1a0346c24bd69a46d81d2e950e55',
