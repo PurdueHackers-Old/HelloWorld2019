@@ -11,7 +11,7 @@ export class EmailService {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
 				? 'http://localhost:5000'
-				: 'https://purduehackers.com';
+				: 'https://www.helloworldpurdue.com';
 
 		sendGrid.send({
 			templateId: 'd-f534db9ac5df4fa5a0dc273095582e9d',
@@ -34,7 +34,7 @@ export class EmailService {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
 				? 'http://localhost:5000'
-				: 'https://purduehackers.com';
+				: 'https://helloworldpurdue.com';
 
 		return sendGrid.send({
 			templateId: 'd-0bba1a0346c24bd69a46d81d2e950e55',
