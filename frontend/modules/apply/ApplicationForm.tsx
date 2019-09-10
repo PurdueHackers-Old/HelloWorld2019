@@ -211,7 +211,7 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 
 			<label className="uk-form-label text-purple" htmlFor="resume">
-				{props.admin && (
+				{props.admin && props.resume && (
 					<>
 						<a href={props.resume} rel="noopener noreferrer" target="_blank">
 							View Here{' '}
