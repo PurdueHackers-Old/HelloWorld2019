@@ -75,7 +75,7 @@ export class EmailService {
 	}
 
 	sendAcceptanceEmails(users: UserDto[]) {
-		return this.sendMassEmail('d-a3fbf20d2b6e4405bc3384c208eaa5ed', users);
+		return this.sendMassEmail('d-316e8d8337dc460eb12148c82a51ba86', users);
 	}
 
 	sendRejectedEmails(users: UserDto[]) {
@@ -83,7 +83,7 @@ export class EmailService {
 	}
 
 	sendWaitlistedEmails(users: UserDto[]) {
-		return this.sendMassEmail('d-3ef018711e9645e6b841317f77aaa36c', users);
+		return this.sendMassEmail('d-29fa0a4a1e064e7383afadc49062273c', users);
 	}
 
 	private sendMassEmail(templateId: string, users: UserDto[]) {
