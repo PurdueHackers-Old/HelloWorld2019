@@ -10,14 +10,29 @@ export class SlackService {
 	logger = createLogger(this);
 
 	async postMessage(announcement: IAnnouncementModel) {
-		const { data } = await axios.get('https://slack.com/api/chat.postMessage', {
+		let { data } = await axios.get('https://slack.com/api/chat.postMessage', {
 			params: {
 				token: CONFIG.SLACK_TOKEN,
 				channel: CONFIG.SLACK_CHANNEL_ID,
 				text: announcement.body
 			}
 		});
-		if (!data.ok) throw new InternalServerError(data.error);
+		if (!data.ok) {
+			this.logger.fatal('Error sending slack message:', data);
+			throw new InternalServerError(data.error);
+		}
+
+		({ data } = await axios.get('https://slack.com/api/chat.postMessage', {
+			params: {
+				token: CONFIG.SLACK_TOKEN,
+				channel: 'CK688GXTL',
+				text: announcement.body
+			}
+		}));
+		if (!data.ok) {
+			this.logger.fatal('Error sending slack message:', data);
+			throw new InternalServerError(data.error);
+		}
 		announcement.slackTS = data.ts;
 		await announcement.save();
 		return announcement;
