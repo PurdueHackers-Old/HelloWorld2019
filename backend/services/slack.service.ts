@@ -39,15 +39,30 @@ export class SlackService {
 	}
 
 	async removeMessage(announcement: IAnnouncementModel) {
-		const { data } = await axios.get('https://slack.com/api/chat.delete', {
+		let { data } = await axios.get('https://slack.com/api/chat.delete', {
 			params: {
 				token: CONFIG.SLACK_TOKEN,
 				channel: CONFIG.SLACK_CHANNEL_ID,
 				ts: announcement.slackTS
 			}
 		});
-		if (!data.ok && data.error !== 'message_not_found')
+		if (!data.ok && data.error !== 'message_not_found') {
+			this.logger.fatal('Error deleting slack message:', data);
 			throw new InternalServerError(data.error);
+		}
+
+		({ data } = await axios.get('https://slack.com/api/chat.delete', {
+			params: {
+				token: CONFIG.SLACK_TOKEN,
+				channel: 'CK688GXTL',
+				ts: announcement.slackTS
+			}
+		}));
+		if (!data.ok && data.error !== 'message_not_found') {
+			this.logger.fatal('Error deleting slack message:', data);
+			throw new InternalServerError(data.error);
+		}
+
 		return announcement;
 	}
 }

@@ -3,7 +3,7 @@ export const isSWSupported = () =>
 
 const register = async () => navigator.serviceWorker.register('/service-worker.js');
 
-export const requestNotificationPermission = async () => window.Notification.requestPermission();
+export const requestNotificationPermission = async () => (window as any).Notification.requestPermission();
 
 export const registerServiceWorker = async () => {
 	if (!isSWSupported()) throw new Error('Service worker not supported');

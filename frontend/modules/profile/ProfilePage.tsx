@@ -7,7 +7,7 @@ import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
 import { getOwnApplication } from '../../api';
 import Link from 'next/link';
-import { requestNotificationPermission } from '../../utils/service-worker';
+import { requestNotificationPermission, isSWSupported } from '../../utils/service-worker';
 
 interface Props {
 	email: string;
@@ -29,8 +29,13 @@ const Profile = ({ email }: Props) => {
 	}, [loading]);
 
 	const onNotifcationClick = async () => {
+		if (!isSWSupported()) return;
 		const permission = await requestNotificationPermission();
 		if (permission !== 'granted') console.error('Permission not granted for notifications');
+		if (window.navigator.serviceWorker && window.navigator.serviceWorker.controller)
+			window.navigator.serviceWorker.controller.postMessage({
+				action: 'subscriptionAdded'
+			});
 	};
 
 	if (loading) return <span>Loading...</span>;
