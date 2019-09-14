@@ -98,5 +98,5 @@ export const Faq = () => (
 				</div>
 			</div>
 		</div>
-	</div>
+	</div >
 );

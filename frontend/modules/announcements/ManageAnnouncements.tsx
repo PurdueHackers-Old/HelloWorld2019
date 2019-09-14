@@ -57,8 +57,8 @@ const ManageAnnouncements = ({
 	};
 
 	return (
-		<div>
-			<h3>Manage Announcements</h3>
+		<div className="uk-section bg-light uk-section-default uk-flex hero fullscreen">
+			<h3 className="text-yellow">Manage Announcements</h3>
 			{announcements &&
 				announcements.map(announcement => (
 					<Announcement

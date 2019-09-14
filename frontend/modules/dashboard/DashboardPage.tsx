@@ -33,40 +33,57 @@ export const Dashboard = ({ flashError }: Props) => {
 
 	if (state.loading) return <span>Loading...</span>;
 	return (
-		<div>
-			<h3>Dashboard</h3>
+		<div id="background-announcement" className="uk-section bg-purple-gradient uk-section-default uk-flex hero fullscreen">
+			<h1
+				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
+			>
+				Dashboard
+			</h1>
+			{/* <div style={{ height: '300px' }}></div> */}
 			<br />
 			<br />
-			Application Stats:
+			<div className="uk-container text-yellow">
+				Application Stats:
 			<br />
-			Total: {state.total}
+				Total: {state.total}
+				<br />
+				Pending: {state.pending}
+				<br />
+				Accepted: {state.accepted}
+				<br />
+				Rejected: {state.rejected}
+				<br />
+				Waitlist: {state.waitlist}
+				<br />
+				<br />
+				Admin Actions:
 			<br />
-			Pending: {state.pending}
-			<br />
-			Accepted: {state.accepted}
-			<br />
-			Rejected: {state.rejected}
-			<br />
-			Waitlist: {state.waitlist}
-			<br />
-			<br />
-			Admin Actions:
-			<br />
-			<Link href="/applications" prefetch>
-				<a>Applications</a>
-			</Link>
-			<br />
-			<Link href="/announcements/new">
-				<a>Create Announcement</a>
-			</Link>
-			<br />
-			<Link href="/announcements/manage">
-				<a>Manage Announcements</a>
-			</Link>
-			<br />
-			<Link href="/checkin">
-				<a>Check In</a>
-			</Link>
+				<div className="uk-container">
+					<div className="uk-button-ancmnt">
+						<Link href="/applications" prefetch>
+							<a>Applications</a>
+						</Link>
+					</div>
+					<br />
+					<div className="uk-button-ancmnt">
+						<Link href="/announcements/new">
+							<a>Create Announcement</a>
+						</Link>
+					</div>
+					<br />
+					<div className="uk-button-ancmnt">
+						<Link href="/announcements/manage">
+							<a>Manage Announcements</a>
+						</Link>
+					</div>
+					<br />
+					<div className="uk-button-ancmnt">
+						<Link href="/checkin">
+							<a>Check In</a>
+						</Link>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 };
