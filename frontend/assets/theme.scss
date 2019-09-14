@@ -317,6 +317,11 @@ table {
 	color: white;
 }
 
+.uk-button-ancmnt a {
+	text-decoration: none;
+	color: black;
+}
+
 .uk-button-ancmnt {
 	font-family: 'krungthep', sans-serif !important;
 	border: none;
@@ -336,6 +341,7 @@ table {
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
 	color: #7233ad;
+	margin-top: 10px;
 }
 
 .uk-button-apply {
@@ -398,6 +404,11 @@ table {
 	color: #f39c12;
 	border-radius: 0px;
 	transition: ease-in-out 1s;
+}
+
+.uk-button-ancmnt:hover a {
+	color: white;
+	transition: all 0.3s;
 }
 
 .uk-button-apply:hover {
@@ -820,4 +831,53 @@ table {
 
 .uk-dark {
 	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.text-white {
+	color: white; 
+}
+
+.label {
+	background: #222;
+	margin: 0;
+	border-radius: 20px;
+	width: -webkit-fit-content;
+	padding-right: 10px; 
+	padding-left: 10px; 
+	padding-bottom: 5px;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.label-Events {
+	background: red;
+}
+.label-Food {
+	background: rgb(255, 230, 0);
+	color: black;
+}
+.label-Miscellaneous {
+	background: black;
+}
+.label-Sponsor, .label-Judging {
+	background: green;
+}
+.label-Logistics {
+	background: #f39c12;
+}
+.margin-small {
+	margin-top: 10px !important;
+}
+.timestamp {
+	position: absolute;
+	right: 1em;
+	margin-left: 1rem; 
+}
+.qr {
+	margin: 10px;
+	max-width: 500px;
+	max-height: 500px;
+}
+
+.bg-light {
+	background: #9555d1;
 }
