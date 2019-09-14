@@ -25,7 +25,7 @@ export const ApplyBanner = () => (
 						className="uk-button uk-button-large uk-margin-top uk-align-center"
 						rel="noopener noreferrer"
 						target="_blank"
-						href="https://helloworld-helpq.herokuapp.com/"
+						href="http://helpq.helloworldpurdue.com"
 					>
 						HelpQ
 					</a>
