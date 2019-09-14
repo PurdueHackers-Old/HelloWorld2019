@@ -45,6 +45,7 @@ export default (props: Props) => {
 		<div
 			className="uk-card  uk-card-body bg-purple-gradient uk-margin-small-left 
 			uk-margin-small-right uk-margin-small-left uk-margin-medium-bottom ancmnt-card uk-padding-small fullwidth"
+			style={{borderRadius: '20px'}}
 		>
 			<div className="uk-flex">
 				<div className={`text-white label label-${labels}`}>{labels}</div>
