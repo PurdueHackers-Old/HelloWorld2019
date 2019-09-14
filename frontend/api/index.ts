@@ -33,6 +33,22 @@ export const resetPassword = async (password: string, passwordConfirm: string, t
 };
 
 // User Actions
+export const getAllUsers = async (ctx?: IContext, params?) => {
+	try {
+		const token = getToken(ctx);
+		const {
+			data: { response }
+		} = await api.get(`/users`, {
+			params,
+			headers: { Authorization: `Bearer ${token}` }
+		});
+		const users: IUser[] = response;
+		return users;
+	} catch (error) {
+		throw error.response ? error.response.data : error;
+	}
+};
+
 export const getUserApplication = async (id: string, ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
@@ -51,6 +67,7 @@ export const getUserApplication = async (id: string, ctx?: IContext) => {
 export const getOwnApplication = async (ctx?: IContext) => {
 	try {
 		const token = getToken(ctx);
+		if (!token) return null;
 		const id = (decode(token) as any)._id;
 		return getUserApplication(id, ctx);
 	} catch (error) {
