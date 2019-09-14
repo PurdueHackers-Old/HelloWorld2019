@@ -36,18 +36,23 @@ const AdminActions = ({ _id, released, admin: { onRelease, onDelete } }: Props) 
 export default (props: Props) => {
 	const { _id, title, body, labels, createdAt, released, admin,} = props;
 	let date = new Date(createdAt)
+	let hours = date.getHours()
+	if (hours >= 12) {
+		hours = hours - 12
+	}
 
 	return (
 		<div
 			className="uk-card  uk-card-body bg-purple-gradient uk-margin-small-left 
 			uk-margin-small-right uk-margin-small-left uk-margin-medium-bottom ancmnt-card uk-padding-small fullwidth"
+			style={{borderRadius: '20px'}}
 		>
 			<div className="uk-flex">
 				<div className={`text-white label label-${labels}`}>{labels}</div>
 				<div className="uk-align-right timestamp text-white label">
-					{`${date.getHours() < 10 ? "0" + date.getHours(): date.getHours()}:
-					 	${date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}:
-						${date.getSeconds() < 10 ? "0" + date.getSeconds(): date.getSeconds()}`}
+					{`${hours < 10 ? "0" + hours: hours}:
+					 	${date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}
+						${date.getHours() < 12 ? "AM": "PM"}`}
 				</div>
 			</div>
 			<h3 className="uk-card-title text-yellow margin-small">{title}</h3>

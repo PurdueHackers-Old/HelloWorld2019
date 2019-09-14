@@ -881,3 +881,13 @@ table {
 .bg-light {
 	background: #9555d1;
 }
+
+#ancmnt-pad {
+	height: 25em;
+}
+
+@media(max-width: 800px) {
+	#ancmnt-pad {
+		height: 5em;
+	}
+}

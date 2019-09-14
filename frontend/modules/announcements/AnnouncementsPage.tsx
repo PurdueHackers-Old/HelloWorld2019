@@ -52,10 +52,11 @@ export const Announcements = ({ announcements: ancmnts }: Props) => {
 					backgroundImage: `url(${require('../../static/images/DefaultForeground.png')})`,
 					backgroundPosition: 'center top',
 					backgroundSize: 'cover',
-					height: '3000px'
+					height: '3000px',
+					marginTop: '2em',
 				}}
 			>
-				<div style={{ height: '380px' }}></div>
+				<div id="ancmnt-pad" ></div>
 				<div className="uk-section uk-section uk-flex uk-flex-around uk-flex-wrap">
 					{announcements.map(announcement => (
 						<Announcement key={announcement._id} {...announcement} />
