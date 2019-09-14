@@ -23,19 +23,19 @@ const AccountDropdown = ({ token }: { token?: string }) =>
 			</li>
 		</>
 	) : (
-		<>
-			<li>
-				<Link href="/login">
-					<a className="text-purple-link">Login</a>
-				</Link>
-			</li>
-			<li>
-				<Link href="/signup">
-					<a className="text-purple-link">Signup</a>
-				</Link>
-			</li>
-		</>
-	);
+			<>
+				<li>
+					<Link href="/login">
+						<a className="text-purple-link">Login</a>
+					</Link>
+				</li>
+				<li>
+					<Link href="/signup">
+						<a className="text-purple-link">Signup</a>
+					</Link>
+				</li>
+			</>
+		);
 
 const ManageDropdown = ({ role }: { role?: Role }) => {
 	if (!role || !roleMatches(role, Role.EXEC)) return null;
@@ -103,8 +103,8 @@ const Navigation = ({ token, role }: Props) => {
 							</Link>
 						</li>
 						<li>
-							<Link href="/#sponsors">
-								<a className="text-yellow">Sponsors</a>
+							<Link href="/announcements">
+								<a className="text-yellow">Announcements</a>
 							</Link>
 						</li>
 						{!role || !roleMatches(role, Role.EXEC) ? null : (
