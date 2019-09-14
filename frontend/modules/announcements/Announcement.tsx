@@ -37,8 +37,10 @@ export default (props: Props) => {
 	const { _id, title, body, labels, createdAt, released, admin,} = props;
 	let date = new Date(createdAt)
 	let hours = date.getHours()
-	if (hours >= 12) {
+	if (hours > 12) {
 		hours = hours - 12
+	} else if (hours === 0) {
+		hours = 12
 	}
 
 	return (
