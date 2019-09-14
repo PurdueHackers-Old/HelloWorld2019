@@ -65,8 +65,8 @@ describe('Suite: /api/users -- Integration', () => {
 				status
 			} = await request.get('/api/users').auth(user.token, { type: 'bearer' });
 			expect(status).toEqual(200);
-			expect(response.users).toHaveLength(users.length);
-			response.users.forEach(u => {
+			expect(response).toHaveLength(users.length);
+			response.forEach(u => {
 				expect(u).not.toHaveProperty('password');
 				expect(u).toHaveProperty('_id');
 				const foundUser = users.find(val => new ObjectId(val.user._id).equals(u._id));
