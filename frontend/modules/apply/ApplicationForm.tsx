@@ -20,15 +20,11 @@ interface Props extends IApplication {
 
 export const ApplicationForm = (props: Props) => {
 	return (
-<<<<<<< HEAD
-		<form className="uk-fieldset uk-card uk-card-body uk-form" onSubmit={props.onSubmit} ref={props.formRef}>
-=======
 		<form
 			className="uk-fieldset uk-card uk-card-body uk-form"
 			onSubmit={props.onSubmit}
 			ref={props.formRef}
 		>
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 			<div style={{ height: '380px' }}></div>
 			<label className="uk-form-label text-purple">Name: {props.user.name}</label>
 			<div className="uk-margin"></div>
@@ -106,9 +102,6 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 			<label className="uk-form-label text-purple" htmlFor="major">
 				Major{' '}
-<<<<<<< HEAD
-				<select disabled={props.disabled} className="uk-select" required name="major" defaultValue={props.major}>
-=======
 				<select
 					disabled={props.disabled}
 					className="uk-select"
@@ -116,7 +109,6 @@ export const ApplicationForm = (props: Props) => {
 					name="major"
 					defaultValue={props.major}
 				>
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 					{Object.values(Major).map(major => (
 						<option value={major} key={major}>
 							{major}
@@ -219,9 +211,6 @@ export const ApplicationForm = (props: Props) => {
 			<div className="uk-margin"></div>
 
 			<label className="uk-form-label text-purple" htmlFor="resume">
-<<<<<<< HEAD
-				{props.resume && <>&#9989;</>} Resume:{' '}
-=======
 				{props.admin && props.resume && (
 					<>
 						<a href={props.resume} rel="noopener noreferrer" target="_blank">
@@ -231,7 +220,6 @@ export const ApplicationForm = (props: Props) => {
 					</>
 				)}
 				Resume (.pdf file):{props.resume && <> &#9989;</>}{' '}
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 				<input className="" type="file" name="resume" accept="application/pdf" />
 			</label>
 			<br />
