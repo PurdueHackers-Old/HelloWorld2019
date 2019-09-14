@@ -9,13 +9,6 @@ export const Schedule = () => (
 	>
 		<div className="uk-container-small fullwidth uk-margin-large-bottom">
 			<h2 className="uk-padding-small h1-light text-align-center text-yellow">
-				Workshop Schedule
-			</h2>
-			<div style={{ position: 'relative', overflow: 'hidden' }}>
-				<img src={require(`../../static/images/WorkshopFlyer.jpg`)} />
-			</div>
-			<hr />
-			<h2 className="uk-padding-small h1-light text-align-center text-yellow">
 				Day-Of Schedule
 			</h2>
 			<div style={{ position: 'relative', overflow: 'hidden' }}>

@@ -35,7 +35,11 @@ export class UserController {
 
 	@Get('/')
 	@Authorized([Role.EXEC])
-	async getAll(@QueryParam('sortBy') sortBy?: string, @QueryParam('order') order?: number) {
+	async getAll(
+		@QueryParam('sortBy') sortBy?: string,
+		@QueryParam('order') order?: number,
+		@QueryParam('filter') filter: any = {}
+	) {
 		order = order === 1 ? 1 : -1;
 		sortBy = sortBy || 'createdAt';
 
@@ -45,12 +49,12 @@ export class UserController {
 		});
 		if (!contains) sortBy = 'createdAt';
 
-		const results = await User.find()
+		const results = await User.find(filter)
 			.sort({ [sortBy]: order })
 			.lean()
 			.exec();
 
-		return { users: results };
+		return results;
 	}
 
 	@Get('/:id/application')
