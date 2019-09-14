@@ -33,6 +33,7 @@ const Admin = ({
 }: Props) => {
 	const [status, setStatus] = useState(applicationsStatus);
 	const [pub, setPub] = useState(`${applicationsPublic}`);
+	const [sentEmails, setSentEmails] = useState(emailsSent);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -41,6 +42,7 @@ const Admin = ({
 				const globals = await fetchGlobals();
 				setStatus(globals.applicationsStatus);
 				setPub(`${globals.applicationsPublic}`);
+				setSentEmails(globals.emailsSent);
 			} catch (error) {
 				clear();
 				flashError('Couldnt load globals');
@@ -126,7 +128,7 @@ const Admin = ({
 			</form>
 			<br />
 			<h3>Mass Emails Sent:</h3>
-			{emailsSent ? formatDate(emailsSent) : 'Not Yet!'}
+			{sentEmails ? formatDate(sentEmails) : 'Not Yet!'}
 			<br />
 			<br />
 			<button onClick={onSendMassEmails}>Send Emails</button>

@@ -77,6 +77,7 @@ export default class Server {
 				this.app.use('/service-worker.js', express.static('frontend/service-worker.js'));
 			}
 			this.app.use('/manifest.json', express.static('frontend/static/manifest.json'));
+			this.app.use('/robots.txt', express.static('frontend/static/robots.txt'));
 			this.app.get('*', (req, res) => {
 				return handle(req, res);
 			});
@@ -106,7 +107,12 @@ export default class Server {
 		if (CONFIG.REDIRECT_HTTPS) this.app.use(yes());
 		if (CONFIG.NODE_ENV !== 'test') {
 			const logFormat = CONFIG.NODE_ENV !== 'production' ? 'dev' : 'tiny';
-			this.app.use(logger(logFormat, { skip: r => r.url.startsWith('/_next') }));
+			this.app.use(
+				logger(logFormat, {
+					skip: r =>
+						r.originalUrl.startsWith('/_next/') || r.originalUrl.startsWith('/static/')
+				})
+			);
 		}
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));

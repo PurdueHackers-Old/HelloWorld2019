@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.scss'
+import './index.scss';
 
 export const Schedule = () => (
 	<div
@@ -8,13 +8,25 @@ export const Schedule = () => (
 		style={{ paddingBottom: 0 }}
 	>
 		<div className="uk-container-small fullwidth uk-margin-large-bottom">
-			{/* <div className="subheader-inverted  text-align-center"><h2 className="h2-light">Schedule</h2></div> */}
-			<div className="uk-container-small fullwidth">
-				<h2 className="h1-light text-align-center text-yellow">Schedule</h2>
+			<h2 className="uk-padding-small h1-light text-align-center text-yellow">
+				Workshop Schedule
+			</h2>
+			<div style={{ position: 'relative', overflow: 'hidden' }}>
+				<img src={require(`../../static/images/WorkshopFlyer.jpg`)} />
 			</div>
+			<hr />
+			<h2 className="uk-padding-small h1-light text-align-center text-yellow">
+				Day-Of Schedule
+			</h2>
+			<div style={{ position: 'relative', overflow: 'hidden' }}>
+				<img src={require(`../../static/images/Day_Sched.jpg`)} />
+			</div>
+			<hr />
+			<h2 className="uk-padding-small h1-light text-align-center text-yellow">Location</h2>
 			<div uk-grid="" className="uk-grid">
 				<div className="uk-width-2-3@m uk-first-column">
 					<iframe
+						title="Location Map"
 						allowFullScreen
 						frameBorder="0"
 						height="300px"
@@ -25,13 +37,15 @@ export const Schedule = () => (
 				</div>
 				<div className="uk-width-1-3@m">
 					<p className="p-large-yellow">
-						<b>Date:-</b>
+						<b>Date:</b>
 					</p>
-					<p className="p-large-yellow"> September 15 - 16 </p>
+					<p className="p-large-yellow"> September 14 - 15 </p>
+					<hr />
 					<p className="p-large-yellow">
-						<b>Location:-</b>
+						<b>Location: </b>
 					</p>
-					<p className="p-large-yellow"> Purdue University </p>
+					<p className="p-large-yellow">Wilmeth Active Learning Center</p>
+					<hr />
 				</div>
 			</div>
 		</div>

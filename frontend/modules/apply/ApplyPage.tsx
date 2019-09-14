@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent, useState, useEffect, useRef } from 'react';
+import React, { FormEvent, useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { sendErrorMessage, sendSuccessMessage, clearFlashMessages } from '../../redux/actions';
 import { IContext, IStoreState, IUser } from '../../@types';
@@ -86,6 +86,7 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 	if (state.loading) return <span>Loading...</span>;
 
 	return (
+<<<<<<< HEAD
 		<div className="bg-purple-gradient uk-section" style={{ minHeight: '100vh', paddingBottom: 0 }}>
 			<h1 id="apply-heading" className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top">Apply Page</h1>
 			{/* <br /> */}
@@ -112,6 +113,53 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 					</>
 				)}
 				{state.closed && <h2 className="text-align-center" style={{ color: 'red' }}>APPLICATIONS ARE CLOSED!</h2>}
+=======
+		<div
+			className="bg-purple-gradient uk-section fullscreen"
+			style={{ minHeight: '100vh', paddingBottom: 0 }}
+		>
+			<h1
+				id="apply-heading"
+				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
+			>
+				Apply
+			</h1>
+			<div
+				className="foreground-announcement"
+				style={{
+					backgroundImage: `url(${require('../../static/images/DefaultForeground.png')})`,
+
+					backgroundPosition: 'center top',
+					backgroundSize: 'cover'
+				}}
+			>
+				{state.updatedAt && (
+					<div className="uk-margin-large-top uk-margin-large-left">
+						<br />
+						<div className="text-yellow">
+							Last Updated:
+							<br />
+							{formatDate(state.updatedAt)}
+						</div>
+						<br />
+					</div>
+				)}
+				{state.statusPublic && (
+					<div className="uk-margin-large-left">
+						<div className="text-yellow">
+							Status:
+							<br />
+							{state.statusPublic}
+						</div>
+						<br />
+					</div>
+				)}
+				{state.closed && (
+					<h2 className="text-align-center" style={{ color: 'red' }}>
+						APPLICATIONS ARE CLOSED!
+					</h2>
+				)}
+>>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 				<ApplicationForm
 					{...(state as any)}
 					formRef={formRef}
@@ -125,7 +173,11 @@ const Apply = ({ user, flashError, flashSuccess, clear }: Props) => {
 };
 
 Apply.getInitialProps = async (ctx: IContext) => {
+<<<<<<< HEAD
 	if (redirectIfNotAuthenticated('/login', ctx, { msg: 'You must login to apply' }))
+=======
+	if (redirectIfNotAuthenticated('/signup', ctx, { msg: 'You must login to apply' }))
+>>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 		return endResponse(ctx);
 
 	const { user } = ctx.store.getState().sessionState;

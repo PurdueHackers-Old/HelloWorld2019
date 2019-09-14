@@ -80,16 +80,18 @@ const _self = self;
  */
 // This will be called only once when the service worker is installed for first time.
 _self.addEventListener('install', event => {
-	console.log('[Service Worker]: Installing service worker');
-	const promiseChain = createSubscription()
-		.then(subscription => saveSubscription(subscription))
-		.then(() => console.log('[Service Worker]: Successfully installed service worker'))
-		.catch(err => {
-			console.error('[Service Worker]: Error creating subscription:', err.message);
-			return self.skipWaiting();
-		});
+	// console.log('[Service Worker]: Installing service worker');
+	// const promiseChain = createSubscription()
+	// 	.then(subscription => saveSubscription(subscription))
+	// 	.then(() => console.log('[Service Worker]: Successfully installed service worker'))
+	// 	.catch(err => {
+	// 		console.error('[Service Worker]: Error creating subscription:', err.message);
+	// 		return self.skipWaiting();
+	// 	});
 
-	event.waitUntil(promiseChain);
+	// event.waitUntil(promiseChain);
+
+	console.log('[Service Worker]: Successfully installed service worker');
 });
 
 _self.addEventListener('push', event => {
@@ -133,6 +135,22 @@ _self.addEventListener('notificationclick', event => {
 	event.waitUntil(promiseChain);
 });
 
+_self.addEventListener('message', event => {
+	const { action } = event.data;
+	if (action === 'subscriptionAdded') {
+		console.log('[Service Worker]: Creating subscription');
+		const promiseChain = createSubscription()
+			.then(subscription => saveSubscription(subscription))
+			.then(() => console.log('[Service Worker]: Successfully created subscription'))
+			.catch(err => {
+				console.error('[Service Worker]: Error creating subscription:', err.message);
+				return self.skipWaiting();
+			});
+
+		event.waitUntil(promiseChain);
+	}
+});
+
 /**
  * Workbox Caching
  */
@@ -171,7 +189,7 @@ const initializeWorkboxCaching = _workbox => {
 };
 
 try {
-	if (workbox) {
+	if (typeof workbox !== 'undefined') {
 		initializeWorkboxCaching(workbox);
 	}
 } catch (error) {

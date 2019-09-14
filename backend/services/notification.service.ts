@@ -6,7 +6,7 @@ import { Subscription } from '../models/subscription';
 import { EmailService } from './email.service';
 import { createLogger } from '../utils/logger';
 
-setVapidDetails('https://purduehackers.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_PRIVATE);
+setVapidDetails('https://www.helloworldpurdue.com', CONFIG.VAPID_PUBLIC, CONFIG.VAPID_PRIVATE);
 
 @Service('notificationService')
 export class NotificationService {
@@ -34,7 +34,7 @@ export class NotificationService {
 				await sendNotification(subscription.content, content);
 			} catch (error) {
 				if (!(error instanceof WebPushError)) {
-					this.logger.emerg('Error sending push notification:', error);
+					this.logger.fatal('Error sending push notification:', { err: error });
 					this.emailService
 						.sendErrorEmail(error)
 						.then(() => this.logger.info('Email sent'))

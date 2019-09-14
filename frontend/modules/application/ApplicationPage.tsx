@@ -5,7 +5,8 @@ import {
 	redirectIfNotAuthenticated,
 	redirect,
 	userMatches,
-	extractUser
+	extractUser,
+	hasPermission
 } from '../../utils/session';
 import { err, endResponse } from '../../utils';
 import { Role } from '../../../shared/user.enums';
@@ -61,6 +62,7 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 	};
 
 	const disabled = !userMatches(user, application.user._id);
+	const admin = hasPermission(user, Role.EXEC);
 	return (
 		<div>
 			<h3>Application Page</h3>
@@ -81,7 +83,13 @@ const AppPage = ({ application, user, flashError, flashSuccess, clear }: Props) 
 			</form>
 			<br />
 			<br />
-			<ApplicationForm {...state} formRef={formRef} disabled={disabled} onSubmit={onSubmit} />
+			<ApplicationForm
+				{...state}
+				formRef={formRef}
+				disabled={disabled}
+				admin={admin}
+				onSubmit={onSubmit}
+			/>
 		</div>
 	);
 };

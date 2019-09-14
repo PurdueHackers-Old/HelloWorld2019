@@ -14,7 +14,8 @@ import {
 	Put,
 	QueryParam,
 	Req,
-	UnauthorizedError
+	UnauthorizedError,
+	InternalServerError
 } from 'routing-controllers';
 import { Inject } from 'typedi';
 import { ApplicationsStatus } from '../../shared/globals.enums';
@@ -152,8 +153,12 @@ export class UserController {
 					currentUser
 				);
 			} catch (error) {
-				this.logger.emerg('Error uploading resume:', error);
-				throw new BadRequestError('Something is wrong! Unable to upload at the moment!');
+				this.logger.fatal('Error uploading resume:', { err: error });
+				if (error.code === 429)
+					throw new BadRequestError(
+						'You are uploading your resume too fast! Please try again in 5 minutes!'
+					);
+				else throw error;
 			}
 		}
 

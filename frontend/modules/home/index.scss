@@ -1,5 +1,5 @@
 .container-fluid {
-	background-image: url('/static/images/HomeBackground.jpg');
+	background-image: url('../../static/images/HomeBackground.jpg');
 	background-position: center top;
 	/*    Parallax effect   */
 	background-attachment: fixed;
@@ -7,7 +7,7 @@
 }
 
 .foreground {
-	background-image: url('/static/images/HomeForeground.png');
+	background-image: url('../../static/images/HomeForeground.png');
 	background-position: center;
 	height: 2500px;
 }
@@ -76,14 +76,15 @@
 }
 
 #banner {
-	background-image: url('/static/images/HomeBackground.jpg');
-	background-repeat: no;
+	background-image: url('../../static/images/HomeBackground\ copy.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
 	background-position: center top;
 	background-attachment: fixed;
 }
 
 @media (max-width: 636px) {
 	#banner {
-		background-image: url('/static/images/HomeBackground1080x2102.jpg');
+		background-image: url('../../static/images/HomeBackground1080x2102.jpg');
 	}
 }

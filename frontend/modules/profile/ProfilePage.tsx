@@ -7,6 +7,7 @@ import { Status } from '../../../shared/app.enums';
 import { endResponse } from '../../utils';
 import { getOwnApplication } from '../../api';
 import Link from 'next/link';
+import { requestNotificationPermission, isSWSupported } from '../../utils/service-worker';
 
 interface Props {
 	email: string;
@@ -27,6 +28,16 @@ const Profile = ({ email }: Props) => {
 		fetchData();
 	}, [loading]);
 
+	const onNotifcationClick = async () => {
+		if (!isSWSupported()) return;
+		const permission = await requestNotificationPermission();
+		if (permission !== 'granted') console.error('Permission not granted for notifications');
+		if (window.navigator.serviceWorker && window.navigator.serviceWorker.controller)
+			window.navigator.serviceWorker.controller.postMessage({
+				action: 'subscriptionAdded'
+			});
+	};
+
 	if (loading) return <span>Loading...</span>;
 	return (
 		<div
@@ -35,20 +46,32 @@ const Profile = ({ email }: Props) => {
 			style={{ paddingBottom: 0, minHeight: '100vh' }}
 		>
 			<div className="uk-container-small fullwidth uk-margin-large-bottom">
-				<h2 className="h1-light text-yellow">Profile Page</h2>
-				<Link href="/profile/edit">
+				<h2 className="h1-light text-yellow">Profile</h2>
+				<Link href="/apply">
 					<a>
-						<h4>Edit Profile</h4>
+						<h4>View Application</h4>
 					</a>
 				</Link>
+
+				<a
+					className="uk-button uk-button-large uk-margin-top uk-align-center"
+					onClick={onNotifcationClick}
+				>
+					Enable Push Notifications
+				</a>
+
 				<h4>Application Status:</h4>
 				{!application ? (
 					<div>You have not applied yet!</div>
 				) : application.statusPublic !== Status.ACCEPTED ? (
-					<div>{application.statusPublic}</div>
+					<u>
+						<h4 style={{ color: 'orange' }}>{application.statusPublic}</h4>
+					</u>
 				) : (
 							<div>
-								<b>{application.statusPublic}</b>
+								<u>
+									<h4 style={{ color: 'palegreen' }}>{application.statusPublic}</h4>
+								</u>
 								<h4>QR Code:</h4>
 								<QRCode email={email} />
 							</div>

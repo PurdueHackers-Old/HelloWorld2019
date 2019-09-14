@@ -67,12 +67,12 @@ export class ApplicationDto {
 
 	@IsNotEmpty({ message: 'Please provide an answer' })
 	@MinLength(1, { message: 'Please provide an answer' })
-	@MaxLength(250, { message: 'Your answer must be less than 250 characters' })
+	@MaxLength(500, { message: 'Your answer must be less than 500 characters' })
 	answer1: string;
 
 	@IsNotEmpty()
 	@MinLength(1, { message: 'Please provide an answer' })
-	@MaxLength(250, { message: 'Your answer must be less than 250 characters' })
+	@MaxLength(500, { message: 'Your answer must be less than 500 characters' })
 	answer2: string;
 
 	resume: string;

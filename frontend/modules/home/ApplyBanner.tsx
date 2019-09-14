@@ -11,11 +11,32 @@ export const ApplyBanner = () => (
 				<hr />
 				<h2 className="h2-purple text-align-center">Reach new heights.</h2>
 				<div className="uk-container-large fullwidth" style={{ textAlign: 'center' }}>
-					<Link href="/apply">
+					{/* <Link href="/apply">
 						<a className="uk-button uk-button-large uk-margin-top uk-align-center">
 							Apply
 						</a>
-					</Link>
+					</Link> */}
+					<h4 className="h4-purple text-align-center">Applications are now closed!</h4>
+					<a
+						className="uk-button uk-button-large uk-margin-top uk-align-center"
+						rel="noopener noreferrer"
+						target="_blank"
+						href="http://bit.ly/hw2019rsvp"
+					>
+						RSVP
+					</a>
+					<a
+						style={{ border: 0 }}
+						className="uk-button uk-button-large uk-margin-top uk-align-center"
+					></a>
+					<a
+						className="uk-button uk-button-large uk-margin-top uk-align-center"
+						rel="noopener noreferrer"
+						target="_blank"
+						href="https://bit.ly/helloworld2019slack"
+					>
+						Slack
+					</a>
 				</div>
 			</div>
 		</div>

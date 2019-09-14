@@ -28,7 +28,10 @@ const AppsPage = ({ flashError, clear }: Props) => {
 		try {
 			clear();
 			setState(prev => ({ ...prev, loading: true }));
-			const response = await getApplications(null, params);
+			let response = (await getApplications(null, params)) || {
+				applications: [],
+				pagination: { total: 0, pageSize: 0, page: 1, pages: 1 }
+			};
 			setState(prev => ({ ...prev, loading: false, ...response }));
 		} catch (error) {
 			setState(prev => ({ ...prev, loading: false }));
@@ -59,7 +62,7 @@ const AppsPage = ({ flashError, clear }: Props) => {
 
 	return (
 		<div>
-			<h3>Applications Page</h3>
+			<h3>Applications</h3>
 			<br />
 			<ApplicationsTable
 				{...state}

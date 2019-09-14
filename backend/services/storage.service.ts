@@ -2,6 +2,7 @@ import CONFIG from '../config';
 import { Storage } from '@google-cloud/storage';
 import { Service } from 'typedi';
 import { UserDto } from '../models/user';
+import { BadRequestError } from 'routing-controllers';
 
 const storage = new Storage({
 	projectId: CONFIG.GC_PROJECT_ID,
@@ -15,12 +16,16 @@ const bucket = storage.bucket(CONFIG.GC_BUCKET);
 
 @Service('storageService')
 export class StorageService {
-	async uploadToStorage(file: Express.Multer.File, folder: string, user: UserDto) {
+	async uploadToStorage(
+		file: Express.Multer.File,
+		folder: 'pictures' | 'resumes',
+		user: UserDto
+	) {
 		if (!file) throw new Error('No image file');
 		else if (folder === 'pictures' && !file.originalname.match(/\.(jpg|jpeg|png|gif)$/i))
 			throw new Error(`File: ${file.originalname} is an invalid image type`);
 		else if (folder === 'resumes' && !file.originalname.match(/\.(pdf)$/i))
-			throw new Error(`File: ${file.originalname} is an invalid image type`);
+			throw new BadRequestError(`File: ${file.originalname} must be a .pdf file`);
 
 		const fileName = `${folder}/${user.email.replace('@', '_')}`;
 		const fileUpload = bucket.file(fileName);
@@ -34,8 +39,7 @@ export class StorageService {
 			});
 
 			blobStream.on('error', error => {
-				console.error('Error uploading file to folder:', folder);
-				// reject(new Error('Something is wrong! Unable to upload at the moment.'));
+				console.error('Error uploading file to folder:', folder, error);
 				reject(error);
 			});
 

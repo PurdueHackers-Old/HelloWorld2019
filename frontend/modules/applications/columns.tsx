@@ -35,6 +35,10 @@ export const columns: Column<IApplication>[] = [
 		filterable: false
 	},
 	{
+		Header: 'Dietary Restrictions',
+		accessor: 'dietaryRestrictions'
+	},
+	{
 		Header: 'Resume',
 		accessor: 'resume',
 		Cell: ({ value }) => <div>{value ? 'Yes' : 'No'}</div>,

@@ -11,7 +11,7 @@ export class EmailService {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
 				? 'http://localhost:5000'
-				: 'https://purduehackers.com';
+				: 'https://www.helloworldpurdue.com';
 
 		sendGrid.send({
 			templateId: 'd-f534db9ac5df4fa5a0dc273095582e9d',
@@ -34,7 +34,7 @@ export class EmailService {
 		const url =
 			CONFIG.NODE_ENV !== 'production'
 				? 'http://localhost:5000'
-				: 'https://purduehackers.com';
+				: 'https://www.helloworldpurdue.com';
 
 		return sendGrid.send({
 			templateId: 'd-0bba1a0346c24bd69a46d81d2e950e55',
@@ -53,16 +53,18 @@ export class EmailService {
 		} as any);
 	}
 
-	sendErrorEmail(error: Error, user?: UserDto) {
+	sendErrorEmail(error: Error) {
 		return sendGrid.send({
 			templateId: 'd-9fbbdf1f9c90423a80d69b83885eefa8',
 			from: `${CONFIG.ORG_NAME} <${CONFIG.EMAIL}>`,
 			to: 'purduehackers@gmail.com',
 			dynamicTemplateData: {
-				timestamp: new Date(Date.now()).toLocaleString(),
+				timestamp: new Date(Date.now()).toLocaleString([], {
+					timeZone: 'America/New_York'
+				}),
+				error,
 				message: error.message.replace(/\n/g, '<br>'),
-				stack: error.stack.replace(/\n/g, '<br>&emsp;'),
-				user
+				stack: error.stack ? error.stack.replace(/\n/g, '<br>&emsp;') : 'No Stack'
 			},
 			mailSettings: {
 				sandboxMode: {
@@ -73,7 +75,7 @@ export class EmailService {
 	}
 
 	sendAcceptanceEmails(users: UserDto[]) {
-		return this.sendMassEmail('d-a3fbf20d2b6e4405bc3384c208eaa5ed', users);
+		return this.sendMassEmail('d-316e8d8337dc460eb12148c82a51ba86', users);
 	}
 
 	sendRejectedEmails(users: UserDto[]) {
@@ -81,7 +83,7 @@ export class EmailService {
 	}
 
 	sendWaitlistedEmails(users: UserDto[]) {
-		return this.sendMassEmail('d-3ef018711e9645e6b841317f77aaa36c', users);
+		return this.sendMassEmail('d-29fa0a4a1e064e7383afadc49062273c', users);
 	}
 
 	private sendMassEmail(templateId: string, users: UserDto[]) {

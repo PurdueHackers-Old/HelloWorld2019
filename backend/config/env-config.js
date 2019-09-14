@@ -34,6 +34,8 @@ const serverRuntimeConfig = {
 
 const publicRuntimeConfig = {
 	API_URL: env.API_URL ? env.API_URL : `http://localhost:${serverRuntimeConfig.PORT}/api`,
+	SENTRY_KEY: env.SENTRY_KEY ? env.SENTRY_KEY : 'sentry_key',
+	SENTRY_ENVIRONMENT: env.SENTRY_ENVIRONMENT ? env.SENTRY_ENVIRONMENT : sharedConfig.NODE_ENV,
 	...sharedConfig
 };
 
