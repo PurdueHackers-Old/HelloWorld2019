@@ -34,8 +34,12 @@ const Scan = ({ flashError, flashSuccess, clear }: Props) => {
 	};
 
 	return (
-		<div>
-			<h3>Checkin Scan</h3>
+		<div className="uk-section bg-purple-gradient uk-section-default uk-flex hero fullscreen">
+			<h1
+				className="text-yellow uk-heading-small uk-margin-large-top uk-margin-large-left uk-padding-large-top"
+			>
+				Checkin Scan
+			</h1>
 			<br />
 			<QrReader delay={750} onError={onError} onScan={onScan} />
 		</div>

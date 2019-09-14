@@ -68,14 +68,14 @@ const Profile = ({ email }: Props) => {
 						<h4 style={{ color: 'orange' }}>{application.statusPublic}</h4>
 					</u>
 				) : (
-					<div>
-						<u>
-							<h4 style={{ color: 'palegreen' }}>{application.statusPublic}</h4>
-						</u>
-						<h4>QR Code:</h4>
-						<QRCode email={email} />
-					</div>
-				)}
+							<div>
+								<u>
+									<h4 style={{ color: 'palegreen' }}>{application.statusPublic}</h4>
+								</u>
+								<h4>QR Code:</h4>
+								<QRCode email={email} />
+							</div>
+						)}
 			</div>
 		</div>
 	);

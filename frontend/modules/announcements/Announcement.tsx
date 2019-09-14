@@ -34,23 +34,35 @@ const AdminActions = ({ _id, released, admin: { onRelease, onDelete } }: Props) 
 };
 
 export default (props: Props) => {
-	const { _id, title, body, labels, released, admin } = props;
+	const { _id, title, body, labels, createdAt, released, admin,} = props;
+	let date = new Date(createdAt)
+	let hours = date.getHours()
+	if (hours >= 12) {
+		hours = hours - 12
+	}
+
 	return (
 		<div
 			className="uk-card  uk-card-body bg-purple-gradient uk-margin-small-left 
-			uk-margin-small-right uk-margin-medium-bottom ancmnt-card uk-padding-small fullwidth"
+			uk-margin-small-right uk-margin-small-left uk-margin-medium-bottom ancmnt-card uk-padding-small fullwidth"
+			style={{borderRadius: '20px'}}
 		>
-			<h3 className="uk-card-title text-yellow">Title: {title}</h3>
-			Body: {body}
-			<br />
-			Labels: {labels}
-			<br />
+			<div className="uk-flex">
+				<div className={`text-white label label-${labels}`}>{labels}</div>
+				<div className="uk-align-right timestamp text-white label">
+					{`${hours < 10 ? "0" + hours: hours}:
+					 	${date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}
+						${date.getHours() < 12 ? "AM": "PM"}`}
+				</div>
+			</div>
+			<h3 className="uk-card-title text-yellow margin-small">{title}</h3>
+			<div className="text-white">{body}</div>
 			{/* {!released && (
 				<button id={_id} onClick={(e: any) => onRelease(e.target.id)}>
 				Release
 				</button>
 			)} */}
-			<hr />
+			{/* <hr /> */}
 			{admin && <AdminActions {...props} />}
 			<br />
 		</div>
