@@ -43,6 +43,10 @@ export default (props: Props) => {
 		hours = 12
 	}
 
+	const formatTime = (date: Date) => {
+		return date.toLocaleString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit',})
+	}
+
 	return (
 		<div
 			className="uk-card  uk-card-body bg-purple-gradient uk-margin-small-left 
@@ -52,9 +56,7 @@ export default (props: Props) => {
 			<div className="uk-flex">
 				<div className={`text-white label label-${labels}`}>{labels}</div>
 				<div className="uk-align-right timestamp text-white label">
-					{`${hours < 10 ? "0" + hours: hours}:
-					 	${date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}
-						${date.getHours() < 12 ? "AM": "PM"}`}
+					{formatTime(date)}
 				</div>
 			</div>
 			<h3 className="uk-card-title text-yellow margin-small">{title}</h3>
