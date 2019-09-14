@@ -12,26 +12,6 @@ interface Props {
 const FlashMessage = ({ green, red, clear }: Props) => {
 	return (
 		<React.Fragment>
-<<<<<<< HEAD
-			{green && (
-				<div
-					className="uk-alert-success"
-					uk-alert="true"
-					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
-				>
-					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
-					<p>{green}</p>
-				</div>
-			)}
-			{red && (
-				<div
-					className="uk-alert-danger"
-					uk-alert="true"
-					style={{ padding: 15, textAlign: 'center', marginBottom: 0 }}
-				>
-					<a className="uk-alert-close" uk-close="true" style={{ opacity: 'unset' }} />
-					<p>{red}</p>
-=======
 			{red && (
 				<div
 					className="uk-notification uk-notification-top-center uk-alert-danger"
@@ -131,7 +111,6 @@ const FlashMessage = ({ green, red, clear }: Props) => {
 						</a>{' '}
 						<div>{green}</div>{' '}
 					</div>
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 				</div>
 			)}
 			{/* {red && (

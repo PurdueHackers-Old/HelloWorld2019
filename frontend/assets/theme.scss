@@ -1,8 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-<<<<<<< HEAD
-=======
 @font-face {
 	font-family: 'krungthep';
 	font-display: auto;
@@ -10,7 +8,6 @@
 		url('/static/fonts/krungthep-webfont.woff') format('woff');
 }
 
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 /* Color palette */
 :root {
 	--dark-blue: #1d1f7a;
@@ -18,13 +15,10 @@
 	--bluey-purple-50: rgba(114, 51, 173, 0.5);
 }
 
-<<<<<<< HEAD
-=======
 html {
 	overflow: hidden;
 }
 
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 html,
 body {
 	height: 100%;
@@ -34,12 +28,6 @@ body {
 body {
 	font-family: 'krungthep', sans-serif !important;
 	margin: 0;
-<<<<<<< HEAD
-	color: white;
-	background-size: 100% auto;
-	background-repeat: repeat-y;
-	overflow-x: hidden;
-=======
 	// color: white;
 	background-size: 100% auto;
 	background-repeat: repeat-y;
@@ -49,7 +37,6 @@ body {
 
 a {
 	font-family: 'krungthep', sans-serif !important;
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 }
 
 a {
@@ -314,11 +301,7 @@ table {
 .uk-button {
 	border: none;
 	cursor: pointer !important;
-<<<<<<< HEAD
-	padding: 1em 2em;
-=======
 	// padding: 1em 2em;
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 	display: inline-block;
 	text-transform: uppercase;
 	text-decoration: none;
@@ -332,6 +315,11 @@ table {
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
 	color: white;
+}
+
+.uk-button-ancmnt a {
+	text-decoration: none;
+	color: black;
 }
 
 .uk-button-ancmnt {
@@ -353,6 +341,7 @@ table {
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
 	color: #7233ad;
+	margin-top: 10px;
 }
 
 .uk-button-apply {
@@ -415,6 +404,11 @@ table {
 	color: #f39c12;
 	border-radius: 0px;
 	transition: ease-in-out 1s;
+}
+
+.uk-button-ancmnt:hover a {
+	color: white;
+	transition: all 0.3s;
 }
 
 .uk-button-apply:hover {
@@ -607,31 +601,22 @@ table {
 }
 
 .sponsor-card {
-<<<<<<< HEAD
-	height: 150px;
-	width: 300px;
-	display: flex;
-=======
 	// height: 150px;
 	// width: 300px;
 	height: 100%;
 	width: 100%;
 	display: flex;
 	// position: absolute;
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 	align-items: center;
 	justify-content: center;
 }
 
-<<<<<<< HEAD
-=======
 .sponsor-card img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
 }
 
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
 .uk-card-default h3 {
 	color: var(--dark-blue) !important;
 }
@@ -783,8 +768,6 @@ table {
 	// position: fixed;
 	z-index: 0;
 }
-<<<<<<< HEAD
-=======
 
 .text-purple {
 	color: #5b2c6f !important;
@@ -849,4 +832,43 @@ table {
 .uk-dark {
 	background-color: rgba(0, 0, 0, 0.3);
 }
->>>>>>> a2d01eab95812dac16beec29a08d71eb0e36c73c
+
+.text-white {
+	color: white; 
+}
+
+.label {
+	background: #222;
+	margin: 0;
+	border-radius: 20px;
+	width: -webkit-fit-content;
+	padding-right: 10px; 
+	padding-left: 10px; 
+	padding-bottom: 5px;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.label-Events {
+	background: red;
+}
+.label-Food {
+	background: rgb(255, 230, 0);
+	color: black;
+}
+.label-Miscellaneous {
+	background: black;
+}
+.label-Sponsor, .label-Judging {
+	background: green;
+}
+.label-Logistics {
+	background: #f39c12;
+}
+.margin-small {
+	margin-top: 10px !important;
+}
+.timestamp {
+	position: absolute;
+	right: 1em;
+	margin-left: 1rem; 
+}
